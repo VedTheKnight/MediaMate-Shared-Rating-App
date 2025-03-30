@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "ajv": "^7.2.4"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.0.1"
+  }
+}
