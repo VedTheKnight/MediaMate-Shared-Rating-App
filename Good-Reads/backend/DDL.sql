@@ -38,7 +38,7 @@ CREATE TABLE ContentItem (
     description TEXT,
     content_type VARCHAR(50) CHECK (content_type IN ('Book', 'TV Show', 'Movie')),
     release_date DATE,
-    genre_id INT NOT NULL REFERENCES Genre(genre_id),
+    genre_id REFERENCES Genre(genre_id),
     image_url TEXT
 );
 
