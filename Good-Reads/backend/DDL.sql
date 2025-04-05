@@ -70,6 +70,12 @@ CREATE TABLE Watchlist (
     timestamp TIMESTAMP DEFAULT now()
 );
 
+CREATE TABLE ContentItemGenre (
+    item_id INT NOT NULL REFERENCES ContentItem(item_id) ON DELETE CASCADE,
+    genre_id INT NOT NULL REFERENCES Genre(genre_id) ON DELETE CASCADE,
+    PRIMARY KEY (item_id, genre_id)
+);
+
 -- Indexes for Foreign Keys
 CREATE INDEX idx_rating_user ON Rating(user_id);
 CREATE INDEX idx_rating_item ON Rating(item_id);
