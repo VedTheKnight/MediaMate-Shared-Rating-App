@@ -38,7 +38,7 @@ CREATE TABLE ContentItem (
     description TEXT,
     content_type VARCHAR(50) CHECK (content_type IN ('Book', 'TV Show', 'Movie')),
     release_date DATE,
-    genre_id REFERENCES Genre(genre_id),
+    genre_id INT NOT NULL REFERENCES Genre(genre_id),
     image_url TEXT
 );
 
@@ -68,12 +68,6 @@ CREATE TABLE Watchlist (
     item_id INT REFERENCES ContentItem(item_id),
     status VARCHAR(20) CHECK (status IN ('Planned', 'Watching', 'Completed')),
     timestamp TIMESTAMP DEFAULT now()
-);
-
-CREATE TABLE ContentItemGenre (
-    item_id INT NOT NULL REFERENCES ContentItem(item_id) ON DELETE CASCADE,
-    genre_id INT NOT NULL REFERENCES Genre(genre_id) ON DELETE CASCADE,
-    PRIMARY KEY (item_id, genre_id)
 );
 
 -- Indexes for Foreign Keys
