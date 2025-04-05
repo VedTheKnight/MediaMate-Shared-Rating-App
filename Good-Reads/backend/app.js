@@ -76,8 +76,17 @@ app.post("/signup", async (req, res) => {
 
     // Insert the new user into the database
     await pool.query(
-      "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)", 
-      [username, email, hashedPassword]
+     `INSERT INTO users 
+      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private) 
+      VALUES ($1, $2, $3, $4, $5, $6)`,
+      [
+        username,
+        email,
+        hashedPassword,
+        null, // Default to null if not provided
+        false, // Default value for is_profile_private
+        false  // Default value for is_rating_private
+      ]
     );
 
     res.status(200).json({ message: "User Registered Successfully" });
@@ -179,7 +188,7 @@ app.get("/friend-requests", isAuthenticated, async (req, res) => {
     const requests = await pool.query(
       `SELECT u.user_id, u.username 
        FROM Users u 
-       JOIN Friendships f ON u.user_id = f.user1_id 
+       JOIN Friendship f ON u.user_id = f.user1_id 
        WHERE f.user2_id = $1 AND f.status = 'pending'`,
       [userId]
     );
@@ -198,7 +207,7 @@ app.post("/friend-request", isAuthenticated, async (req, res) => {
   try {
     // Check if a friendship already exists
     const existingFriendship = await pool.query(
-      "SELECT * FROM Friendships WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)",
+      "SELECT * FROM Friendship WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)",
       [userId, friendId]
     );
 
@@ -208,7 +217,7 @@ app.post("/friend-request", isAuthenticated, async (req, res) => {
 
     // Insert a new friend request
     await pool.query(
-      "INSERT INTO Friendships (user1_id, user2_id, status) VALUES ($1, $2, 'pending')",
+      "INSERT INTO Friendship (user1_id, user2_id, status) VALUES ($1, $2, 'pending')",
       [userId, friendId]
     );
 
@@ -227,7 +236,7 @@ app.post("/accept-friend-request", isAuthenticated, async (req, res) => {
   try {
     // Update the friendship status to accepted
     const result = await pool.query(
-      "UPDATE Friendships SET status = 'accepted' WHERE user1_id = $1 AND user2_id = $2 AND status = 'pending'",
+      "UPDATE Friendship SET status = 'accepted' WHERE user1_id = $1 AND user2_id = $2 AND status = 'pending'",
       [friendId, userId]
     );
 
@@ -250,7 +259,7 @@ app.post("/reject-friend-request", isAuthenticated, async (req, res) => {
   try {
     // Delete the pending friend request
     const result = await pool.query(
-      "DELETE FROM Friendships WHERE user1_id = $1 AND user2_id = $2 AND status = 'pending'",
+      "DELETE FROM Friendship WHERE user1_id = $1 AND user2_id = $2 AND status = 'pending'",
       [friendId, userId]
     );
 
@@ -270,9 +279,9 @@ app.get("/friends", isAuthenticated, async (req, res) => {
   const { userId } = req.session;
 
   try {
-    // Retrieve all accepted friendships
+    // Retrieve all accepted Friendship
     const friends = await pool.query(
-      "SELECT u.user_id, u.username FROM Users u JOIN Friendships f ON (u.user_id = f.user1_id OR u.user_id = f.user2_id) WHERE (f.user1_id = $1 OR f.user2_id = $1) AND f.status = 'accepted' AND u.user_id != $1",
+      "SELECT u.user_id, u.username FROM Users u JOIN Friendship f ON (u.user_id = f.user1_id OR u.user_id = f.user2_id) WHERE (f.user1_id = $1 OR f.user2_id = $1) AND f.status = 'accepted' AND u.user_id != $1",
       [userId]
     );
 
@@ -291,7 +300,7 @@ app.get("/friendship-status/:friendId", isAuthenticated, async (req, res) => {
   try {
     // Check the status of the friendship
     const friendship = await pool.query(
-      "SELECT status FROM Friendships WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)",
+      "SELECT status FROM Friendship WHERE (user1_id = $1 AND user2_id = $2) OR (user1_id = $2 AND user2_id = $1)",
       [userId, friendId]
     );
 
@@ -309,4 +318,173 @@ app.get("/friendship-status/:friendId", isAuthenticated, async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+});
+
+//______________________________________________________________ Content APIs ____________________________________________________________
+
+app.get("/books", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
+             COALESCE(AVG(r.rating_value), 0) AS rating
+      FROM ContentItem ci
+      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+      LEFT JOIN Rating r ON ci.item_id = r.item_id
+      GROUP BY ci.item_id, g.name
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/genres", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM Genre");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/watchlist", async (req, res) => {
+  const { bookId } = req.body;
+  const userId = req.session.userId; // Assuming user ID is stored in session
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    await pool.query(
+      "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
+      [userId, bookId, 'Planned']
+    );
+    res.json({ message: "Book added to watchlist" });
+  } catch (error) {
+    console.error("Error adding to watchlist:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/books/:id/rating", async (req, res) => {
+  const { id } = req.params; // Book ID
+  const { rating } = req.body; // Rating value
+  const userId = req.session.userId; // Assuming user ID is stored in session
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    await pool.query(
+      "INSERT INTO Rating (user_id, item_id, rating_value, is_private) VALUES ($1, $2, $3, $4)",
+      [userId, id, rating, false]
+    );
+    res.json({ message: "Rating submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting rating:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/books/:id/review", async (req, res) => {
+  const { id } = req.params; // Book ID
+  const { text } = req.body; // Review text
+  const userId = req.session.userId; // Assuming user ID is stored in session
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    await pool.query(
+      "INSERT INTO Review (user_id, item_id, text) VALUES ($1, $2, $3)",
+      [userId, id, text]
+    );
+    res.json({ message: "Review submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/books/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const bookResult = await pool.query(`
+      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url,
+             g.name AS genre,
+             COALESCE(AVG(r.rating_value), 0) AS rating
+      FROM ContentItem ci
+      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+      LEFT JOIN Rating r ON ci.item_id = r.item_id
+      WHERE ci.item_id = $1
+      GROUP BY ci.item_id, g.name
+    `, [id]);
+
+    const reviewsResult = await pool.query(`
+      SELECT r.review_id, r.text, u.username 
+      FROM Review r 
+      JOIN Users u ON r.user_id = u.user_id 
+      WHERE r.item_id = $1
+    `, [id]);
+
+    if (bookResult.rows.length === 0) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+
+    const bookDetails = bookResult.rows[0];
+    bookDetails.reviews = reviewsResult.rows;
+
+    res.json(bookDetails);
+  } catch (error) {
+    console.error("Error fetching book details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.get("/user_watchlist", async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const result = await pool.query(`
+      SELECT w.watchlist_id, w.status,
+             ci.title AS book_title,
+             ci.image_url AS book_image,
+             g.name AS genre_name
+      FROM Watchlist w
+      JOIN ContentItem ci ON w.item_id = ci.item_id
+      JOIN Genre g ON ci.genre_id = g.genre_id
+      WHERE w.user_id = $1
+    `, [userId]);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/books/:id/friendRatings", async (req, res) => {
+  const { id } = req.params;
+  const userId = req.session.userId;
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const result = await pool.query(`
+      SELECT r.rating_value,
+             u.username AS friend_name 
+      FROM Rating r 
+      JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+      JOIN User u ON u.user_id = r.user_id 
+      WHERE r.item_id = $2 AND r.is_private = false;
+    `, [userId, id]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching friend ratings:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });

@@ -1,24 +1,79 @@
-DROP TABLE IF EXISTS Users CASCADE;
-
+-- User Table
 CREATE TABLE Users (
     user_id SERIAL PRIMARY KEY,
-    username VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL
+    password_hash VARCHAR(255) NOT NULL,
+    profile_picture_url TEXT,
+    is_profile_private BOOLEAN DEFAULT FALSE,
+    is_rating_private BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE Friendships (
-    friendship_id SERIAL PRIMARY KEY,          -- Auto-incrementing primary key
-    user1_id INT NOT NULL,                     -- ID of one user in the friendship
-    user2_id INT NOT NULL,                     -- ID of the other user in the friendship
-    status VARCHAR(10) DEFAULT 'pending',      -- Friendship status (e.g., pending, accepted, blocked)
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the friendship was created
-    FOREIGN KEY (user1_id) REFERENCES Users(user_id) ON DELETE CASCADE, -- Foreign key to Users table
-    FOREIGN KEY (user2_id) REFERENCES Users(user_id) ON DELETE CASCADE  -- Foreign key to Users table
+-- Friendship Table
+CREATE TABLE Friendship (
+    friendship_id SERIAL PRIMARY KEY,
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    status VARCHAR(10) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT now(),
+    FOREIGN KEY (user1_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (user2_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    CONSTRAINT check_user_ids_not_equal CHECK (user1_id <> user2_id)
 );
 
--- Create a unique index to enforce uniqueness on user1_id and user2_id combinations
+-- Unique Index for Friendship Table
 CREATE UNIQUE INDEX unique_friendship_idx 
-ON Friendships (LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id));
+ON Friendship (user1_id, user2_id);
 
+-- Genre Table
+CREATE TABLE Genre (
+    genre_id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
 
+-- ContentItem Table
+CREATE TABLE ContentItem (
+    item_id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    content_type VARCHAR(50) CHECK (content_type IN ('Book', 'TV Show', 'Movie')),
+    release_date DATE,
+    genre_id INT NOT NULL REFERENCES Genre(genre_id),
+    image_url TEXT
+);
+
+-- Rating Table
+CREATE TABLE Rating (
+    rating_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    item_id INT REFERENCES ContentItem(item_id),
+    rating_value INT CHECK (rating_value BETWEEN 1 AND 10),
+    is_private BOOLEAN DEFAULT FALSE,
+    timestamp TIMESTAMP DEFAULT now()
+);
+
+-- Review Table
+CREATE TABLE Review (
+    review_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    item_id INT REFERENCES ContentItem(item_id),
+    text TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT now()
+);
+
+-- Watchlist Table
+CREATE TABLE Watchlist (
+    watchlist_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(user_id),
+    item_id INT REFERENCES ContentItem(item_id),
+    status VARCHAR(20) CHECK (status IN ('Planned', 'Watching', 'Completed')),
+    timestamp TIMESTAMP DEFAULT now()
+);
+
+-- Indexes for Foreign Keys
+CREATE INDEX idx_rating_user ON Rating(user_id);
+CREATE INDEX idx_rating_item ON Rating(item_id);
+CREATE INDEX idx_review_user ON Review(user_id);
+CREATE INDEX idx_review_item ON Review(item_id);
+CREATE INDEX idx_watchlist_user ON Watchlist(user_id);
+CREATE INDEX idx_watchlist_item ON Watchlist(item_id);

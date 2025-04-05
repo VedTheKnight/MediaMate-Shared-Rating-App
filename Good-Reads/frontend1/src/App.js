@@ -4,6 +4,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/UserHome";
 import Books from "./pages/Books";
+import BookDetails from './pages/BookDetails';
 import Movies from "./pages/Movies";
 import TVShows from "./pages/TVShows";
 import Watchlist from "./pages/Watchlist";
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/items/books" element={<Books />} />
+        <Route path="/items/books/:id" element={<BookDetails />} />
         <Route path="/items/movies" element={<Movies />} />
         <Route path="/items/tvshows" element={<TVShows />} />
         <Route path="/watchlist" element={<Watchlist />} />
