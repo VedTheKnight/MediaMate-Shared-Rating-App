@@ -70,6 +70,63 @@ CREATE TABLE Watchlist (
     timestamp TIMESTAMP DEFAULT now()
 );
 
+/*
+
+For Groups
+1] Group Membership relation is a tuple (group_id, user_id), will make it indexable by user id
+2] Comment Section relation is (group_id, comment_id) -> Merge with group only ig?
+3] Comment relation -> (comment_id, upvotes (int), downvotes(int), content(varchar?))
+
+*/
+-- Community Table: Represents a community (subreddit)
+CREATE TABLE Community (
+    community_id SERIAL PRIMARY KEY,
+    genre_id INT NOT NULL REFERENCES Genre(genre_id),
+    community_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    timestamp TIMESTAMP DEFAULT now(),
+    UNIQUE (community_name) -- Ensuring unique community names
+);
+
+-- Group Membership Table: Maps users to communities
+CREATE TABLE GroupMembership (
+    community_id INT NOT NULL REFERENCES Community(community_id),
+    user_id INT NOT NULL REFERENCES User(user_id),
+    PRIMARY KEY (community_id, user_id)  -- Ensures a user can only be a member of a community once
+);
+
+-- Comment Table: Represents individual comments
+CREATE TABLE Comment (
+    comment_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES User(user_id),
+    content VARCHAR(500),
+    timestamp TIMESTAMP DEFAULT now(),
+    parent_comment_id INT NULL REFERENCES Comment(comment_id), -- For thread structure
+    upvotes INT DEFAULT 0,
+    downvotes INT DEFAULT 0
+);
+
+-- Comment Section Table: Maps comments to communities (connects comments to a specific community)
+CREATE TABLE CommentSection (
+    community_id INT NOT NULL REFERENCES Community(community_id),
+    comment_id INT NOT NULL REFERENCES Comment(comment_id),
+    PRIMARY KEY (community_id, comment_id)  -- A comment belongs to only one community
+);
+
+-- Voting Table: Represents individual user votes on comments
+CREATE TABLE CommentVotes (
+    vote_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES User(user_id),
+    comment_id INT NOT NULL REFERENCES Comment(comment_id),
+    vote_type BOOLEAN NOT NULL, -- TRUE for upvote, FALSE for downvote
+    UNIQUE (user_id, comment_id)  -- Ensures a user can only vote once per comment
+);
+
+-- Add indexes for performance optimization
+CREATE INDEX idx_user_id ON GroupMembership(user_id);
+CREATE INDEX idx_community_id ON GroupMembership(community_id);
+CREATE INDEX idx_comment_id ON CommentSection(comment_id);
+CREATE INDEX idx_community_comment ON CommentSection(community_id, comment_id);
 -- Indexes for Foreign Keys
 CREATE INDEX idx_rating_user ON Rating(user_id);
 CREATE INDEX idx_rating_item ON Rating(item_id);
