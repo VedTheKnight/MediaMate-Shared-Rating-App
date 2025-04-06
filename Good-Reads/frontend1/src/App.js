@@ -12,6 +12,7 @@ import BooksWatchlist from "./pages/BooksWatchlist";
 import MoviesWatchlist from "./pages/MoviesWatchlist";
 import TVShowsWatchlist from "./pages/TVShowsWatchlist";
 import Groups from "./pages/Groups";
+import CommunityPage from "./pages/CommunityPage";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
 import Notfound from "./pages/Notfound";
@@ -34,6 +35,7 @@ function App() {
         <Route path="/watchlist/movies" element={<MoviesWatchlist />} />
         <Route path="/watchlist/tvshows" element={<TVShowsWatchlist />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/groups/:id" element={<CommunityPage />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/*" element={<Notfound />} />

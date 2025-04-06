@@ -13,7 +13,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'rating_app',
-  password: '12345678',
+  password: 'Harijanvi1!',
   port: 5432,
 });
 
@@ -488,3 +488,238 @@ app.get("/books/:id/friendRatings", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+app.get("/get-joinable-communities", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const result = await pool.query(`
+      SELECT c.community_id, c.community_name, c.community_description
+      FROM Community c
+      WHERE c.community_id NOT IN (
+        SELECT cm.community_id
+        FROM CommunityMembership cm
+        WHERE cm.user_id = $1
+      )
+    `, [userId]);
+    
+    res.status(200).json({ communities: result.rows });
+  } catch (error) {
+    console.error("Error fetching joinable communities:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.get('/get-joined-communities', async (req, res) => {
+  const user = req.session;
+
+  if (!user) {
+      return res.status(401).json({ error: 'Not authenticated' });
+  }
+  try {
+      const result = await pool.query(`
+          SELECT c.community_id, c.community_name, c.community_description, c.timestamp
+          FROM Community c
+          JOIN CommunityMembership cm ON c.community_id = cm.community_id
+          WHERE cm.user_id = $1
+      `, [user.userId]);
+
+      res.json({ communities: result.rows });
+  } catch (err) {
+      console.error('Error fetching joined communities:', err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+app.post("/join-community", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+  const { community_id } = req.body;
+
+  if (!userId || !community_id) {
+    return res.status(400).json({ message: "Missing user or community ID" });
+  }
+
+  try {
+    await pool.query(
+      `INSERT INTO CommunityMembership (community_id, user_id) VALUES ($1, $2)
+       ON CONFLICT DO NOTHING`, // prevent duplicates
+      [community_id, userId]
+    );
+    res.status(200).json({ message: "Joined community successfully" });
+  } catch (error) {
+    console.error("Error joining community:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.get("/groups/:id", isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const communityRes = await pool.query(
+      "SELECT community_name, community_description FROM Community WHERE community_id = $1",
+      [id]
+    );
+
+    const commentRes = await pool.query(
+      `SELECT c.comment_id, c.content, c.user_id, c.upvotes, c.downvotes,
+              c.parent_comment_id, u.username
+       FROM CommentSection cs
+       JOIN Comment c ON cs.comment_id = c.comment_id
+       JOIN Users u ON u.user_id = c.user_id
+       WHERE cs.community_id = $1`,
+      [id]
+    );
+
+    res.json({
+      community: communityRes.rows[0],
+      comments: commentRes.rows,
+    });
+  } catch (err) {
+    console.error("Error fetching community page:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
+app.post("/groups/:id/add-comment", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+  const { id: communityId } = req.params;
+  const { content } = req.body;
+
+  if (!userId || !content || !content.trim()) {
+    return res.status(400).json({ error: "Invalid comment" });
+  }
+
+  try {
+    const insertComment = await pool.query(
+      `INSERT INTO Comment (user_id, content) VALUES ($1, $2) RETURNING *`,
+      [userId, content]
+    );
+
+    const commentId = insertComment.rows[0].comment_id;
+
+    await pool.query(
+      `INSERT INTO CommentSection (community_id, comment_id) VALUES ($1, $2)`,
+      [communityId, commentId]
+    );
+
+    res.status(200).json({ comment: insertComment.rows[0] });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+app.post("/comments/:commentId/vote", isAuthenticated, async (req, res) => {
+  const { commentId } = req.params;
+  const { type } = req.body; // 'upvote' or 'downvote'
+  const userId = req.session.userId;
+
+  if (!["upvote", "downvote"].includes(type)) {
+    return res.status(400).send("Invalid vote type");
+  }
+
+  const voteType = type === "upvote";
+
+  try {
+    // 1. Upsert into CommentVotes
+    await pool.query(
+      `
+      INSERT INTO CommentVotes (user_id, comment_id, vote_type)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (user_id, comment_id)
+      DO UPDATE SET vote_type = EXCLUDED.vote_type
+      `,
+      [userId, commentId, voteType]
+    );
+
+    // 2. Recalculate upvotes/downvotes on Comment
+    await pool.query(
+      `
+      UPDATE Comment c SET
+        upvotes = COALESCE(v.up_count, 0),
+        downvotes = COALESCE(v.down_count, 0)
+      FROM (
+        SELECT
+          comment_id,
+          COUNT(*) FILTER (WHERE vote_type IS TRUE) AS up_count,
+          COUNT(*) FILTER (WHERE vote_type IS FALSE) AS down_count
+        FROM CommentVotes
+        WHERE comment_id = $1
+        GROUP BY comment_id
+      ) v
+      WHERE c.comment_id = v.comment_id
+      `,
+      [commentId]
+    );
+
+    // 3. Return updated comment
+    const result = await pool.query(
+      `
+      SELECT c.comment_id, c.content, c.user_id, c.upvotes, c.downvotes, u.username
+      FROM Comment c
+      JOIN Users u ON u.user_id = c.user_id
+      WHERE c.comment_id = $1
+      `,
+      [commentId]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error handling vote:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+app.post("/comments/:parentId/reply", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+  const { parentId } = req.params;
+  const { content } = req.body;
+
+  if (!content) {
+    return res.status(400).json({ message: "Missing content" });
+  }
+
+  try {
+    // Find the community this comment belongs to
+    const section = await pool.query(
+      `SELECT community_id FROM CommentSection WHERE comment_id = $1`,
+      [parentId]
+    );
+
+    if (section.rows.length === 0) {
+      return res.status(404).json({ message: "Parent comment not found" });
+    }
+
+    const communityId = section.rows[0].community_id;
+
+    // Insert the reply
+    const commentResult = await pool.query(
+      `INSERT INTO Comment (user_id, content, parent_comment_id)
+       VALUES ($1, $2, $3) RETURNING *`,
+      [userId, content, parentId]
+    );
+
+    const commentId = commentResult.rows[0].comment_id;
+
+    await pool.query(
+      `INSERT INTO CommentSection (community_id, comment_id)
+       VALUES ($1, $2)`,
+      [communityId, commentId]
+    );
+
+    const user = await pool.query("SELECT username FROM Users WHERE user_id = $1", [userId]);
+    const fullComment = { ...commentResult.rows[0], username: user.rows[0].username };
+
+    res.status(200).json({ comment: fullComment });
+  } catch (error) {
+    console.error("Error posting reply:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+

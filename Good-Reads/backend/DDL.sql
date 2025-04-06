@@ -83,22 +83,22 @@ CREATE TABLE Community (
     community_id SERIAL PRIMARY KEY,
     genre_id INT NOT NULL REFERENCES Genre(genre_id),
     community_name VARCHAR(100) NOT NULL,
-    description TEXT,
+    community_description TEXT,
     timestamp TIMESTAMP DEFAULT now(),
     UNIQUE (community_name) -- Ensuring unique community names
 );
 
 -- Group Membership Table: Maps users to communities
-CREATE TABLE GroupMembership (
+CREATE TABLE CommunityMembership (
     community_id INT NOT NULL REFERENCES Community(community_id),
-    user_id INT NOT NULL REFERENCES User(user_id),
+    user_id INT NOT NULL REFERENCES Users(user_id),
     PRIMARY KEY (community_id, user_id)  -- Ensures a user can only be a member of a community once
 );
 
 -- Comment Table: Represents individual comments
 CREATE TABLE Comment (
     comment_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES User(user_id),
+    user_id INT NOT NULL REFERENCES Users(user_id),
     content VARCHAR(500),
     timestamp TIMESTAMP DEFAULT now(),
     parent_comment_id INT NULL REFERENCES Comment(comment_id), -- For thread structure
@@ -116,15 +116,15 @@ CREATE TABLE CommentSection (
 -- Voting Table: Represents individual user votes on comments
 CREATE TABLE CommentVotes (
     vote_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES User(user_id),
+    user_id INT NOT NULL REFERENCES Users(user_id),
     comment_id INT NOT NULL REFERENCES Comment(comment_id),
     vote_type BOOLEAN NOT NULL, -- TRUE for upvote, FALSE for downvote
     UNIQUE (user_id, comment_id)  -- Ensures a user can only vote once per comment
 );
 
 -- Add indexes for performance optimization
-CREATE INDEX idx_user_id ON GroupMembership(user_id);
-CREATE INDEX idx_community_id ON GroupMembership(community_id);
+CREATE INDEX idx_user_id ON CommunityMembership(user_id);
+CREATE INDEX idx_community_id ON CommunityMembership(community_id);
 CREATE INDEX idx_comment_id ON CommentSection(comment_id);
 CREATE INDEX idx_community_comment ON CommentSection(community_id, comment_id);
 -- Indexes for Foreign Keys
