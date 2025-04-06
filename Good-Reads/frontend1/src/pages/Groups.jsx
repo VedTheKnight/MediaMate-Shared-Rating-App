@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material"; // if not already imported
 import {
   Container,
   Typography,
@@ -10,6 +9,14 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Button,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 
 function Groups() {
@@ -19,8 +26,15 @@ function Groups() {
   const [joinableCommunities, setJoinableCommunities] = useState([]);
   const [joinedCommunities, setJoinedCommunities] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    community_name: "",
+    community_description: "",
+    genre_id: "",
+    selected_friends: []  // Initialize as an empty array
+  });  
+  const [genres, setGenres] = useState([]);
+  const [friends, setFriends] = useState([]); // New state for storing user's friends
 
-  // Auth check
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -42,7 +56,39 @@ function Groups() {
     checkAuth();
   }, [navigate]);
 
-  // Fetch communities
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/get-genres", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setGenres(data.genres || []);
+      } catch (err) {
+        console.error("Failed to fetch genres:", err);
+      }
+    };
+
+    fetchGenres();
+  }, []);
+
+  // Fetch user's friends from the backend
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/get-friends", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setFriends(data.friends || []);
+      } catch (err) {
+        console.error("Failed to fetch friends:", err);
+      }
+    };
+
+    if (authChecked) fetchFriends();
+  }, [authChecked]);
+
   useEffect(() => {
     const fetchCommunities = async () => {
       setLoading(true);
@@ -53,7 +99,7 @@ function Groups() {
           });
           const data = await res.json();
           setJoinableCommunities(data.communities || []);
-        } else {
+        } else if (tabIndex === 1) {
           const res = await fetch("http://localhost:4000/get-joined-communities", {
             credentials: "include",
           });
@@ -67,12 +113,10 @@ function Groups() {
       }
     };
 
-    if (authChecked) fetchCommunities();
+    if (authChecked && tabIndex !== 2) fetchCommunities();
   }, [tabIndex, authChecked]);
 
   const handleTabChange = (_, newIndex) => setTabIndex(newIndex);
-
-
 
   const handleJoinCommunity = async (community_id) => {
     try {
@@ -84,16 +128,72 @@ function Groups() {
         },
         body: JSON.stringify({ community_id }),
       });
-  
+
       if (res.ok) {
-        setJoinableCommunities(prev =>
-          prev.filter(c => c.community_id !== community_id)
+        setJoinableCommunities((prev) =>
+          prev.filter((c) => c.community_id !== community_id)
         );
       } else {
         console.error("Failed to join community");
       }
     } catch (err) {
       console.error("Error joining community:", err);
+    }
+  };
+  const handleCreateCommunity = async (e) => {
+    e.preventDefault();
+    try {
+      // Step 1: Create the community
+      const res = await fetch("http://localhost:4000/create-community", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+  
+      if (res.ok) {
+        alert("Community created!");
+  
+        // Step 2: After community creation, add selected friends to the community
+        const communityData = await res.json();
+        const community_id = communityData.community_id; // Assuming the backend returns the new community ID
+  
+        // Add selected friends to the community
+        const addFriendsRes = await fetch("http://localhost:4000/add-friends-to-community", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            community_id,
+            friends: form.selected_friends,  // Send the selected friend IDs
+          }),
+        });
+  
+        if (addFriendsRes.ok) {
+          alert("Friends added to the community!");
+        } else {
+          const err = await addFriendsRes.json();
+          alert(err.message || "Error adding friends to the community");
+        }
+  
+        // Step 3: Clear the form and switch to the joined tab
+        setForm({
+          community_name: "",
+          community_description: "",
+          genre_id: "",
+          selected_friends: [],
+        });
+        setTabIndex(1); // Switch to the "Joined Communities" tab
+      } else {
+        const err = await res.json();
+        alert(err.message || "Error creating community");
+      }
+    } catch (err) {
+      console.error("Failed to create community:", err);
     }
   };
   
@@ -105,7 +205,7 @@ function Groups() {
         </Box>
       );
     }
-  
+
     if (joinableCommunities.length === 0) {
       return (
         <Typography align="center" color="textSecondary" mt={4}>
@@ -113,7 +213,7 @@ function Groups() {
         </Typography>
       );
     }
-  
+
     return joinableCommunities.map((comm, index) => (
       <Card key={index} style={styles.card}>
         <CardContent>
@@ -136,7 +236,7 @@ function Groups() {
       </Card>
     ));
   };
-  
+
   const renderJoinedCommunities = () => {
     if (loading) {
       return (
@@ -145,7 +245,7 @@ function Groups() {
         </Box>
       );
     }
-  
+
     if (joinedCommunities.length === 0) {
       return (
         <Typography align="center" color="textSecondary" mt={4}>
@@ -153,7 +253,7 @@ function Groups() {
         </Typography>
       );
     }
-  
+
     return joinedCommunities.map((comm, index) => (
       <Card
         key={index}
@@ -173,8 +273,84 @@ function Groups() {
       </Card>
     ));
   };
-  
-  
+
+  const renderCreateCommunityForm = () => (
+    <Box component="form" onSubmit={handleCreateCommunity} mt={3}>
+      <TextField
+        fullWidth
+        label="Community Name"
+        value={form.community_name}
+        onChange={(e) => setForm({ ...form, community_name: e.target.value })}
+        required
+        style={{ marginBottom: 16 }}
+      />
+      <TextField
+        fullWidth
+        multiline
+        rows={3}
+        label="Community Description"
+        value={form.community_description}
+        onChange={(e) => setForm({ ...form, community_description: e.target.value })}
+        required
+        style={{ marginBottom: 16 }}
+      />
+      <FormControl fullWidth style={{ marginBottom: 16 }}>
+        <InputLabel>Genre</InputLabel>
+        <Select
+          value={form.genre_id}
+          onChange={(e) => setForm({ ...form, genre_id: e.target.value })}
+          label="Genre"
+          required
+        >
+          {genres.map((genre) => (
+            <MenuItem key={genre.genre_id} value={genre.genre_id}>
+              {genre.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      {/* Friends Selection - Dropdown with checkboxes */}
+      <FormControl fullWidth style={{ marginBottom: 16 }}>
+  <InputLabel>Friends</InputLabel>
+  <Select
+    multiple
+    value={form.selected_friends || []}  // Ensure it's an empty array when no friends are selected
+    onChange={(e) => setForm({ ...form, selected_friends: e.target.value })}
+    renderValue={(selected) => {
+      // Display nothing in the main bar if no friends are selected
+      if (selected.length === 0) return ""; 
+
+      // Map over the selected userIds and get their names from the friends array
+      const selectedNames = selected.map(userId => {
+        const friend = friends.find(f => f.user_id === userId);
+        return friend ? friend.username : "";
+      });
+
+      return selectedNames.join(", ");  // Display the selected friend names
+    }}
+    label="Friends"
+    required
+  >
+    {friends.map((friend) => (
+      <MenuItem key={friend.user_id} value={friend.user_id}>
+        <Checkbox checked={form.selected_friends.includes(friend.user_id)} />
+        <Typography variant="body2">{friend.username}</Typography> {/* This will display the username */}
+        <ListItemText primary={friend.name} />
+      </MenuItem>
+    ))}
+
+  </Select>
+</FormControl>
+
+
+
+
+      <Button variant="contained" color="primary" type="submit" fullWidth>
+        Create Community
+      </Button>
+    </Box>
+  );
 
   return (
     <Container style={styles.container}>
@@ -190,12 +366,18 @@ function Groups() {
       >
         <Tab label="Joinable Communities" />
         <Tab label="Joined Communities" />
+        <Tab
+          label="🌟 Create Community"
+          style={{ color: "#FFD700", fontWeight: "bold" }}
+        />
       </Tabs>
 
       <Box mt={3}>
-      {tabIndex === 0
-        ? renderJoinableCommunities()
-        : renderJoinedCommunities()}
+        {tabIndex === 0
+          ? renderJoinableCommunities()
+          : tabIndex === 1
+          ? renderJoinedCommunities()
+          : renderCreateCommunityForm()}
       </Box>
     </Container>
   );
@@ -216,6 +398,7 @@ const styles = {
   },
   card: {
     marginBottom: "16px",
+    cursor: "pointer",
   },
 };
 

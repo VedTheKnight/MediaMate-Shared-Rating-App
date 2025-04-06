@@ -722,4 +722,90 @@ app.post("/comments/:parentId/reply", isAuthenticated, async (req, res) => {
   }
 });
 
+app.post("/create-community", isAuthenticated, async (req, res) => {
+  const { community_name, community_description, genre_id } = req.body;
+  const userId = req.session.userId;
+
+  if (!community_name || !genre_id || !userId) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO Community (community_name, community_description, genre_id)
+       VALUES ($1, $2, $3)
+       RETURNING community_id`,
+      [community_name, community_description, genre_id]
+    );
+
+    const communityId = result.rows[0].community_id;
+
+    await pool.query(
+      `INSERT INTO CommunityMembership (community_id, user_id)
+       VALUES ($1, $2)`,
+      [communityId, userId]
+    );
+
+    res.status(201).json({ message: "Community created", community_id: communityId });
+  } catch (error) {
+    console.error("Error creating community:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+app.get("/get-genres", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM Genre ORDER BY name ASC");
+    res.json({ genres: result.rows });  // Return the result rows as genres
+  } catch (err) {
+    console.error("Failed to fetch genres:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.get("/get-friends", async (req, res) => {
+  // Assuming the user is authenticated and their user_id is available
+  const user_id = req.session.userId; // You may need to adjust this based on your authentication method (session, JWT, etc.)
+
+  try {
+    // Query to get the friends of the logged-in user
+    const result = await pool.query(`
+      SELECT u.user_id, u.username
+      FROM Users u
+      JOIN Friendship f ON (f.user1_id = u.user_id OR f.user2_id = u.user_id)
+      WHERE (f.user1_id = $1 OR f.user2_id = $1)
+        AND f.status = 'accepted'
+        AND u.user_id != $1 
+    `, [user_id]);
+
+    // Send the list of friends as a response
+    res.json({ friends: result.rows });
+  } catch (error) {
+    console.error("Error fetching friends:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.post("/add-friends-to-community", async (req, res) => {
+  const { community_id, friends } = req.body;
+
+  if (!community_id || !friends || friends.length === 0) {
+    return res.status(400).json({ message: "Invalid request data" });
+  }
+
+  try {
+    // Assuming you have a "CommunityMembership" table that links users to communities
+    const values = friends.map((friend_id) => `(${community_id}, ${friend_id})`).join(", ");
+    const query = `
+      INSERT INTO CommunityMembership (community_id, user_id)
+      VALUES ${values}
+    `;
+    await pool.query(query);
+    res.status(200).json({ message: "Friends added to community" });
+  } catch (error) {
+    console.error("Error adding friends to community:", error);
+    res.status(500).json({ message: "Failed to add friends to community" });
+  }
+});
 
