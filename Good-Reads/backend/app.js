@@ -675,6 +675,8 @@ app.post("/comments/:commentId/vote", isAuthenticated, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 app.post("/comments/:parentId/reply", isAuthenticated, async (req, res) => {
   const { userId } = req.session;
   const { parentId } = req.params;
