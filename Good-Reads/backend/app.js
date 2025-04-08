@@ -13,7 +13,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'rating_app',
-  password: 'Harijanvi1!',
+  password: '12345678',
   port: 5432,
 });
 
@@ -349,8 +349,17 @@ app.get("/genres", async (req, res) => {
   }
 });
 
+app.get("/getwatchlist", async (req, res) => {
+  const userId = req.session.userId; // or however you're storing it
+  const result = await pool.query(
+    "SELECT w.item_id, b.title, w.status FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+    [userId]
+  );
+  res.json(result.rows);
+});
+
 app.post("/watchlist", async (req, res) => {
-  const { bookId } = req.body;
+  const { bookId, status } = req.body;
   const userId = req.session.userId; // Assuming user ID is stored in session
 
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
@@ -358,7 +367,7 @@ app.post("/watchlist", async (req, res) => {
   try {
     await pool.query(
       "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
-      [userId, bookId, 'Planned']
+      [userId, bookId, status ]
     );
     res.json({ message: "Book added to watchlist" });
   } catch (error) {
@@ -370,25 +379,25 @@ app.post("/watchlist", async (req, res) => {
 app.post("/books/:bookId/rating", async (req, res) => {
   const { bookId } = req.params;
   const { rating } = req.body;
-  const userId = req.user.id; // Assuming you're using authentication
+  const userId = req.user; // Assuming you're using authentication
 
   try {
     // Check if a rating already exists for this user and book
-    const existingRating = await db.query(
-      "SELECT * FROM ratings WHERE user_id = $1 AND book_id = $2",
+    const existingRating = await pool.query(
+      "SELECT * FROM rating WHERE user_id = $1 AND item_id = $2",
       [userId, bookId]
     );
 
     if (existingRating.rows.length > 0) {
       // Update existing rating
-      await db.query(
-        "UPDATE ratings SET rating = $1 WHERE user_id = $2 AND book_id = $3",
+      await pool.query(
+        "UPDATE rating SET rating_value = $1 WHERE user_id = $2 AND item_id = $3",
         [rating, userId, bookId]
       );
     } else {
       // Insert new rating
-      await db.query(
-        "INSERT INTO ratings (user_id, book_id, rating) VALUES ($1, $2, $3)",
+      await pool.query(
+        "INSERT INTO rating (user_id, item_id, rating_value) VALUES ($1, $2, $3)",
         [userId, bookId, rating]
       );
     }

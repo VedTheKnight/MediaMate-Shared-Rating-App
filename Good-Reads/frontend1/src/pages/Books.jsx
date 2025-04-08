@@ -193,9 +193,9 @@ function Books() {
                   style={{ marginTop: "10px" }}
                 >
                   <MenuItem value="">Add to Watchlist</MenuItem>
-                  <MenuItem value="To Read">To Read</MenuItem>
-                  <MenuItem value="Reading">Reading</MenuItem>
-                  <MenuItem value="Finished">Finished</MenuItem>
+                  <MenuItem value="Planned">Planned</MenuItem>
+                  <MenuItem value="Watching">Watching</MenuItem>
+                  <MenuItem value="Completed">Completed</MenuItem>
                 </Select>
               </CardContent>
             </Card>

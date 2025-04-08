@@ -13,7 +13,7 @@ import {
 function BooksWatchlist() {
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
-  const [filteredStatus, setFilteredStatus] = useState("To Read");
+  const [filteredStatus, setFilteredStatus] = useState("Planned");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -48,7 +48,9 @@ function BooksWatchlist() {
     checkAuth();
   }, [navigate]);
 
-  const filteredBooks = books.filter((book) => 1);
+  const filteredBooks = books.filter((book) => 
+    book.status === filteredStatus
+  );
   console.log("Filtered books for status:", filteredStatus, filteredBooks);
 
   return (
@@ -64,22 +66,22 @@ function BooksWatchlist() {
         style={styles.buttonGroup}
       >
         <Button
-          onClick={() => setFilteredStatus("To Read")}
-          variant={filteredStatus === "To Read" ? "contained" : "outlined"}
+          onClick={() => setFilteredStatus("Planned")}
+          variant={filteredStatus === "Planned" ? "contained" : "outlined"}
         >
-          To Read
+          Planned
         </Button>
         <Button
-          onClick={() => setFilteredStatus("Reading")}
-          variant={filteredStatus === "Reading" ? "contained" : "outlined"}
+          onClick={() => setFilteredStatus("Watching")}
+          variant={filteredStatus === "Watching" ? "contained" : "outlined"}
         >
-          Reading
+          Watching
         </Button>
         <Button
-          onClick={() => setFilteredStatus("Finished")}
-          variant={filteredStatus === "Finished" ? "contained" : "outlined"}
+          onClick={() => setFilteredStatus("Completed")}
+          variant={filteredStatus === "Completed" ? "contained" : "outlined"}
         >
-          Finished
+          Completed
         </Button>
       </ButtonGroup>
 
