@@ -1,17 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Typography, Grid, Card, CardContent } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  ButtonGroup,
+} from "@mui/material";
 
 function BooksWatchlist() {
   const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
+  const [filteredStatus, setFilteredStatus] = useState("To Read");
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const res = await fetch("http://localhost:4000/isLoggedIn", {
+          credentials: "include",
+        });
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");
+        } else {
+          fetchWatchlist(); // fetch books after auth passes
         }
       } catch (error) {
         console.error("Authentication check failed:", error);
@@ -19,29 +33,70 @@ function BooksWatchlist() {
       }
     };
 
+    const fetchWatchlist = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/getwatchlist", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setBooks(data); // assuming API returns an array like [{ item_id, title, status }]
+      } catch (error) {
+        console.error("Failed to fetch watchlist:", error);
+      }
+    };
+
     checkAuth();
   }, [navigate]);
 
-  // Sample data for demonstration
-  const books = [
-    { id: 1, title: "Book One", status: "To Read" },
-    { id: 2, title: "Book Two", status: "Reading" },
-  ];
+  const filteredBooks = books.filter((book) => 1);
+  console.log("Filtered books for status:", filteredStatus, filteredBooks);
 
   return (
     <Container style={styles.container}>
       <Typography variant="h4" gutterBottom style={styles.title}>
         Books Watchlist
       </Typography>
+
+      {/* Filter Buttons */}
+      <ButtonGroup
+        variant="contained"
+        color="primary"
+        style={styles.buttonGroup}
+      >
+        <Button
+          onClick={() => setFilteredStatus("To Read")}
+          variant={filteredStatus === "To Read" ? "contained" : "outlined"}
+        >
+          To Read
+        </Button>
+        <Button
+          onClick={() => setFilteredStatus("Reading")}
+          variant={filteredStatus === "Reading" ? "contained" : "outlined"}
+        >
+          Reading
+        </Button>
+        <Button
+          onClick={() => setFilteredStatus("Finished")}
+          variant={filteredStatus === "Finished" ? "contained" : "outlined"}
+        >
+          Finished
+        </Button>
+      </ButtonGroup>
+
+      {/* Book Cards */}
       <Grid container spacing={4}>
-        {books.map((book) => (
-          <Grid item xs={12} sm={6} md={4} key={book.id}>
+        {filteredBooks.map((book) => (
+          <Grid item xs={12} sm={6} md={4} key={book.item_id}>
             <Card style={styles.card}>
               <CardContent>
                 <Typography variant="h5" style={styles.cardTitle}>
                   {book.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" style={styles.cardDescription}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={styles.cardDescription}
+                >
                   Status: {book.status}
                 </Typography>
               </CardContent>
@@ -66,13 +121,14 @@ const styles = {
     textAlign: "center",
     marginBottom: "30px",
   },
+  buttonGroup: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "30px",
+  },
   card: {
     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
     transition: "transform 0.3s, box-shadow 0.3s",
-    '&:hover': {
-      transform: "scale(1.05)",
-      boxShadow: "0px 6px 25px rgba(0, 0, 0, 0.15)",
-    },
   },
   cardTitle: {
     color: "#222",
@@ -84,4 +140,4 @@ const styles = {
   },
 };
 
-export default BooksWatchlist; 
+export default BooksWatchlist;

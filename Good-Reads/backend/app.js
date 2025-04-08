@@ -811,3 +811,29 @@ app.post("/add-friends-to-community", async (req, res) => {
   }
 });
 
+app.get("/getwatchlist", async (req, res) => {
+  const userId = req.session.userId; // or however you're storing it
+  const result = await pool.query(
+    "SELECT w.item_id, b.title, w.status FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+    [userId]
+  );
+  res.json(result.rows);
+});
+
+app.post("/watchlist", async (req, res) => {
+  const { bookId, stat } = req.body;
+  const userId = req.session.userId; // Assuming user ID is stored in session
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    await pool.query(
+      "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
+      [userId, bookId, stat ]
+    );
+    res.json({ message: "Book added to watchlist" });
+  } catch (error) {
+    console.error("Error adding to watchlist:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});

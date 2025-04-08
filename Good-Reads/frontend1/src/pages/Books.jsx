@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Typography, Grid, Card, CardContent, CardMedia, Button, Select, MenuItem } from "@mui/material";
+import {
+  Container, Typography, Grid, Card, CardContent, CardMedia,
+  Button, Select, MenuItem
+} from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
@@ -10,8 +13,8 @@ function Books() {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [minRating, setMinRating] = useState(0);
+  const [statusMap, setStatusMap] = useState({}); // { [item_id]: "To Read" }
 
-  // Authentication check
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -29,7 +32,6 @@ function Books() {
     checkAuth();
   }, [navigate]);
 
-  // Fetch books and genres
   useEffect(() => {
     fetchBooks();
     fetchGenres();
@@ -55,18 +57,18 @@ function Books() {
     }
   };
 
-  // Add to watchlist
-  const addToWatchlist = async (bookId) => {
+  // Submit watchlist status
+  const handleWatchlistStatus = async (bookId, status) => {
+    setStatusMap((prev) => ({ ...prev, [bookId]: status }));
     try {
       await fetch("http://localhost:4000/watchlist", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookId }),
+        body: JSON.stringify({ bookId, status }),
       });
-      alert("Book added to watchlist!");
     } catch (error) {
-      console.error("Error adding to watchlist:", error);
+      console.error("Error updating watchlist:", error);
     }
   };
 
@@ -80,13 +82,12 @@ function Books() {
         body: JSON.stringify({ rating: ratingValue }),
       });
       alert("Rating submitted!");
-      fetchBooks(); // Refresh books after rating update
+      fetchBooks(); // refresh
     } catch (error) {
       console.error("Error submitting rating:", error);
     }
   };
 
-  // Filter books by genre and rating
   const filteredBooks = books.filter(
     (book) =>
       (!selectedGenre || book.genre === selectedGenre) &&
@@ -119,7 +120,7 @@ function Books() {
         </Select>
       </div>
 
-      {/* Book List */}
+      {/* Book Cards */}
       <Grid container spacing={3}>
         {filteredBooks.map((book) => (
           <Grid item xs={12} sm={6} md={4} key={book.item_id}>
@@ -140,22 +141,26 @@ function Books() {
                   onChange={(value) => handleRating(book.item_id, value)}
                 />
 
-                {/* Watchlist Button */}
-                <Button
-                  variant="contained"
-                  color="primary"
+                {/* Watchlist Dropdown */}
+                <Select
+                  fullWidth
+                  value={statusMap[book.item_id] || ""}
+                  onChange={(e) => handleWatchlistStatus(book.item_id, e.target.value)}
+                  displayEmpty
                   style={{ marginTop: "10px" }}
-                  onClick={() => addToWatchlist(book.item_id)}
                 >
-                  Add to Watchlist
-                </Button>
+                  <MenuItem value="">Add to Watchlist</MenuItem>
+                  <MenuItem value="To Read">To Read</MenuItem>
+                  <MenuItem value="Reading">Reading</MenuItem>
+                  <MenuItem value="Finished">Finished</MenuItem>
+                </Select>
 
                 {/* View Details Button */}
                 <Button
                   variant="outlined"
                   color="secondary"
-                  style={{ marginTop: "10px", marginLeft: "10px" }}
-                  onClick={() => navigate(`/items/books/${book.item_id}`)} // Navigate to BookDetails page
+                  style={{ marginTop: "10px" }}
+                  onClick={() => navigate(`/items/books/${book.item_id}`)}
                 >
                   View Details
                 </Button>
@@ -170,7 +175,7 @@ function Books() {
 
 const styles = {
   container: {
-    marginTop: "80px", // To account for fixed navbar
+    marginTop: "80px",
     padding: "20px",
   },
   title: {
