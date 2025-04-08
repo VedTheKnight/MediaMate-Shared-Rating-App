@@ -13,7 +13,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'rating_app',
-  password: '12345678',
+  password: 'Harijanvi1!',
   port: 5432,
 });
 
@@ -802,16 +802,19 @@ app.get("/get-friends", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
 app.post("/add-friends-to-community", async (req, res) => {
   const { community_id, friends } = req.body;
 
-  if (!community_id || !friends || friends.length === 0) {
+  if (!community_id || !friends) {
     return res.status(400).json({ message: "Invalid request data" });
   }
 
+  if (friends.includes("na") || friends.length === 0) {
+    // If N/A is selected or no friends selected, skip inserting
+    return res.status(200).json({ message: "No friends added to community" });
+  }
+
   try {
-    // Assuming you have a "CommunityMembership" table that links users to communities
     const values = friends.map((friend_id) => `(${community_id}, ${friend_id})`).join(", ");
     const query = `
       INSERT INTO CommunityMembership (community_id, user_id)

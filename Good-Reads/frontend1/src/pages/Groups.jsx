@@ -315,33 +315,48 @@ function Groups() {
   <InputLabel>Friends</InputLabel>
   <Select
     multiple
-    value={form.selected_friends || []}  // Ensure it's an empty array when no friends are selected
-    onChange={(e) => setForm({ ...form, selected_friends: e.target.value })}
+    value={form.selected_friends}
+    onChange={(e) => {
+      const value = e.target.value;
+
+      // If N/A (represented as 'na') is selected, only keep that in selection
+      if (value.includes("na")) {
+        setForm({ ...form, selected_friends: ["na"] });
+      } else {
+        setForm({ ...form, selected_friends: value.filter(v => v !== "na") });
+      }
+    }}
     renderValue={(selected) => {
-      // Display nothing in the main bar if no friends are selected
-      if (selected.length === 0) return ""; 
-
-      // Map over the selected userIds and get their names from the friends array
-      const selectedNames = selected.map(userId => {
-        const friend = friends.find(f => f.user_id === userId);
-        return friend ? friend.username : "";
+      if (selected.length === 0) return "";
+      if (selected.includes("na")) return "N/A";
+      const selectedNames = selected.map((userId) => {
+        const friend = friends.find((f) => f.user_id === userId);
+        return friend?.username || "";
       });
-
-      return selectedNames.join(", ");  // Display the selected friend names
+      return selectedNames.join(", ");
     }}
     label="Friends"
     required
   >
+    <MenuItem value="na">
+      <Checkbox checked={form.selected_friends.includes("na")} />
+      <ListItemText primary="N/A (Don’t add any friends)" />
+    </MenuItem>
+
     {friends.map((friend) => (
-      <MenuItem key={friend.user_id} value={friend.user_id}>
+      <MenuItem
+        key={friend.user_id}
+        value={friend.user_id}
+        disabled={form.selected_friends.includes("na")}
+      >
         <Checkbox checked={form.selected_friends.includes(friend.user_id)} />
-        <Typography variant="body2">{friend.username}</Typography> {/* This will display the username */}
-        <ListItemText primary={friend.name} />
+        <Typography variant="body2">{friend.username}</Typography>
+        <ListItemText primary={friend.name || ""} />
       </MenuItem>
     ))}
-
   </Select>
 </FormControl>
+
 
 
 
