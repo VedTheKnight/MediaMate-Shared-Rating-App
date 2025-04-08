@@ -1,0 +1,1 @@
+DROP TABLE Community, CommunityMembership, Comment, CommentSection, CommentVotes;
