@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -12,6 +14,7 @@ import {
 } from "@mui/material";
 
 function CommunityPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [community, setCommunity] = useState(null);
   const [comments, setComments] = useState([]);
@@ -19,6 +22,23 @@ function CommunityPage() {
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const data = await res.json();
+        if (data.message !== "Logged in") {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Authentication check failed:", error);
+        navigate("/login");
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
 
   useEffect(() => {
     const fetchCommunityData = async () => {
@@ -236,7 +256,9 @@ function CommunityPage() {
   }
 
   return (
-    <Container>
+    <>
+    <Navbar />
+    <Container sx={{ paddingTop: "100px" }}>
       <Card sx={{ mb: 2 }}>
         <CardContent>
           <Typography variant="h4" align="center" gutterBottom>
@@ -273,6 +295,7 @@ function CommunityPage() {
         renderComments(comments)
       )}
     </Container>
+    </>
   );
 }
 

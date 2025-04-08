@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Container, Typography, Grid, Card, CardContent, Box, Divider } from "@mui/material";
+import { Container, Typography, Grid, Card, CardContent, Box } from "@mui/material";
 
 function UserHome() {
   const navigate = useNavigate();
-  // const [userData, setUserData] = useState({
-  //   username: "Loading...",
-  //   email: "Loading...",
-  //   friendCount: 0,
-  //   joinDate: "Loading..."
-  // });
+  const [userData, setUserData] = useState({
+    username: "Loading...",
+    email: "Loading...",
+    friendCount: 0
+  });
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,22 +24,20 @@ function UserHome() {
       }
     };
 
-    // Fetch user data
-    // const fetchUserData = async () => {
-    //   try {
-    //     const res = await fetch("http://localhost:4000/user/profile", { credentials: "include" });
-    //     const data = await res.json();
-    //     setUserData(data);
-    //   } catch (error) {
-    //     console.error("Failed to fetch user data:", error);
-    //   }
-    // };
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/user/profile", { credentials: "include" });
+        const data = await res.json();
+        setUserData(data);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
 
     checkAuth();
-    // fetchUserData();
+    fetchUserData();
   }, [navigate]);
 
-  // Sample data for demonstration
   const recommendations = {
     books: [
       { id: 1, title: "The Great Gatsby", rating: "★★★★★" },
@@ -64,10 +61,9 @@ function UserHome() {
         <CardContent>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Typography variant="h4" style={styles.username}>placeholder</Typography>
-              <Typography variant="body1" style={styles.userInfo}>placeholder</Typography>
-              <Typography variant="body1" style={styles.userInfo}>Friends: 0</Typography>
-              <Typography variant="body1" style={styles.userInfo}>Member since: March 2025</Typography>
+              <Typography variant="h4" style={styles.username}>{userData.username}</Typography>
+              <Typography variant="body1" style={styles.userInfo}>{userData.email}</Typography>
+              <Typography variant="body1" style={styles.userInfo}>Friends: {userData.friendCount}</Typography>
             </Grid>
             <Grid item xs={12} md={6}>
               <Box style={styles.watchlistLinks}>
@@ -137,6 +133,7 @@ const styles = {
     padding: "20px",
     maxWidth: "1200px",
     margin: "0 auto",
+    paddingTop: "100px"
   },
   profileCard: {
     marginBottom: "30px",

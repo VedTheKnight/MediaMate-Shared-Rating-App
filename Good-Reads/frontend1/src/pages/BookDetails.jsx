@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { Container, Typography, Card, CardContent, Button, TextField } from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
@@ -87,6 +88,8 @@ function BookDetails() {
   if (!book || !book.reviews) return <Typography>Error loading book details.</Typography>;
 
   return (
+    <>
+    <Navbar />
     <Container style={styles.container}>
       {/* Book Details */}
       <Card style={styles.card}>
@@ -156,6 +159,7 @@ function BookDetails() {
         </div>
       </div>
     </Container>
+    </>
   );
 }
 
@@ -163,6 +167,7 @@ const styles = {
   container: {
     marginTop: "80px",
     paddingBottom: "40px",
+    paddingTop: "100px" 
   },
   card: {
     marginBottom: "30px",

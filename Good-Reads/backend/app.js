@@ -13,7 +13,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'rating_app',
-  password: 'Harijanvi1!',
+  password: '12345678',
   port: 5432,
 });
 
@@ -367,22 +367,36 @@ app.post("/watchlist", async (req, res) => {
   }
 });
 
-app.post("/books/:id/rating", async (req, res) => {
-  const { id } = req.params; // Book ID
-  const { rating } = req.body; // Rating value
-  const userId = req.session.userId; // Assuming user ID is stored in session
-
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+app.post("/books/:bookId/rating", async (req, res) => {
+  const { bookId } = req.params;
+  const { rating } = req.body;
+  const userId = req.user.id; // Assuming you're using authentication
 
   try {
-    await pool.query(
-      "INSERT INTO Rating (user_id, item_id, rating_value, is_private) VALUES ($1, $2, $3, $4)",
-      [userId, id, rating, false]
+    // Check if a rating already exists for this user and book
+    const existingRating = await db.query(
+      "SELECT * FROM ratings WHERE user_id = $1 AND book_id = $2",
+      [userId, bookId]
     );
-    res.json({ message: "Rating submitted successfully" });
+
+    if (existingRating.rows.length > 0) {
+      // Update existing rating
+      await db.query(
+        "UPDATE ratings SET rating = $1 WHERE user_id = $2 AND book_id = $3",
+        [rating, userId, bookId]
+      );
+    } else {
+      // Insert new rating
+      await db.query(
+        "INSERT INTO ratings (user_id, book_id, rating) VALUES ($1, $2, $3)",
+        [userId, bookId, rating]
+      );
+    }
+
+    res.status(200).json({ message: "Rating updated successfully" });
   } catch (error) {
-    console.error("Error submitting rating:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error updating/inserting rating:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -835,5 +849,42 @@ app.post("/watchlist", async (req, res) => {
   } catch (error) {
     console.error("Error adding to watchlist:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// Get user profile
+app.get("/user/profile", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+
+  try {
+    const result = await pool.query(
+      "SELECT username, email FROM Users WHERE user_id = $1",
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = result.rows[0];
+
+    // You can add logic to count friends if your schema supports it
+    const friendCountResult = await pool.query(
+      `SELECT COUNT(*) AS friendCount FROM Friendship
+       WHERE (user1_id = $1 OR user2_id = $1) AND status = 'accepted'`,
+      [userId]
+    );
+
+    const friendCount = parseInt(friendCountResult.rows[0].friendcount, 10);
+
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+      friendCount: friendCount
+    });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(500).json({ message: "Error retrieving profile" });
   }
 });

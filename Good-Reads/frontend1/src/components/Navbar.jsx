@@ -24,9 +24,14 @@ function Navbar() {
   ];
 
   // Only show navbar on specified routes
-  if (!showNavbarRoutes.includes(location.pathname) || hideNavbarRoutes.includes(location.pathname)) {
+  const shouldShowNavbar = showNavbarRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  ) && !hideNavbarRoutes.includes(location.pathname);
+  
+  if (!shouldShowNavbar) {
     return null;
   }
+  
 
   const handleLogout = async () => {  
     try {

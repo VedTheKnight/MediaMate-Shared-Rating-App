@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Container, Typography, Grid, Card, CardContent, CardMedia,
-  Button, Select, MenuItem
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
@@ -13,7 +20,7 @@ function Books() {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [minRating, setMinRating] = useState(0);
-  const [statusMap, setStatusMap] = useState({}); // { [item_id]: "To Read" }
+  const [statusMap, setStatusMap] = useState({});
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -57,7 +64,6 @@ function Books() {
     }
   };
 
-  // Submit watchlist status
   const handleWatchlistStatus = async (bookId, status) => {
     setStatusMap((prev) => ({ ...prev, [bookId]: status }));
     try {
@@ -72,17 +78,25 @@ function Books() {
     }
   };
 
-  // Submit rating
   const handleRating = async (bookId, ratingValue) => {
     try {
-      await fetch(`http://localhost:4000/books/${bookId}/rating`, {
+      const response = await fetch(`http://localhost:4000/books/${bookId}/rating`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating: ratingValue }),
       });
-      alert("Rating submitted!");
-      fetchBooks(); // refresh
+
+      if (response.ok) {
+        setBooks((prevBooks) =>
+          prevBooks.map((book) =>
+            book.item_id === bookId ? { ...book, rating: ratingValue } : book
+          )
+        );
+        alert("Rating submitted!");
+      } else {
+        console.error("Failed to update rating");
+      }
     } catch (error) {
       console.error("Error submitting rating:", error);
     }
@@ -121,25 +135,54 @@ function Books() {
       </div>
 
       {/* Book Cards */}
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justifyContent="center">
         {filteredBooks.map((book) => (
-          <Grid item xs={12} sm={6} md={4} key={book.item_id}>
+          <Grid item key={book.item_id}>
             <Card style={styles.card}>
-              <CardMedia component="img" height="140" image={book.image_url} alt={book.title} />
-              <CardContent>
+              <CardMedia
+                component="img"
+                image={book.image_url}
+                alt={book.title}
+                style={{
+                  objectFit: "cover",
+                  height: "300px",
+                  width: "100%",
+                }}
+              />
+              <CardContent style={{ padding: "20px" }}>
                 <Typography variant="h5" style={styles.cardTitle}>
                   {book.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" style={styles.cardDescription}>
-                  {book.description.slice(0, 100)}...
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    marginBottom: "15px",
+                  }}
+                >
+                  {book.description}
                 </Typography>
 
-                {/* Rating */}
-                <Rating
-                  style={{ maxWidth: "100px", marginTop: "10px" }}
-                  value={book.rating}
-                  onChange={(value) => handleRating(book.item_id, value)}
-                />
+                {/* Rating and View Details side by side */}
+                <div style={styles.ratingDetailsContainer}>
+                  <Rating
+                    style={{ maxWidth: "120px" }}
+                    value={book.rating}
+                    onChange={(value) => handleRating(book.item_id, value)}
+                  />
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                    style={{ marginLeft: "10px", height: "fit-content" }}
+                    onClick={() => navigate(`/items/books/${book.item_id}`)}
+                  >
+                    View Details
+                  </Button>
+                </div>
 
                 {/* Watchlist Dropdown */}
                 <Select
@@ -154,16 +197,6 @@ function Books() {
                   <MenuItem value="Reading">Reading</MenuItem>
                   <MenuItem value="Finished">Finished</MenuItem>
                 </Select>
-
-                {/* View Details Button */}
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  style={{ marginTop: "10px" }}
-                  onClick={() => navigate(`/items/books/${book.item_id}`)}
-                >
-                  View Details
-                </Button>
               </CardContent>
             </Card>
           </Grid>
@@ -181,20 +214,35 @@ const styles = {
   title: {
     color: "#333",
     fontWeight: "bold",
+    textAlign: "center",
   },
   filters: {
     display: "flex",
     gap: "20px",
-    marginBottom: "20px",
+    marginBottom: "30px",
+    justifyContent: "center",
   },
   card: {
-    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
-    transition: "transform 0.3s",
-    paddingBottom: "15px",
+    boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+    transition: "transform 0.3s ease-in-out",
+    width: "350px",
+    height: "550px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    borderRadius: "10px",
+    overflow: "hidden",
   },
   cardTitle: {
     color: "#222",
     fontWeight: "bold",
+    fontSize: "20px",
+    marginBottom: "10px",
+  },
+  ratingDetailsContainer: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: "10px",
   },
 };
 
