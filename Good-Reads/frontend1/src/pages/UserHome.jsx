@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { Container, Typography, Grid, Card, CardContent, Box } from "@mui/material";
 
+
 function UserHome() {
+  const { userId } = useParams();  // undefined for /dashboard
   const navigate = useNavigate();
+  const location = useLocation();  // to check where we came from
+
   const [userData, setUserData] = useState({
     username: "Loading...",
     email: "Loading...",
@@ -26,7 +30,20 @@ function UserHome() {
 
     const fetchUserData = async () => {
       try {
-        const res = await fetch("http://localhost:4000/user/profile", { credentials: "include" });
+        // If viewing a friend's dashboard, make sure we came from /friends
+        if (userId && (!location.state || location.state.from !== "friends")) {
+          console.warn("Unauthorized profile access attempt");
+          navigate("/dashboard");
+          return;
+        }
+
+        const endpoint = userId
+          ? `http://localhost:4000/user2/${userId}`  // friend view
+          : "http://localhost:4000/user/profile";           // self view
+        console.log(endpoint)
+
+        const res = await fetch(endpoint, { credentials: "include" });
+        if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
         setUserData(data);
       } catch (error) {
@@ -36,7 +53,8 @@ function UserHome() {
 
     checkAuth();
     fetchUserData();
-  }, [navigate]);
+  }, [navigate, userId, location.state]);
+
 
   const recommendations = {
     books: [
@@ -56,7 +74,6 @@ function UserHome() {
 
   return (
     <Container style={styles.container}>
-      {/* User Profile Section */}
       <Card style={styles.profileCard}>
         <CardContent>
           <Grid container spacing={3}>
@@ -68,16 +85,15 @@ function UserHome() {
             <Grid item xs={12} md={6}>
               <Box style={styles.watchlistLinks}>
                 <Typography variant="h6" gutterBottom>Your Watchlists</Typography>
-                <Link to="/watchlist/books" style={styles.link}>📚 Books Watchlist</Link>
-                <Link to="/watchlist/movies" style={styles.link}>🎬 Movies Watchlist</Link>
-                <Link to="/watchlist/tvshows" style={styles.link}>📺 TV Shows Watchlist</Link>
+                <Link to={`/watchlist/books/${userId}`} style={styles.link}>📚 Books Watchlist</Link>
+                <Link to={`/watchlist/movies/${userId}`} style={styles.link}>🎬 Movies Watchlist</Link>
+                <Link to={`/watchlist/tvshows/${userId}`} style={styles.link}>📺 TV Shows Watchlist</Link>
               </Box>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
 
-      {/* Recommendations Section */}
       <Grid container spacing={4} style={styles.recommendationsSection}>
         <Grid item xs={12} md={6}>
           <Typography variant="h5" gutterBottom style={styles.sectionTitle}>
@@ -106,8 +122,7 @@ function UserHome() {
         </Grid>
       </Grid>
 
-      {/* Friend Activity Section */}
-      <Typography variant="h5" gutterBottom style={{...styles.sectionTitle, marginTop: "40px"}}>
+      <Typography variant="h5" gutterBottom style={{ ...styles.sectionTitle, marginTop: "40px" }}>
         Recent Friend Activity
       </Typography>
       <Grid container spacing={2}>

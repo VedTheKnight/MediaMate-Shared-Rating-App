@@ -19,6 +19,7 @@ function Friends() {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
   const [friendshipStatuses, setFriendshipStatuses] = useState({});
+  const [activeFriendId, setActiveFriendId] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -180,9 +181,14 @@ function Friends() {
     </Box>
   );
 
-  const renderUserCard = (user, actions) => (
+  const renderUserCard = (user, actions = null) => (
     <Grid item xs={12} sm={6} md={4} key={user.user_id}>
-      <Card sx={styles.card}>
+      <Card
+        sx={styles.card}
+        onClick={() =>
+          setActiveFriendId((prev) => (prev === user.user_id ? null : user.user_id))
+        }
+      >
         <CardContent>
           <Typography variant="h6" sx={{ mb: 2 }}>
             {user.username}
@@ -190,10 +196,39 @@ function Friends() {
           <Stack spacing={1} direction="row" flexWrap="wrap">
             {actions}
           </Stack>
+  
+          {activeFriendId === user.user_id && (
+            <Box mt={2} display="flex" gap={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/dashboard/${user.user_id}`, {
+                    state: { from: "friends" },
+                  });
+                  // Future: view profile
+                }}
+              >
+                View Profile
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/watchlist2/${user.user_id}`);
+                }}
+              >
+                View Watchlist
+              </Button>
+            </Box>
+          )}
         </CardContent>
       </Card>
     </Grid>
   );
+  
 
   return (
     <Container sx={styles.container}>

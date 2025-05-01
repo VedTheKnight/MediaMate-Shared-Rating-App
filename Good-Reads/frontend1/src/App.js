@@ -16,6 +16,9 @@ import CommunityPage from "./pages/CommunityPage";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
 import Notfound from "./pages/Notfound";
+import UserWatchlist from "./pages/UserWatchlist";
+import UserBooksWatchlist from "./pages/UserBooksWatchlist";
+import UserHome from "./pages/UserHome";
 
 function App() {
   return (
@@ -39,6 +42,11 @@ function App() {
         <Route path="/friends" element={<Friends />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/*" element={<Notfound />} />
+        <Route path="/watchlist2/:userId" element={<UserWatchlist/>} />
+        <Route path="/watchlist2/:userId/books" element={<UserBooksWatchlist/>} />
+        <Route path="/watchlist2/:userId/movies" element={<MoviesWatchlist/>} />
+        <Route path="/watchlist2/:userId/tvshows" element={<TVShowsWatchlist/>} />
+        <Route path="/dashboard/:userId" element={<UserHome/>} />
       </Routes>
     </Router>
   );

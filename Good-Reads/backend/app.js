@@ -13,7 +13,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'rating_app',
-  password: '12345678',
+  password: 'Harijanvi1!',
   port: 5432,
 });
 
@@ -28,6 +28,28 @@ app.use(
     credentials: true,
   })
 );
+
+// Get a user's username by ID
+app.get("/user2/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const result = await pool.query(
+      "SELECT username FROM Users WHERE user_id = $1",
+      [userId]
+    );
+    // console.log(userId,result.rows[0].username);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ username: result.rows[0].username });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 // Session information
 app.use(
@@ -348,6 +370,16 @@ app.get("/genres", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+app.get("/getwatchlist2/:userId", isAuthenticated, async (req, res) => {
+  const { userId } = req.params; // Extract userId from the URL
+  const result = await pool.query(
+    "SELECT w.item_id, b.title, w.status FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+    [userId]
+  );
+  res.json(result.rows);
+});
+
 
 app.get("/getwatchlist", async (req, res) => {
   const userId = req.session.userId; // or however you're storing it
