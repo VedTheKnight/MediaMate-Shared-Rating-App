@@ -6,6 +6,7 @@ function UserWatchlist() {
   const { userId } = useParams(); // Grab user ID from URL
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [viewable, setViewable] = useState(false); // State to manage viewable status
 
   useEffect(() => {
     console.log(userId);
@@ -32,6 +33,7 @@ function UserWatchlist() {
         const data = await res.json();
         console.log(data)
         setUsername(data.username || `User ${userId}`);
+        setViewable(data.is_watchlist_private); // Set viewable status based on response
       } catch (err) {
         console.error("Failed to fetch username:", err);
       }
@@ -54,6 +56,19 @@ function UserWatchlist() {
       <Container style={styles.container}>
         <Typography variant="h5" align="center">
           Loading watchlist...
+        </Typography>
+      </Container>
+    );
+  }
+
+  if (!viewable) {
+    return (
+      <Container style={styles.container}>
+        <Typography variant="h3" align="center">
+        {username}'s watchlist is private.
+        </Typography>
+        <Typography variant="h3" align="center">
+        {username}'s watchlist is private.
         </Typography>
       </Container>
     );

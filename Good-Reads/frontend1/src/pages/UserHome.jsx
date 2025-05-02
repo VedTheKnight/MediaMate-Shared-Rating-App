@@ -85,9 +85,9 @@ function UserHome() {
             <Grid item xs={12} md={6}>
               <Box style={styles.watchlistLinks}>
                 <Typography variant="h6" gutterBottom>Your Watchlists</Typography>
-                <Link to={`/watchlist/books/${userId}`} style={styles.link}>📚 Books Watchlist</Link>
-                <Link to={`/watchlist/movies/${userId}`} style={styles.link}>🎬 Movies Watchlist</Link>
-                <Link to={`/watchlist/tvshows/${userId}`} style={styles.link}>📺 TV Shows Watchlist</Link>
+                <Link to={`/watchlist/books/`} style={styles.link}>📚 Books Watchlist</Link>
+                <Link to={`/watchlist/movies/`} style={styles.link}>🎬 Movies Watchlist</Link>
+                <Link to={`/watchlist/tvshows/`} style={styles.link}>📺 TV Shows Watchlist</Link>
               </Box>
             </Grid>
           </Grid>
