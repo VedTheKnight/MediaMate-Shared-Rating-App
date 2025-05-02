@@ -10,6 +10,12 @@ const config = require("./config");
 const app = express();
 const port = 4000;
 
+const mapPrivacyLevel = (level) => {
+  if (level === 2) return "private";
+  if (level === 1) return "friends";
+  return "public";
+};
+
 // Initialize sentiment analyzer
 const sentiment = new Sentiment();
 
@@ -126,8 +132,8 @@ app.post("/signup", async (req, res) => {
         email,
         hashedPassword,
         null, // Default to null if not provided
-        false, // Default value for is_profile_private
-        false  // Default value for is_rating_private
+        0, // Default value for is_profile_private
+        0  // Default value for is_rating_private
       ]
     );
 
