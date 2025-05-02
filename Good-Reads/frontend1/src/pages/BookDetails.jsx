@@ -64,7 +64,7 @@ function BookDetails() {
   const fetchBookDetails = useCallback(async (bookId) => {
     try {
       // const response = await fetch(`http://localhost:4000/books/${bookId}`, { credentials: "include" });
-      const response = await fetch(`${API_BASE}/books/${bookId}`, { credentials: "include" });
+      const response = await fetch(`${API_BASE}/content/book/${bookId}`, { credentials: "include" });
       const data = await response.json();
       setBook(data);
       setLoading(false);
@@ -116,7 +116,7 @@ function BookDetails() {
       //   body: JSON.stringify({ text: reviewText }),
       // });
 
-      await fetch(`${API_BASE}/books/${id}/review`, {
+      await fetch(`${API_BASE}/content/book/${id}/review`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -134,7 +134,7 @@ function BookDetails() {
   // Memoize fetchFilteredReviews with useCallback
   const fetchFilteredReviews = useCallback(async (filter) => {
     try {
-      const response = await fetch(`${API_BASE}/books/${id}/reviews?sentiment=${filter}`, { 
+      const response = await fetch(`${API_BASE}/content/book/${id}/reviews?sentiment=${filter}`, { 
         credentials: "include" 
       });
 
