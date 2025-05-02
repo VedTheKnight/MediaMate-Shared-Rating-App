@@ -15,6 +15,7 @@ import Groups from "./pages/Groups";
 import CommunityPage from "./pages/CommunityPage";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
+import Chatbot from "./pages/Chatbot";
 import Notfound from "./pages/Notfound";
 import UserWatchlist from "./pages/UserWatchlist";
 import UserBooksWatchlist from "./pages/UserBooksWatchlist";
@@ -41,6 +42,7 @@ function App() {
         <Route path="/groups/:id" element={<CommunityPage />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/*" element={<Notfound />} />
         <Route path="/watchlist2/:userId" element={<UserWatchlist/>} />
         <Route path="/watchlist2/:userId/books" element={<UserBooksWatchlist/>} />
@@ -52,4 +54,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

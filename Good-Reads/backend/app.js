@@ -4,8 +4,18 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 const { Pool } = require("pg");
+const Sentiment = require('sentiment');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const config = require("./config");
 const app = express();
 const port = 4000;
+
+// Initialize sentiment analyzer
+const sentiment = new Sentiment();
+
+// Initialize Gemini API
+const genAI = new GoogleGenerativeAI(config.geminiApiKey);
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 // PostgreSQL connection
 // NOTE: use YOUR postgres username and password here
@@ -24,7 +34,7 @@ app.use(express.json());
 // to use this backend API
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
   })
 );
@@ -348,10 +358,13 @@ app.get("/books", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
-             COALESCE(AVG(r.rating_value), 0) AS rating
+             COALESCE(AVG(r.rating_value), 0) AS rating,
+             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
       FROM ContentItem ci
       LEFT JOIN Genre g ON ci.genre_id = g.genre_id
       LEFT JOIN Rating r ON ci.item_id = r.item_id
+      LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      WHERE ci.content_type = 'Book'
       GROUP BY ci.item_id, g.name
     `);
     res.json(result.rows);
@@ -382,9 +395,9 @@ app.get("/getwatchlist2/:userId", isAuthenticated, async (req, res) => {
 
 
 app.get("/getwatchlist", async (req, res) => {
-  const userId = req.session.userId; // or however you're storing it
+  const userId = req.session.userId;
   const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+    "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
     [userId]
   );
   res.json(result.rows);
@@ -441,17 +454,28 @@ app.post("/books/:bookId/rating", async (req, res) => {
   }
 });
 
+// Helper function to calculate sentiment score
+function calculateSentimentScore(text) {
+  const result = sentiment.analyze(text);
+  // Normalize score to 0-1 range
+  // sentiment score ranges from -5 to 5, so we add 5 and divide by 10
+  const normalizedScore = (result.score + 5) / 10;
+  return Math.max(0, Math.min(1, normalizedScore));
+}
+
 app.post("/books/:id/review", async (req, res) => {
-  const { id } = req.params; // Book ID
-  const { text } = req.body; // Review text
-  const userId = req.session.userId; // Assuming user ID is stored in session
+  const { id } = req.params;
+  const { text } = req.body;
+  const userId = req.session.userId;
 
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
   try {
+    const sentimentScore = calculateSentimentScore(text);
+    
     await pool.query(
-      "INSERT INTO Review (user_id, item_id, text) VALUES ($1, $2, $3)",
-      [userId, id, text]
+      "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, $4)",
+      [userId, id, text, sentimentScore]
     );
     res.json({ message: "Review submitted successfully" });
   } catch (error) {
@@ -467,19 +491,22 @@ app.get("/books/:id", async (req, res) => {
     const bookResult = await pool.query(`
       SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url,
              g.name AS genre,
-             COALESCE(AVG(r.rating_value), 0) AS rating
+             COALESCE(AVG(r.rating_value), 0) AS rating,
+             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
       FROM ContentItem ci
       LEFT JOIN Genre g ON ci.genre_id = g.genre_id
       LEFT JOIN Rating r ON ci.item_id = r.item_id
+      LEFT JOIN Review rev ON ci.item_id = rev.item_id
       WHERE ci.item_id = $1
       GROUP BY ci.item_id, g.name
     `, [id]);
 
     const reviewsResult = await pool.query(`
-      SELECT r.review_id, r.text, u.username 
+      SELECT r.review_id, r.text, r.sentiment_score, u.username 
       FROM Review r 
       JOIN Users u ON r.user_id = u.user_id 
       WHERE r.item_id = $1
+      ORDER BY r.sentiment_score DESC
     `, [id]);
 
     if (bookResult.rows.length === 0) {
@@ -487,6 +514,10 @@ app.get("/books/:id", async (req, res) => {
     }
 
     const bookDetails = bookResult.rows[0];
+    // Add sentiment analysis for the book description
+    if (bookDetails.description) {
+      bookDetails.description_sentiment = calculateSentimentScore(bookDetails.description);
+    }
     bookDetails.reviews = reviewsResult.rows;
 
     res.json(bookDetails);
@@ -496,6 +527,35 @@ app.get("/books/:id", async (req, res) => {
   }
 });
 
+// Add a new endpoint to filter reviews by sentiment
+app.get("/books/:id/reviews", async (req, res) => {
+  const { id } = req.params;
+  const { sentiment } = req.query; // 'positive', 'negative', or 'neutral'
+
+  try {
+    let sentimentQuery = '';
+    if (sentiment === 'positive') {
+      sentimentQuery = 'AND r.sentiment_score >= 0.6';
+    } else if (sentiment === 'negative') {
+      sentimentQuery = 'AND r.sentiment_score < 0.4';
+    } else if (sentiment === 'neutral') {
+      sentimentQuery = 'AND r.sentiment_score >= 0.4 AND r.sentiment_score < 0.6';
+    }
+
+    const reviewsResult = await pool.query(`
+      SELECT r.review_id, r.text, r.sentiment_score, u.username 
+      FROM Review r 
+      JOIN Users u ON r.user_id = u.user_id 
+      WHERE r.item_id = $1 ${sentimentQuery}
+      ORDER BY r.sentiment_score DESC
+    `, [id]);
+
+    res.json(reviewsResult.rows);
+  } catch (error) {
+    console.error("Error fetching filtered reviews:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.get("/user_watchlist", async (req, res) => {
   const userId = req.session.userId;
@@ -870,9 +930,9 @@ app.post("/add-friends-to-community", async (req, res) => {
 });
 
 app.get("/getwatchlist", async (req, res) => {
-  const userId = req.session.userId; // or however you're storing it
+  const userId = req.session.userId;
   const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+    "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
     [userId]
   );
   res.json(result.rows);
@@ -932,3 +992,106 @@ app.get("/user/profile", isAuthenticated, async (req, res) => {
     res.status(500).json({ message: "Error retrieving profile" });
   }
 });
+
+// Chatbot endpoint
+app.post("/chatbot", isAuthenticated, async (req, res) => {
+  const { message, watchlistData } = req.body;
+  const userId = req.session.userId;
+
+  if (!message) {
+    return res.status(400).json({ message: "Message is required" });
+  }
+
+  try {
+    // console.log("Received watchlist data:", watchlistData);
+    
+    // Format watchlist data for the prompt
+    const watchlistContext = formatWatchlistForPrompt(watchlistData);
+    // console.log("Formatted watchlist context:", watchlistContext);
+    
+    // Create the prompt with context
+    const prompt = createPromptWithContext(message, watchlistContext);
+    console.log("Generated prompt:", prompt);
+
+    // Initialize Gemini API
+    const genAI = new GoogleGenerativeAI(config.geminiApiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Updated model name
+
+    // Generate response
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.status(200).json({ response: text });
+  } catch (error) {
+    console.error("Error in chatbot endpoint:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+// Helper function to format watchlist data for the prompt
+function formatWatchlistForPrompt(watchlistData) {
+  if (!watchlistData || !Array.isArray(watchlistData)){
+    console.log("No watchlist data provided");
+    return "";
+  } 
+
+  const categorized = {
+    book: { planned: [], watching: [], completed: [] },
+    tvshow: { planned: [], watching: [], completed: [] },
+    movie: { planned: [], watching: [], completed: [] }
+  };
+
+  watchlistData.forEach(item => {
+    // Handle null or undefined content_type
+    const category = (item.content_type).toLowerCase();
+    // Handle null or undefined status
+    const status = (item.status || 'planned').toLowerCase();
+    
+    // Map category names to match our structure
+    const mappedCategory = category === 'tv show' ? 'tvshow' : category;
+    
+    if (categorized[mappedCategory]) {
+      if (!categorized[mappedCategory][status]) {
+        console.log(`Unknown status: ${status} for item: ${item.title}`);
+        categorized[mappedCategory]['planned'].push(item.title); // Default to planned
+      } else {
+        categorized[mappedCategory][status].push(item.title);
+      }
+    } else {
+      console.log(`Unknown category: ${category} for item: ${item.title}`);
+      categorized.books[status].push(item.title); // Default to books
+    }
+  });
+
+  let prompt = "Here is the user's watchlist:\n\n";
+  
+  Object.entries(categorized).forEach(([category, items]) => {
+    // Only show categories that have items
+    const hasItems = Object.values(items).some(arr => arr.length > 0);
+    if (hasItems) {
+      prompt += `${category.charAt(0).toUpperCase() + category.slice(1)}:\n`;
+      Object.entries(items).forEach(([status, titles]) => {
+        if (titles.length > 0) {
+          prompt += `- ${status.charAt(0).toUpperCase() + status.slice(1)}: ${titles.join(", ")}\n`;
+        }
+      });
+      prompt += "\n";
+    }
+  });
+  
+  console.log("Generated watchlist prompt:", prompt);
+  return prompt;
+}
+
+// Helper function to create the prompt with context
+function createPromptWithContext(message, watchlistContext) {
+  return `You are a recommendation assistant for books, TV shows, and movies. 
+Here is the user's watchlist and preferences:
+
+${watchlistContext}
+
+User's question: ${message}
+
+Please provide a helpful response based on their watchlist and preferences.`;
+}
