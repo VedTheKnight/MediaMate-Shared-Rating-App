@@ -21,14 +21,8 @@ function Settings() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-<<<<<<< HEAD
         // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
         const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include"});
-=======
-        const res = await fetch("http://localhost:4000/isLoggedIn", {
-          credentials: "include",
-        });
->>>>>>> origin/main
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");

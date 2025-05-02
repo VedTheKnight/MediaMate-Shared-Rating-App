@@ -69,8 +69,8 @@ function Books() {
 
   const fetchBooks = async () => {
     try {
-      // const response = await fetch("http://localhost:4000/books", { credentials: "include" });
-      const response = await fetch(`${API_BASE}/books`, { credentials: "include" });
+      // const response = await fetch("http://localhost:4000/content/book", { credentials: "include" });
+      const response = await fetch(`${API_BASE}/content/book`, { credentials: "include" });
       const data = await response.json();
       setBooks(data);
     } catch (error) {
@@ -112,13 +112,13 @@ function Books() {
 
   const handleRating = async (bookId, ratingValue) => {
     try {
-      // const response = await fetch(`http://localhost:4000/books/${bookId}/rating`, {
+      // const response = await fetch(`http://localhost:4000/content/book/${bookId}/rating`, {
       //   method: "POST",
       //   credentials: "include",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify({ rating: ratingValue }),
       // });
-      const response = await fetch(`${API_BASE}/books/${bookId}/rating`, {
+      const response = await fetch(`${API_BASE}/content/book/${bookId}/rating`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -239,7 +239,7 @@ function Books() {
                     color="secondary"
                     size="small"
                     style={{ marginLeft: "10px", height: "fit-content" }}
-                    onClick={() => navigate(`/items/books/${book.item_id}`)}
+                    onClick={() => navigate(`/items/content/book/${book.item_id}`)}
                   >
                     View Details
                   </Button>
