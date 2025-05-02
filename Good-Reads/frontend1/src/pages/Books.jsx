@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+import { FormControlLabel, Checkbox } from "@mui/material";
 
 const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
 
@@ -43,6 +44,8 @@ function Books() {
   const [minRating, setMinRating] = useState(0);
   const [sentimentFilter, setSentimentFilter] = useState("all");
   const [statusMap, setStatusMap] = useState({});
+  const [filterByFriends, setFilterByFriends] = useState(false);
+
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -63,21 +66,27 @@ function Books() {
   }, [navigate]);
 
   useEffect(() => {
-    fetchBooks();
     fetchGenres();
   }, []);
+  
+  useEffect(() => {
+    fetchBooks();
+  }, [filterByFriends]);
+  
 
   const fetchBooks = async () => {
     try {
-      // const response = await fetch("http://localhost:4000/content/book", { credentials: "include" });
-      const response = await fetch(`${API_BASE}/content/book`, { credentials: "include" });
+      const endpoint = filterByFriends
+        ? `${API_BASE}/content/book/friends`
+        : `${API_BASE}/content/book`;
+      const response = await fetch(endpoint, { credentials: "include" });
       const data = await response.json();
       setBooks(data);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
   };
-
+  
   const fetchGenres = async () => {
     try {
       // const response = await fetch("http://localhost:4000/genres", { credentials: "include" });
@@ -150,6 +159,7 @@ function Books() {
         (sentimentFilter === "negative" && (book.average_sentiment || 0.5) < 0.4))
   );
 
+
   return (
     <Container style={styles.container}>
       <Typography variant="h4" gutterBottom style={styles.title}>
@@ -173,6 +183,8 @@ function Books() {
             ))}
           </Select>
         </FormControl>
+
+
 
         <FormControl variant="outlined" style={styles.filterControl}>
           <InputLabel>Min Rating</InputLabel>
@@ -202,6 +214,18 @@ function Books() {
             <MenuItem value="negative">Negative (less than 40%)</MenuItem>
           </Select>
         </FormControl>
+
+        <FormControlLabel
+        control={
+          <Checkbox
+            checked={filterByFriends}
+            onChange={(e) => setFilterByFriends(e.target.checked)}
+            color="primary"
+          />
+        }
+        label="Show only friends' rated/reviewed books"
+        />
+
       </div>
 
       {/* Book Cards */}

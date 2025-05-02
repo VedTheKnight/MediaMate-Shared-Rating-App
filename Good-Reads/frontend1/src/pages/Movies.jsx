@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+import { FormControlLabel, Checkbox } from "@mui/material";
 
 const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
 
@@ -43,6 +44,7 @@ function Movies() {
   const [minRating, setMinRating] = useState(0);
   const [sentimentFilter, setSentimentFilter] = useState("all");
   const [statusMap, setStatusMap] = useState({});
+  const [filterByFriends, setFilterByFriends] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -63,14 +65,21 @@ function Movies() {
   }, [navigate]);
 
   useEffect(() => {
-    fetchBooks();
     fetchGenres();
   }, []);
 
+  useEffect(() => {
+    fetchBooks();
+  }, [filterByFriends]);
+  
+
+
   const fetchBooks = async () => {
     try {
-      // const response = await fetch("http://localhost:4000/content/movie", { credentials: "include" });
-      const response = await fetch(`${API_BASE}/content/movie`, { credentials: "include" });
+      const endpoint = filterByFriends
+        ? `${API_BASE}/content/movie/friends`
+        : `${API_BASE}/content/movie`;
+      const response = await fetch(endpoint, { credentials: "include" });
       const data = await response.json();
       setBooks(data);
     } catch (error) {
@@ -202,6 +211,19 @@ function Movies() {
             <MenuItem value="negative">Negative (less than 40%)</MenuItem>
           </Select>
         </FormControl>
+
+        <FormControlLabel
+        control={
+          <Checkbox
+            checked={filterByFriends}
+            onChange={(e) => setFilterByFriends(e.target.checked)}
+            color="primary"
+          />
+        }
+        label="Show only friends' rated/reviewed movies"
+        />
+
+
       </div>
 
       {/* Book Cards */}

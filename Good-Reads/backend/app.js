@@ -1274,6 +1274,56 @@ app.get("/content/:type", async (req, res) => {
   }
 });
 
+app.get("/content/:type/friends", isAuthenticated, async (req, res) => {
+  const { type } = req.params;
+  const { userId } = req.session;
+
+  const canonicalType = typeMap[type?.toLowerCase()];
+  const allowed = ['Book', 'Movie', 'TV Show'];
+
+  if (!canonicalType || !allowed.includes(canonicalType)) {
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url,
+                      g.name AS genre,
+                      COALESCE(AVG(r.rating_value), 0) AS rating,
+                      COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+      FROM ContentItem ci
+      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+      LEFT JOIN Rating r ON ci.item_id = r.item_id
+      LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      WHERE ci.content_type = $1
+        AND ci.item_id IN (
+          SELECT DISTINCT item_id FROM (
+            SELECT r.item_id
+            FROM Rating r
+            JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $2 AND f.status = 'accepted'
+            JOIN Users u ON u.user_id = r.user_id
+            WHERE r.is_private = false AND u.is_rating_private != 2
+
+            UNION
+
+            SELECT rv.item_id
+            FROM Review rv
+            JOIN Friendship f ON f.user2_id = rv.user_id AND f.user1_id = $2 AND f.status = 'accepted'
+            JOIN Users u ON u.user_id = rv.user_id
+            WHERE u.is_review_private != 2
+          ) AS friend_items
+        )
+      GROUP BY ci.item_id, g.name
+    `, [canonicalType, userId]);
+
+    // ✅ match shape with other endpoint
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching friends' content:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 app.post("/content/:type/:id/rating", async (req, res) => {
   const { type, id } = req.params;
@@ -1359,6 +1409,7 @@ app.post("/content/:type/:id/review", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 
 app.get("/content/:type/:id", async (req, res) => {
@@ -1489,8 +1540,8 @@ app.get("/content/:type/:id/friendRatings", async (req, res) => {
       JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
       JOIN "User" u ON u.user_id = r.user_id
       WHERE r.item_id = $2 
-        AND r.is_private = false
-        AND u.is_rating_private = false;
+        AND r.is_private = 0
+        AND u.is_rating_private = 0;
     `, [userId, id]);
 
     res.json(result.rows);
@@ -1499,3 +1550,6 @@ app.get("/content/:type/:id/friendRatings", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+
