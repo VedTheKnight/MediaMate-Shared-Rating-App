@@ -199,7 +199,7 @@ function Friends() {
     </Box>
   );
 
-  const renderUserCard = (user, actions = null) => (
+  const renderUserCard = (user, actions = null, isFriend = false) => (
     <Grid item xs={12} sm={6} md={4} key={user.user_id}>
       <Card
         sx={styles.card}
@@ -214,7 +214,7 @@ function Friends() {
           <Stack spacing={1} direction="row" flexWrap="wrap">
             {actions}
           </Stack>
-  
+
           {activeFriendId === user.user_id && (
             <Box mt={2} display="flex" gap={2}>
               <Button
@@ -225,28 +225,28 @@ function Friends() {
                   navigate(`/dashboard/${user.user_id}`, {
                     state: { from: "friends" },
                   });
-                  // Future: view profile
                 }}
               >
                 View Profile
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/watchlist2/${user.user_id}`);
-                }}
-              >
-                View Watchlist
-              </Button>
+              {isFriend && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/watchlist2/${user.user_id}`);
+                  }}
+                >
+                  View Watchlist
+                </Button>
+              )}
             </Box>
           )}
         </CardContent>
       </Card>
     </Grid>
   );
-  
 
   return (
     <Container sx={styles.container}>
@@ -300,7 +300,7 @@ function Friends() {
       </Section>
 
       <Section title="Your Friends">
-        {friends.map((friend) => renderUserCard(friend))}
+        {friends.map((friend) => renderUserCard(friend, null, true))}
       </Section>
     </Container>
   );

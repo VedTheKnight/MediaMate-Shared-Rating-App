@@ -53,7 +53,7 @@ app.get("/user2/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
     const result = await pool.query(
-      "SELECT username FROM Users WHERE user_id = $1",
+      "SELECT username,is_watchlist_private FROM Users WHERE user_id = $1",
       [userId]
     );
     // console.log(userId,result.rows[0].username);
@@ -210,7 +210,7 @@ app.get("/search-users", isAuthenticated, async (req, res) => {
 
   try {
     const users = await pool.query(
-      "SELECT user_id, username FROM Users WHERE username ILIKE $1 AND user_id != $2",
+      "SELECT user_id, username FROM Users WHERE username ILIKE $1 AND user_id != $2 AND is_profile_private = false",
       [`%${query}%`, userId]
     );
     res.status(200).json(users.rows);
@@ -628,12 +628,15 @@ app.get("/books/:id/friendRatings", async (req, res) => {
 
   try {
     const result = await pool.query(`
-      SELECT r.rating_value,
-             u.username AS friend_name 
-      FROM Rating r 
-      JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
-      JOIN User u ON u.user_id = r.user_id 
-      WHERE r.item_id = $2 AND r.is_private = false;
+    SELECT r.rating_value,
+          u.username AS friend_name
+    FROM Rating r
+    JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+    JOIN "User" u ON u.user_id = r.user_id
+    WHERE r.item_id = $2 
+      AND r.is_private = false
+      AND u.is_rating_private = false;
+
     `, [userId, id]);
 
     res.json(result.rows);
@@ -1135,3 +1138,122 @@ User's question: ${message}
 
 Please provide a helpful response based on their watchlist and preferences.`;
 }
+
+/////////////////////// Task 1 ////////////////////////
+
+// Get visibility settings for the logged-in user
+app.get("/get-settings", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+
+  try {
+    const result = await pool.query(
+      "SELECT is_profile_private, is_rating_private, is_profile_pic_private, is_watchlist_private FROM Users WHERE user_id = $1",
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Settings not found" });
+    }
+
+    const settings = result.rows[0];
+    res.status(200).json({
+      profileVisibility: settings.is_profile_private ? "private" : "public",
+      ratingsVisibility: settings.is_rating_private ? "private" : "public",
+      profilePicVisibility: settings.is_profile_pic_private ? "private" : "public",
+      watchlistVisibility: settings.is_watchlist_private ? "private" : "public",
+    });
+  } catch (error) {
+    console.error("Error fetching settings:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+// Profile visibility (public/private)
+app.post("/settings/profile-visibility", isAuthenticated, async (req, res) => {
+  const { value } = req.body;
+  const { userId } = req.session;
+
+  try {
+    await pool.query(
+      "UPDATE Users SET is_profile_private = $1 WHERE user_id = $2",
+      [value === "private", userId]
+    );
+    res.status(200).json({ message: "Profile visibility updated" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update profile visibility" });
+  }
+});
+
+// Ratings visibility
+app.post("/settings/ratings-visibility", isAuthenticated, async (req, res) => {
+  const { value } = req.body;
+  const { userId } = req.session;
+
+  try {
+    await pool.query(
+      "UPDATE Users SET is_rating_private = $1 WHERE user_id = $2",
+      [value === "private", userId]
+    );
+    res.status(200).json({ message: "Ratings visibility updated" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update ratings visibility" });
+  }
+});
+
+// Ratings visibility
+app.post("/settings/profile-pic-visibility", isAuthenticated, async (req, res) => {
+  const { value } = req.body;
+  const { userId } = req.session;
+
+  try {
+    await pool.query(
+      "UPDATE Users SET is_profile_pic_private = $1 WHERE user_id = $2",
+      [value === "private", userId]
+    );
+    res.status(200).json({ message: "Ratings visibility updated" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update ratings visibility" });
+  }
+});
+
+
+// Reviews visibility
+app.post("/settings/reviews-visibility", isAuthenticated, async (req, res) => {
+  const { value } = req.body;
+  const { userId } = req.session;
+
+  try {
+    await pool.query(
+      "UPDATE Users SET is_review_private = $1 WHERE user_id = $2",
+      [value === "private", userId]
+    );
+    res.status(200).json({ message: "Reviews visibility updated" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update reviews visibility" });
+  }
+});
+
+// Watchlist visibility
+app.post("/settings/watchlist-visibility", isAuthenticated, async (req, res) => {
+  const { value } = req.body;
+  const { userId } = req.session;
+
+  try {
+    await pool.query(
+      "UPDATE Users SET is_watchlist_private = $1 WHERE user_id = $2",
+      [value === "private", userId]
+    );
+    res.status(200).json({ message: "Watchlist visibility updated" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update watchlist visibility" });
+  }
+});
+
+
+///////////////////////////////////////////////////////
