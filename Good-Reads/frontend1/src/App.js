@@ -22,6 +22,7 @@ import UserBooksWatchlist from "./pages/UserBooksWatchlist";
 import UserHome from "./pages/UserHome";
 import MovieDetails from "./pages/MovieDetails";
 import TVShowDetails from "./pages/TVShowDetails";
+import FriendsActivity from "./pages/FriendsActivity";
 
 
 function App() {
@@ -30,11 +31,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/activity" element={<FriendsActivity />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/items/books" element={<Books />} />
-        <Route path="/items/books/:id" element={<BookDetails />} />
         <Route path="/items/movies" element={<Movies />} />
         <Route path="/items/tvshows" element={<TVShows />} />
         <Route path="/watchlist" element={<Watchlist />} />

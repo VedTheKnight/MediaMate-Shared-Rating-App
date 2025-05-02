@@ -6,7 +6,7 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
 // NEEDED FOR RUNNING THE APP ON SERVER ---------- GEET 
-const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
+const API_BASE = "http://10.129.6.79:4000"; // 🔁 your backend IP/port
 // ----------------------------------------------
 
 const getSentimentEmoji = (score) => {

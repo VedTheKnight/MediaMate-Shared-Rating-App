@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
 
 function Signup() {
   const navigate = useNavigate();

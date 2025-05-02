@@ -17,10 +17,10 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { FormControlLabel, Checkbox } from "@mui/material";
 
-// const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
 
 
-const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
+// const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
 
 
 const getSentimentColor = (score) => {
@@ -259,7 +259,7 @@ function Books() {
                 <div style={styles.ratingDetailsContainer}>
                   <Rating
                     style={{ maxWidth: "120px" }}
-                    value={book.rating}
+                    value={book.user_rating || 0}
                     onChange={(value) => handleRating(book.item_id, value)}
                   />
                   <Button

@@ -1,6 +1,9 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
+const API_BASE = "http://10.129.6.79:4000"; // 🔁 your backend IP/port
+
+
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,6 +24,7 @@ function Navbar() {
     "/groups",
     "/friends",
     "/settings",
+    "/activity",
     "/chatbot"
   ];
 
@@ -36,7 +40,7 @@ function Navbar() {
 
   const handleLogout = async () => {  
     try {
-      const response = await fetch("http://localhost:4000/logout", {
+      const response = await fetch(`${API_BASE}/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -91,6 +95,10 @@ function Navbar() {
             <span style={styles.icon}>⚙️</span>
             <span style={styles.linkText}>Settings</span>
           </Link>
+          <Link to="/activity" style={styles.link}>
+            <span style={styles.icon}>📈</span>
+            <span style={styles.linkText}>Activity</span>
+          </Link>
         </div>
         <button onClick={handleLogout} style={styles.button}>
           <span style={styles.icon}>🚪</span>
@@ -111,23 +119,20 @@ const styles = {
     left: 0,
     right: 0,
     zIndex: 1000,
-    padding: "15px 0",
+    padding: "10px 0px",
   },
   container: {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "0 30px",
+    padding: "0 20px",
     width: "100%",
+    gap: "16px", // Adjust spacing between links and button
   },
   navLinks: {
     display: "flex",
-    gap: "35px",
-    flexGrow: 1,
+    gap: "30px", // Tighter spacing between buttons
   },
-  link: {
+    link: {
     color: "#ecf0f1",
     textDecoration: "none",
     fontSize: "16px",
@@ -153,16 +158,16 @@ const styles = {
     backgroundColor: "#3498db",
     color: "white",
     border: "none",
-    padding: "12px 24px",
+    padding: "0px 2px",
     cursor: "pointer",
     fontSize: "16px",
     fontWeight: "500",
     borderRadius: "6px",
     transition: "all 0.3s ease",
-    marginLeft: "auto",
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    // marginLeft: "auto", 👈 REMOVE this
     "&:hover": {
       backgroundColor: "#2980b9",
       transform: "translateY(-2px)"

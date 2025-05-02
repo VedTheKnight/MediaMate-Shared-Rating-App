@@ -38,20 +38,20 @@ app.use(express.json());
 
 // CORS: Give permission to localhost:3000 (ie our React app)
 // to use this backend API
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    credentials: true,
-  })
-);
-
-// /// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
 // app.use(
 //   cors({
-//     origin: "http://10.129.6.179:3000", // ✅ add this IP
+//     origin: ["http://localhost:3000", "http://localhost:3001"],
 //     credentials: true,
 //   })
 // );
+
+// /// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
+app.use(
+  cors({
+    origin: "http://10.129.6.179:3000", // ✅ add this IP
+    credentials: true,
+  })
+);
 // -------------------------------
 
 
@@ -135,15 +135,17 @@ app.post("/signup", async (req, res) => {
     // Insert the new user into the database
     await pool.query(
      `INSERT INTO users 
-      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private,is_review_private) 
-      VALUES ($1, $2, $3, $4, $5, $6)`,
+      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private,is_review_private,is_watchlist_private) 
+      VALUES ($1, $2, $3, $4, $5, $6,$7,$8)`,
       [
         username,
         email,
         hashedPassword,
         null, // Default to null if not provided
+        false, // Default value for is_profile_private
         0, // Default value for is_profile_private
-        0  // Default value for is_rating_private
+        0,  // Default value for is_rating_private
+        0
       ]
     );
 
@@ -374,13 +376,13 @@ app.get("/friendship-status/:friendId", isAuthenticated, async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
-// app.listen(port, '0.0.0.0', () => {
-//   console.log(`Server running at http://0.0.0.0:${port}`);
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}`);
 // });
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${port}`);
+});
 
 
 //______________________________________________________________ Content APIs ____________________________________________________________
@@ -1269,14 +1271,16 @@ app.get("/content/:type", async (req, res) => {
     const result = await pool.query(`
       SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
              COALESCE(AVG(r.rating_value), 0) AS rating,
-             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment,
+             ur.rating_value AS user_rating
       FROM ContentItem ci
       LEFT JOIN Genre g ON ci.genre_id = g.genre_id
       LEFT JOIN Rating r ON ci.item_id = r.item_id
       LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      LEFT JOIN Rating ur ON ur.item_id = ci.item_id AND ur.user_id = $2
       WHERE ci.content_type = $1
-      GROUP BY ci.item_id, g.name
-    `, [canonicalType]);
+      GROUP BY ci.item_id, g.name, ur.rating_value
+    `, [canonicalType, req.session.userId]);
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching content:", error);
