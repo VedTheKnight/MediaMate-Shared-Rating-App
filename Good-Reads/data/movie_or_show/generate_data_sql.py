@@ -6,7 +6,7 @@ import os
 import logging
 
 # ========== CONFIG ==========
-OMDB_API_KEY = 'fac0d505'  # Replace with your real OMDb key
+OMDB_API_KEY = '888888'  # Replace with your real OMDb key
 INPUT_TSV = 'title.basics.nonadult.2020.filtered.tsv'
 OUTPUT_SQL = 'data.sql'
 PROGRESS_FILE = 'processed_ids.txt'

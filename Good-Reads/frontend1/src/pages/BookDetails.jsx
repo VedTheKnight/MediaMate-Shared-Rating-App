@@ -5,6 +5,10 @@ import { Container, Typography, Card, CardContent, Button, TextField, FormContro
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
+// NEEDED FOR RUNNING THE APP ON SERVER ---------- GEET 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+// ----------------------------------------------
+
 const getSentimentEmoji = (score) => {
   if (score >= 0.8) return '😊'; // Very positive
   if (score >= 0.6) return '🙂'; // Positive
@@ -41,7 +45,8 @@ function BookDetails() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" });
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");
@@ -58,7 +63,8 @@ function BookDetails() {
   // Memoize fetchBookDetails with useCallback
   const fetchBookDetails = useCallback(async (bookId) => {
     try {
-      const response = await fetch(`http://localhost:4000/books/${bookId}`, { credentials: "include" });
+      // const response = await fetch(`http://localhost:4000/books/${bookId}`, { credentials: "include" });
+      const response = await fetch(`${API_BASE}/books/${bookId}`, { credentials: "include" });
       const data = await response.json();
       setBook(data);
       setLoading(false);
@@ -78,12 +84,19 @@ function BookDetails() {
   // Add to watchlist
   const addToWatchlist = async () => {
     try {
-      await fetch("http://localhost:4000/watchlist", {
+      // await fetch("http://localhost:4000/watchlist", {
+      //   method: "POST",
+      //   credentials: "include",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ bookId: id }),
+      // });
+      await fetch(`${API_BASE}/watchlist`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookId: id }),
       });
+
       alert("Book added to watchlist!");
     } catch (error) {
       console.error("Error adding to watchlist:", error);
@@ -95,7 +108,15 @@ function BookDetails() {
     if (!reviewText.trim()) return alert("Review cannot be empty!");
 
     try {
-      await fetch(`http://localhost:4000/books/${id}/review`, {
+
+      // await fetch(`http://localhost:4000/books/${id}/review`, {
+      //   method: "POST",
+      //   credentials: "include",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ text: reviewText }),
+      // });
+
+      await fetch(`${API_BASE}/books/${id}/review`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -113,9 +134,13 @@ function BookDetails() {
   // Memoize fetchFilteredReviews with useCallback
   const fetchFilteredReviews = useCallback(async (filter) => {
     try {
-      const response = await fetch(`http://localhost:4000/books/${id}/reviews?sentiment=${filter}`, { 
+      const response = await fetch(`${API_BASE}/books/${id}/reviews?sentiment=${filter}`, { 
         credentials: "include" 
       });
+
+      // const response = await fetch(`http://localhost:4000/books/${id}/reviews?sentiment=${filter}`, { 
+      //   credentials: "include" 
+      // });
       const data = await response.json();
       setBook(prev => ({ ...prev, reviews: data }));
     } catch (error) {

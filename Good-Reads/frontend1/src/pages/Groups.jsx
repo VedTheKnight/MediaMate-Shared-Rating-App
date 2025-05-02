@@ -19,6 +19,9 @@ import {
   ListItemText,
 } from "@mui/material";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
+
 function Groups() {
   const navigate = useNavigate();
   const [authChecked, setAuthChecked] = useState(false);
@@ -38,8 +41,9 @@ function Groups() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", {
-          credentials: "include",
+        // const res = await fetch("http://localhost:4000/isLoggedIn", {
+        const res = await fetch(`${API_BASE}/isLoggedIn`, {
+        credentials: "include",
         });
         const data = await res.json();
         if (data.message !== "Logged in") {
@@ -59,7 +63,8 @@ function Groups() {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const res = await fetch("http://localhost:4000/get-genres", {
+        // const res = await fetch("http://localhost:4000/get-genres", {
+        const res = await fetch(`${API_BASE}/get-genres`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -76,7 +81,8 @@ function Groups() {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const res = await fetch("http://localhost:4000/get-friends", {
+        // const res = await fetch("http://localhost:4000/get-friends", {
+        const res = await fetch(`${API_BASE}/get-friends`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -94,13 +100,15 @@ function Groups() {
       setLoading(true);
       try {
         if (tabIndex === 0) {
-          const res = await fetch("http://localhost:4000/get-joinable-communities", {
+          // const res = await fetch("http://localhost:4000/get-joinable-communities", {
+          const res = await fetch(`${API_BASE}/get-joinable-communities`, {
             credentials: "include",
           });
           const data = await res.json();
           setJoinableCommunities(data.communities || []);
         } else if (tabIndex === 1) {
-          const res = await fetch("http://localhost:4000/get-joined-communities", {
+          // const res = await fetch("http://localhost:4000/get-joined-communities", {
+          const res = await fetch(`${API_BASE}/get-joined-communities`, {
             credentials: "include",
           });
           const data = await res.json();
@@ -120,7 +128,8 @@ function Groups() {
 
   const handleJoinCommunity = async (community_id) => {
     try {
-      const res = await fetch("http://localhost:4000/join-community", {
+      // const res = await fetch("http://localhost:4000/join-community", {
+      const res = await fetch(`${API_BASE}/join-community`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -144,7 +153,8 @@ function Groups() {
     e.preventDefault();
     try {
       // Step 1: Create the community
-      const res = await fetch("http://localhost:4000/create-community", {
+      // const res = await fetch("http://localhost:4000/create-community", {
+      const res = await fetch(`${API_BASE}/create-community`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -161,7 +171,8 @@ function Groups() {
         const community_id = communityData.community_id; // Assuming the backend returns the new community ID
   
         // Add selected friends to the community
-        const addFriendsRes = await fetch("http://localhost:4000/add-friends-to-community", {
+        // const addFriendsRes = await fetch("http://localhost:4000/add-friends-to-community", {
+        const addFriendsRes = await fetch(`${API_BASE}/add-friends-to-community`, {
           method: "POST",
           credentials: "include",
           headers: {

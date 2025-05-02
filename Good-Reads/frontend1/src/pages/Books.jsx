@@ -16,6 +16,9 @@ import {
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
+
 const getSentimentColor = (score) => {
   if (score >= 0.8) return '#4CAF50'; // Very positive - green
   if (score >= 0.6) return '#8BC34A'; // Positive - light green
@@ -44,7 +47,8 @@ function Books() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" });
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");
@@ -65,7 +69,8 @@ function Books() {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch("http://localhost:4000/books", { credentials: "include" });
+      // const response = await fetch("http://localhost:4000/books", { credentials: "include" });
+      const response = await fetch(`${API_BASE}/books`, { credentials: "include" });
       const data = await response.json();
       setBooks(data);
     } catch (error) {
@@ -75,7 +80,8 @@ function Books() {
 
   const fetchGenres = async () => {
     try {
-      const response = await fetch("http://localhost:4000/genres", { credentials: "include" });
+      // const response = await fetch("http://localhost:4000/genres", { credentials: "include" });
+      const response = await fetch(`${API_BASE}/genres`, { credentials: "include" });
       const data = await response.json();
       setGenres(data);
     } catch (error) {
@@ -86,12 +92,19 @@ function Books() {
   const handleWatchlistStatus = async (bookId, status) => {
     setStatusMap((prev) => ({ ...prev, [bookId]: status }));
     try {
-      await fetch("http://localhost:4000/watchlist", {
+      // await fetch("http://localhost:4000/watchlist", {
+      //   method: "POST",
+      //   credentials: "include",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ bookId, status }),
+      // });
+      await fetch(`${API_BASE}/watchlist`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookId, status }),
       });
+
     } catch (error) {
       console.error("Error updating watchlist:", error);
     }
@@ -99,7 +112,13 @@ function Books() {
 
   const handleRating = async (bookId, ratingValue) => {
     try {
-      const response = await fetch(`http://localhost:4000/books/${bookId}/rating`, {
+      // const response = await fetch(`http://localhost:4000/books/${bookId}/rating`, {
+      //   method: "POST",
+      //   credentials: "include",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ rating: ratingValue }),
+      // });
+      const response = await fetch(`${API_BASE}/books/${bookId}/rating`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

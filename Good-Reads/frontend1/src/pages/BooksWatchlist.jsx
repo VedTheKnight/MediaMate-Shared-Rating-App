@@ -10,6 +10,9 @@ import {
   ButtonGroup,
 } from "@mui/material";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
+
 function BooksWatchlist() {
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
@@ -18,8 +21,9 @@ function BooksWatchlist() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", {
-          credentials: "include",
+        // const res = await fetch("http://localhost:4000/isLoggedIn", {
+        const res = await fetch(`${API_BASE}/isLoggedIn`, {
+        credentials: "include",
         });
         const data = await res.json();
         if (data.message !== "Logged in") {
@@ -35,7 +39,8 @@ function BooksWatchlist() {
 
     const fetchWatchlist = async () => {
       try {
-        const res = await fetch("http://localhost:4000/getwatchlist", {
+        // const res = await fetch("http://localhost:4000/getwatchlist", {
+        const res = await fetch(`${API_BASE}/getwatchlist`, {
           credentials: "include",
         });
         const data = await res.json();

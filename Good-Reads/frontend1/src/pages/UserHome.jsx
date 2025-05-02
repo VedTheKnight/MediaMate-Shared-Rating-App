@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { Container, Typography, Grid, Card, CardContent, Box } from "@mui/material";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
 
 function UserHome() {
   const { userId } = useParams();  // undefined for /dashboard
@@ -17,7 +19,8 @@ function UserHome() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" });
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");
@@ -37,9 +40,12 @@ function UserHome() {
           return;
         }
 
+        // const endpoint = userId
+        //   ? `http://localhost:4000/user2/${userId}`  // friend view
+        //   : "http://localhost:4000/user/profile";           // self view
         const endpoint = userId
-          ? `http://localhost:4000/user2/${userId}`  // friend view
-          : "http://localhost:4000/user/profile";           // self view
+          ? `${API_BASE}/user2/${userId}`  // friend view
+          : `${API_BASE}/user/profile`;           // self view
         console.log(endpoint)
 
         const res = await fetch(endpoint, { credentials: "include" });

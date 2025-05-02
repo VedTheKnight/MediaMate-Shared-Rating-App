@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
 const Chatbot = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
@@ -28,7 +30,8 @@ const Chatbot = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", {
+        // const res = await fetch("http://localhost:4000/isLoggedIn", {
+        const res = await fetch(`${API_BASE}/isLoggedIn`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -47,7 +50,8 @@ const Chatbot = () => {
 
   const fetchWatchlistData = async () => {
     try {
-      const response = await fetch("http://localhost:4000/getwatchlist", {
+      // const response = await fetch("http://localhost:4000/getwatchlist", {
+      const response = await fetch(`${API_BASE}/getwatchlist`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -79,7 +83,8 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, { text: userMessage, isUser: true }]);
 
     try {
-      const response = await fetch("http://localhost:4000/chatbot", {
+      // const response = await fetch("http://localhost:4000/chatbot", {
+      const response = await fetch(`${API_BASE}/chatbot`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

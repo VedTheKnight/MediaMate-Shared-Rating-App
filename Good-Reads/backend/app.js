@@ -32,12 +32,21 @@ app.use(express.json());
 
 // CORS: Give permission to localhost:3000 (ie our React app)
 // to use this backend API
+// app.use(
+//   cors({
+//     origin: ["http://localhost:3000", "http://localhost:3001"],
+//     credentials: true,
+//   })
+// );
+/// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: "http://10.129.6.179:3000", // ✅ add this IP
     credentials: true,
   })
 );
+// -------------------------------
+
 
 // Get a user's username by ID
 app.get("/user2/:userId", async (req, res) => {
@@ -348,9 +357,14 @@ app.get("/friendship-status/:friendId", isAuthenticated, async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}`);
+// });
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${port}`);
 });
+
 
 //______________________________________________________________ Content APIs ____________________________________________________________
 
@@ -373,6 +387,31 @@ app.get("/books", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+app.get("/content/:type", async (req, res) => {
+  const { type } = req.params;
+  const allowed = ['Book', 'Movie', 'TV Show'];
+  if (!allowed.includes(type)) return res.status(400).json({ error: "Invalid content type" });
+
+  try {
+    const result = await pool.query(`
+      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
+             COALESCE(AVG(r.rating_value), 0) AS rating,
+             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+      FROM ContentItem ci
+      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+      LEFT JOIN Rating r ON ci.item_id = r.item_id
+      LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      WHERE ci.content_type = $1
+      GROUP BY ci.item_id, g.name
+    `, [type]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 app.get("/genres", async (req, res) => {
   try {
@@ -929,32 +968,33 @@ app.post("/add-friends-to-community", async (req, res) => {
   }
 });
 
-app.get("/getwatchlist", async (req, res) => {
-  const userId = req.session.userId;
-  const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
-    [userId]
-  );
-  res.json(result.rows);
-});
 
-app.post("/watchlist", async (req, res) => {
-  const { bookId, stat } = req.body;
-  const userId = req.session.userId; // Assuming user ID is stored in session
+// app.get("/getwatchlist", async (req, res) => {
+//   const userId = req.session.userId;
+//   const result = await pool.query(
+//     "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+//     [userId]
+//   );
+//   res.json(result.rows);
+// });
 
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+// app.post("/watchlist", async (req, res) => {
+//   const { bookId, stat } = req.body;
+//   const userId = req.session.userId; // Assuming user ID is stored in session
 
-  try {
-    await pool.query(
-      "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
-      [userId, bookId, stat ]
-    );
-    res.json({ message: "Book added to watchlist" });
-  } catch (error) {
-    console.error("Error adding to watchlist:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//   if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+//   try {
+//     await pool.query(
+//       "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
+//       [userId, bookId, stat ]
+//     );
+//     res.json({ message: "Book added to watchlist" });
+//   } catch (error) {
+//     console.error("Error adding to watchlist:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 
 // Get user profile
