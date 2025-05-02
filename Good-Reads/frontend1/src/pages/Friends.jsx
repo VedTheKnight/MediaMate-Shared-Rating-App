@@ -12,6 +12,8 @@ import {
   Stack,
 } from "@mui/material";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
 function Friends() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,8 +26,9 @@ function Friends() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", {
-          credentials: "include",
+        // const res = await fetch("http://localhost:4000/isLoggedIn", {
+        const res = await fetch(`${API_BASE}/isLoggedIn`, {
+        credentials: "include",
         });
         const data = await res.json();
         if (data.message !== "Logged in") navigate("/login");
@@ -36,8 +39,9 @@ function Friends() {
 
     const fetchFriends = async () => {
       try {
-        const res = await fetch("http://localhost:4000/friends", {
-          credentials: "include",
+        // const res = await fetch("http://localhost:4000/friends", {
+        const res = await fetch(`${API_BASE}/friends`, {
+        credentials: "include",
         });
         const data = await res.json();
         setFriends(data);
@@ -48,8 +52,9 @@ function Friends() {
 
     const fetchFriendRequests = async () => {
       try {
-        const res = await fetch("http://localhost:4000/friend-requests", {
-          credentials: "include",
+        // const res = await fetch("http://localhost:4000/friend-requests", {
+        const res = await fetch(`${API_BASE}/friend-requests`, {
+        credentials: "include",
         });
         const data = await res.json();
         setFriendRequests(data);
@@ -65,17 +70,26 @@ function Friends() {
 
   const handleSearch = async () => {
     try {
+      // const res = await fetch(
+      //   `http://localhost:4000/search-users?query=${searchQuery}`,
+      //   { credentials: "include" }
+      // );
       const res = await fetch(
-        `http://localhost:4000/search-users?query=${searchQuery}`,
+        `${API_BASE}/search-users?query=${searchQuery}`,
         { credentials: "include" }
       );
+
       const data = await res.json();
       setSearchResults(data);
 
       const statuses = {};
       for (const user of data) {
+        // const statusRes = await fetch(
+        //   `http://localhost:4000/friendship-status/${user.user_id}`,
+        //   { credentials: "include" }
+        // );
         const statusRes = await fetch(
-          `http://localhost:4000/friendship-status/${user.user_id}`,
+          `${API_BASE}/friendship-status/${user.user_id}`,
           { credentials: "include" }
         );
         const statusData = await statusRes.json();
@@ -89,7 +103,8 @@ function Friends() {
 
   const handleSendRequest = async (userId) => {
     try {
-      const res = await fetch("http://localhost:4000/friend-request", {
+      // const res = await fetch("http://localhost:4000/friend-request", {
+      const res = await fetch(`${API_BASE}/friend-request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -112,7 +127,8 @@ function Friends() {
 
   const handleAcceptRequest = async (userId) => {
     try {
-      const res = await fetch("http://localhost:4000/accept-friend-request", {
+      // const res = await fetch("http://localhost:4000/accept-friend-request", {
+      const res = await fetch(`${API_BASE}/accept-friend-request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -121,7 +137,8 @@ function Friends() {
       const data = await res.json();
       if (res.ok) {
         setFriendRequests(friendRequests.filter((r) => r.user_id !== userId));
-        const updated = await fetch("http://localhost:4000/friends", {
+        // const updated = await fetch("http://localhost:4000/friends", {
+        const updated = await fetch(`${API_BASE}/friends`, {
           credentials: "include",
         });
         setFriends(await updated.json());
@@ -135,7 +152,8 @@ function Friends() {
 
   const handleRejectRequest = async (userId) => {
     try {
-      const res = await fetch("http://localhost:4000/reject-friend-request", {
+      // const res = await fetch("http://localhost:4000/reject-friend-request", {
+      const res = await fetch(`${API_BASE}/reject-friend-request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

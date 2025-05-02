@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
 function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
@@ -8,7 +10,8 @@ function Signup() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:4000/isLoggedIn", { credentials: "include" })
+    // fetch("http://localhost:4000/isLoggedIn", { credentials: "include" })
+    fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "Logged in") {
@@ -27,7 +30,8 @@ function Signup() {
     setError("");
     setLoading(true);
 
-    const response1 = await fetch("http://localhost:4000/signup", {
+    // const response1 = await fetch("http://localhost:4000/signup", {
+    const response1 = await fetch(`${API_BASE}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -40,7 +44,8 @@ function Signup() {
     if (!response1.ok) {
       setError(data1.message);
     } else {
-      const response = await fetch("http://localhost:4000/login", {
+      // const response = await fetch("http://localhost:4000/login", {
+      const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -13,6 +13,8 @@ import {
   Box,
 } from "@mui/material";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
 function CommunityPage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -26,7 +28,8 @@ function CommunityPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" });
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");
@@ -43,7 +46,8 @@ function CommunityPage() {
   useEffect(() => {
     const fetchCommunityData = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/groups/${id}`, {
+        // const res = await fetch(`http://localhost:4000/groups/${id}`, {
+        const res = await fetch(`${API_BASE}/groups/${id}`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -83,7 +87,8 @@ function CommunityPage() {
     if (!newComment.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:4000/groups/${id}/add-comment`, {
+      // const res = await fetch(`http://localhost:4000/groups/${id}/add-comment`, {
+      const res = await fetch(`${API_BASE}/groups/${id}/add-comment`, {  
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +114,8 @@ function CommunityPage() {
     if (!replyText.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:4000/comments/${parentId}/reply`, {
+      // const res = await fetch(`http://localhost:4000/comments/${parentId}/reply`, {
+      const res = await fetch(`${API_BASE}/comments/${parentId}/reply`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +152,8 @@ function CommunityPage() {
 
   const handleVote = async (commentId, type) => {
     try {
-      const res = await fetch(`http://localhost:4000/comments/${commentId}/vote`, {
+      // const res = await fetch(`http://localhost:4000/comments/${commentId}/vote`, {
+      const res = await fetch(`${API_BASE}/comments/${commentId}/vote`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",

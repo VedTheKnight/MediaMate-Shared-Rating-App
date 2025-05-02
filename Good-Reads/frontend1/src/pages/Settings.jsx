@@ -8,6 +8,8 @@ import {
   Box,
 } from "@mui/material";
 
+const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+
 function Settings() {
   const navigate = useNavigate();
 
@@ -19,9 +21,8 @@ function Settings() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/isLoggedIn", {
-          credentials: "include",
-        });
+        // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
+        const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include"});
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");

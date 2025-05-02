@@ -32,12 +32,22 @@ app.use(express.json());
 
 // CORS: Give permission to localhost:3000 (ie our React app)
 // to use this backend API
+// app.use(
+//   cors({
+//     origin: ["http://localhost:3000", "http://localhost:3001"],
+//     credentials: true,
+//   })
+// );
+
+/// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: "http://10.129.6.179:3000", // ✅ add this IP
     credentials: true,
   })
 );
+// -------------------------------
+
 
 // Get a user's username by ID
 app.get("/user2/:userId", async (req, res) => {
@@ -348,31 +358,36 @@ app.get("/friendship-status/:friendId", isAuthenticated, async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}`);
+// });
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${port}`);
 });
+
 
 //______________________________________________________________ Content APIs ____________________________________________________________
 
-app.get("/books", async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
-             COALESCE(AVG(r.rating_value), 0) AS rating,
-             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
-      FROM ContentItem ci
-      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
-      LEFT JOIN Rating r ON ci.item_id = r.item_id
-      LEFT JOIN Review rev ON ci.item_id = rev.item_id
-      WHERE ci.content_type = 'Book'
-      GROUP BY ci.item_id, g.name
-    `);
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching books:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// app.get("/books", async (req, res) => {
+//   try {
+//     const result = await pool.query(`
+//       SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
+//              COALESCE(AVG(r.rating_value), 0) AS rating,
+//              COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+//       FROM ContentItem ci
+//       LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+//       LEFT JOIN Rating r ON ci.item_id = r.item_id
+//       LEFT JOIN Review rev ON ci.item_id = rev.item_id
+//       WHERE ci.content_type = 'Book'
+//       GROUP BY ci.item_id, g.name
+//     `);
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error("Error fetching books:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/genres", async (req, res) => {
   try {
@@ -421,38 +436,38 @@ app.post("/watchlist", async (req, res) => {
   }
 });
 
-app.post("/books/:bookId/rating", async (req, res) => {
-  const { bookId } = req.params;
-  const { rating } = req.body;
-  const userId = req.user; // Assuming you're using authentication
+// app.post("/books/:bookId/rating", async (req, res) => {
+//   const { bookId } = req.params;
+//   const { rating } = req.body;
+//   const userId = req.user; // Assuming you're using authentication
 
-  try {
-    // Check if a rating already exists for this user and book
-    const existingRating = await pool.query(
-      "SELECT * FROM rating WHERE user_id = $1 AND item_id = $2",
-      [userId, bookId]
-    );
+//   try {
+//     // Check if a rating already exists for this user and book
+//     const existingRating = await pool.query(
+//       "SELECT * FROM rating WHERE user_id = $1 AND item_id = $2",
+//       [userId, bookId]
+//     );
 
-    if (existingRating.rows.length > 0) {
-      // Update existing rating
-      await pool.query(
-        "UPDATE rating SET rating_value = $1 WHERE user_id = $2 AND item_id = $3",
-        [rating, userId, bookId]
-      );
-    } else {
-      // Insert new rating
-      await pool.query(
-        "INSERT INTO rating (user_id, item_id, rating_value) VALUES ($1, $2, $3)",
-        [userId, bookId, rating]
-      );
-    }
+//     if (existingRating.rows.length > 0) {
+//       // Update existing rating
+//       await pool.query(
+//         "UPDATE rating SET rating_value = $1 WHERE user_id = $2 AND item_id = $3",
+//         [rating, userId, bookId]
+//       );
+//     } else {
+//       // Insert new rating
+//       await pool.query(
+//         "INSERT INTO rating (user_id, item_id, rating_value) VALUES ($1, $2, $3)",
+//         [userId, bookId, rating]
+//       );
+//     }
 
-    res.status(200).json({ message: "Rating updated successfully" });
-  } catch (error) {
-    console.error("Error updating/inserting rating:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+//     res.status(200).json({ message: "Rating updated successfully" });
+//   } catch (error) {
+//     console.error("Error updating/inserting rating:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 // Helper function to calculate sentiment score
 function calculateSentimentScore(text) {
@@ -463,99 +478,99 @@ function calculateSentimentScore(text) {
   return Math.max(0, Math.min(1, normalizedScore));
 }
 
-app.post("/books/:id/review", async (req, res) => {
-  const { id } = req.params;
-  const { text } = req.body;
-  const userId = req.session.userId;
+// app.post("/books/:id/review", async (req, res) => {
+//   const { id } = req.params;
+//   const { text } = req.body;
+//   const userId = req.session.userId;
 
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+//   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-  try {
-    const sentimentScore = calculateSentimentScore(text);
+//   try {
+//     const sentimentScore = calculateSentimentScore(text);
     
-    await pool.query(
-      "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, $4)",
-      [userId, id, text, sentimentScore]
-    );
-    res.json({ message: "Review submitted successfully" });
-  } catch (error) {
-    console.error("Error submitting review:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     await pool.query(
+//       "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, $4)",
+//       [userId, id, text, sentimentScore]
+//     );
+//     res.json({ message: "Review submitted successfully" });
+//   } catch (error) {
+//     console.error("Error submitting review:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-app.get("/books/:id", async (req, res) => {
-  const { id } = req.params;
+// app.get("/books/:id", async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const bookResult = await pool.query(`
-      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url,
-             g.name AS genre,
-             COALESCE(AVG(r.rating_value), 0) AS rating,
-             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
-      FROM ContentItem ci
-      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
-      LEFT JOIN Rating r ON ci.item_id = r.item_id
-      LEFT JOIN Review rev ON ci.item_id = rev.item_id
-      WHERE ci.item_id = $1
-      GROUP BY ci.item_id, g.name
-    `, [id]);
+//   try {
+//     const bookResult = await pool.query(`
+//       SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url,
+//              g.name AS genre,
+//              COALESCE(AVG(r.rating_value), 0) AS rating,
+//              COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+//       FROM ContentItem ci
+//       LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+//       LEFT JOIN Rating r ON ci.item_id = r.item_id
+//       LEFT JOIN Review rev ON ci.item_id = rev.item_id
+//       WHERE ci.item_id = $1
+//       GROUP BY ci.item_id, g.name
+//     `, [id]);
 
-    const reviewsResult = await pool.query(`
-      SELECT r.review_id, r.text, r.sentiment_score, u.username 
-      FROM Review r 
-      JOIN Users u ON r.user_id = u.user_id 
-      WHERE r.item_id = $1
-      ORDER BY r.sentiment_score DESC
-    `, [id]);
+//     const reviewsResult = await pool.query(`
+//       SELECT r.review_id, r.text, r.sentiment_score, u.username 
+//       FROM Review r 
+//       JOIN Users u ON r.user_id = u.user_id 
+//       WHERE r.item_id = $1
+//       ORDER BY r.sentiment_score DESC
+//     `, [id]);
 
-    if (bookResult.rows.length === 0) {
-      return res.status(404).json({ error: "Book not found" });
-    }
+//     if (bookResult.rows.length === 0) {
+//       return res.status(404).json({ error: "Book not found" });
+//     }
 
-    const bookDetails = bookResult.rows[0];
-    // Add sentiment analysis for the book description
-    if (bookDetails.description) {
-      bookDetails.description_sentiment = calculateSentimentScore(bookDetails.description);
-    }
-    bookDetails.reviews = reviewsResult.rows;
+//     const bookDetails = bookResult.rows[0];
+//     // Add sentiment analysis for the book description
+//     if (bookDetails.description) {
+//       bookDetails.description_sentiment = calculateSentimentScore(bookDetails.description);
+//     }
+//     bookDetails.reviews = reviewsResult.rows;
 
-    res.json(bookDetails);
-  } catch (error) {
-    console.error("Error fetching book details:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     res.json(bookDetails);
+//   } catch (error) {
+//     console.error("Error fetching book details:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-// Add a new endpoint to filter reviews by sentiment
-app.get("/books/:id/reviews", async (req, res) => {
-  const { id } = req.params;
-  const { sentiment } = req.query; // 'positive', 'negative', or 'neutral'
+// // Add a new endpoint to filter reviews by sentiment
+// app.get("/books/:id/reviews", async (req, res) => {
+//   const { id } = req.params;
+//   const { sentiment } = req.query; // 'positive', 'negative', or 'neutral'
 
-  try {
-    let sentimentQuery = '';
-    if (sentiment === 'positive') {
-      sentimentQuery = 'AND r.sentiment_score >= 0.6';
-    } else if (sentiment === 'negative') {
-      sentimentQuery = 'AND r.sentiment_score < 0.4';
-    } else if (sentiment === 'neutral') {
-      sentimentQuery = 'AND r.sentiment_score >= 0.4 AND r.sentiment_score < 0.6';
-    }
+//   try {
+//     let sentimentQuery = '';
+//     if (sentiment === 'positive') {
+//       sentimentQuery = 'AND r.sentiment_score >= 0.6';
+//     } else if (sentiment === 'negative') {
+//       sentimentQuery = 'AND r.sentiment_score < 0.4';
+//     } else if (sentiment === 'neutral') {
+//       sentimentQuery = 'AND r.sentiment_score >= 0.4 AND r.sentiment_score < 0.6';
+//     }
 
-    const reviewsResult = await pool.query(`
-      SELECT r.review_id, r.text, r.sentiment_score, u.username 
-      FROM Review r 
-      JOIN Users u ON r.user_id = u.user_id 
-      WHERE r.item_id = $1 ${sentimentQuery}
-      ORDER BY r.sentiment_score DESC
-    `, [id]);
+//     const reviewsResult = await pool.query(`
+//       SELECT r.review_id, r.text, r.sentiment_score, u.username 
+//       FROM Review r 
+//       JOIN Users u ON r.user_id = u.user_id 
+//       WHERE r.item_id = $1 ${sentimentQuery}
+//       ORDER BY r.sentiment_score DESC
+//     `, [id]);
 
-    res.json(reviewsResult.rows);
-  } catch (error) {
-    console.error("Error fetching filtered reviews:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     res.json(reviewsResult.rows);
+//   } catch (error) {
+//     console.error("Error fetching filtered reviews:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/user_watchlist", async (req, res) => {
   const userId = req.session.userId;
@@ -581,31 +596,31 @@ app.get("/user_watchlist", async (req, res) => {
   }
 });
 
-app.get("/books/:id/friendRatings", async (req, res) => {
-  const { id } = req.params;
-  const userId = req.session.userId;
+// app.get("/books/:id/friendRatings", async (req, res) => {
+//   const { id } = req.params;
+//   const userId = req.session.userId;
 
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+//   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-  try {
-    const result = await pool.query(`
-    SELECT r.rating_value,
-          u.username AS friend_name
-    FROM Rating r
-    JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
-    JOIN "User" u ON u.user_id = r.user_id
-    WHERE r.item_id = $2 
-      AND r.is_private = false
-      AND u.is_rating_private = false;
+//   try {
+//     const result = await pool.query(`
+//     SELECT r.rating_value,
+//           u.username AS friend_name
+//     FROM Rating r
+//     JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+//     JOIN "User" u ON u.user_id = r.user_id
+//     WHERE r.item_id = $2 
+//       AND r.is_private = false
+//       AND u.is_rating_private = false;
 
-    `, [userId, id]);
+//     `, [userId, id]);
 
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching friend ratings:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error("Error fetching friend ratings:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/get-joinable-communities", isAuthenticated, async (req, res) => {
   const { userId } = req.session;
@@ -932,32 +947,33 @@ app.post("/add-friends-to-community", async (req, res) => {
   }
 });
 
-app.get("/getwatchlist", async (req, res) => {
-  const userId = req.session.userId;
-  const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
-    [userId]
-  );
-  res.json(result.rows);
-});
 
-app.post("/watchlist", async (req, res) => {
-  const { bookId, stat } = req.body;
-  const userId = req.session.userId; // Assuming user ID is stored in session
+// app.get("/getwatchlist", async (req, res) => {
+//   const userId = req.session.userId;
+//   const result = await pool.query(
+//     "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+//     [userId]
+//   );
+//   res.json(result.rows);
+// });
 
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+// app.post("/watchlist", async (req, res) => {
+//   const { bookId, stat } = req.body;
+//   const userId = req.session.userId; // Assuming user ID is stored in session
 
-  try {
-    await pool.query(
-      "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
-      [userId, bookId, stat ]
-    );
-    res.json({ message: "Book added to watchlist" });
-  } catch (error) {
-    console.error("Error adding to watchlist:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//   if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+//   try {
+//     await pool.query(
+//       "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
+//       [userId, bookId, stat ]
+//     );
+//     res.json({ message: "Book added to watchlist" });
+//   } catch (error) {
+//     console.error("Error adding to watchlist:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 
 // Get user profile
@@ -1217,3 +1233,263 @@ app.post("/settings/watchlist-visibility", isAuthenticated, async (req, res) => 
 
 
 ///////////////////////////////////////////////////////
+
+const typeMap = {
+  book: 'Book',
+  movie: 'Movie',
+  tv: 'TV Show'
+};
+
+
+app.get("/content/:type", async (req, res) => {
+  const { type } = req.params;
+  const allowed = ['Book', 'Movie', 'TV Show'];
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
+  if (!allowed.includes(canonicalType)){ 
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+  try {
+    const result = await pool.query(`
+      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
+             COALESCE(AVG(r.rating_value), 0) AS rating,
+             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+      FROM ContentItem ci
+      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+      LEFT JOIN Rating r ON ci.item_id = r.item_id
+      LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      WHERE ci.content_type = $1
+      GROUP BY ci.item_id, g.name
+    `, [canonicalType]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.post("/content/:type/:id/rating", async (req, res) => {
+  const { type, id } = req.params;
+  const { rating } = req.body;
+  const userId = req.user; // Assumes authentication middleware sets req.user
+
+  const allowed = ['Book', 'Movie', 'TV Show'];
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
+  if (!allowed.includes(canonicalType)){ 
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+
+  try {
+    // Optional: Verify content_type matches the item
+    const itemCheck = await pool.query(
+      "SELECT content_type FROM ContentItem WHERE item_id = $1",
+      [id]
+    );
+    if (itemCheck.rows.length === 0 || itemCheck.rows[0].content_type !== canonicalType) {
+      return res.status(404).json({ error: "Content item not found or type mismatch" });
+    }
+
+    // Check for existing rating
+    const existing = await pool.query(
+      "SELECT * FROM Rating WHERE user_id = $1 AND item_id = $2",
+      [userId, id]
+    );
+
+    if (existing.rows.length > 0) {
+      await pool.query(
+        "UPDATE Rating SET rating_value = $1 WHERE user_id = $2 AND item_id = $3",
+        [rating, userId, id]
+      );
+    } else {
+      await pool.query(
+        "INSERT INTO Rating (user_id, item_id, rating_value) VALUES ($1, $2, $3)",
+        [userId, id, rating]
+      );
+    }
+
+    res.status(200).json({ message: "Rating saved successfully" });
+  } catch (error) {
+    console.error("Error saving rating:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/content/:type/:id/review", async (req, res) => {
+  const { type, id } = req.params;
+  const { text } = req.body;
+  const userId = req.session.userId; // Assumes session-based auth
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  const allowed = ['Book', 'Movie', 'TV Show'];
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
+  if (!allowed.includes(canonicalType)){ 
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+
+  try {
+    // Verify item exists and matches the type
+    const itemCheck = await pool.query(
+      "SELECT content_type FROM ContentItem WHERE item_id = $1",
+      [id]
+    );
+    if (itemCheck.rows.length === 0 || itemCheck.rows[0].content_type !== canonicalType) {
+      return res.status(404).json({ error: "Content item not found or type mismatch" });
+    }
+
+    const sentimentScore = calculateSentimentScore(text); // assume this is defined elsewhere
+
+    await pool.query(
+      "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, $4)",
+      [userId, id, text, sentimentScore]
+    );
+
+    res.json({ message: "Review submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.get("/content/:type/:id", async (req, res) => {
+  const { type, id } = req.params;
+  const allowed = ['Book', 'Movie', 'TV Show'];
+
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
+  if (!allowed.includes(canonicalType)){ 
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+
+  try {
+    // Fetch content item details along with aggregated ratings/sentiment
+    const contentResult = await pool.query(`
+      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url,
+             g.name AS genre,
+             COALESCE(AVG(r.rating_value), 0) AS rating,
+             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+      FROM ContentItem ci
+      LEFT JOIN Genre g ON ci.genre_id = g.genre_id
+      LEFT JOIN Rating r ON ci.item_id = r.item_id
+      LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      WHERE ci.item_id = $1
+      GROUP BY ci.item_id, g.name
+    `, [id]);
+
+    if (contentResult.rows.length === 0 || contentResult.rows[0].content_type !== canonicalType) {
+      return res.status(404).json({ error: `${type} not found` });
+    }
+
+    // Fetch reviews
+    const reviewsResult = await pool.query(`
+      SELECT r.review_id, r.text, r.sentiment_score, u.username 
+      FROM Review r 
+      JOIN Users u ON r.user_id = u.user_id 
+      WHERE r.item_id = $1
+      ORDER BY r.sentiment_score DESC
+    `, [id]);
+
+    const item = contentResult.rows[0];
+    if (item.description) {
+      item.description_sentiment = calculateSentimentScore(item.description);
+    }
+    item.reviews = reviewsResult.rows;
+
+    res.json(item);
+  } catch (error) {
+    console.error("Error fetching content item details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/content/:type/:id/reviews", async (req, res) => {
+  const { type, id } = req.params;
+  const { sentiment } = req.query;
+  const allowed = ['Book', 'Movie', 'TV Show'];
+
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
+  if (!allowed.includes(canonicalType)){ 
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+
+  try {
+    // Ensure the item exists and type matches
+    const itemCheck = await pool.query(
+      "SELECT content_type FROM ContentItem WHERE item_id = $1",
+      [id]
+    );
+    if (itemCheck.rows.length === 0 || itemCheck.rows[0].content_type !== canonicalType) {
+      return res.status(404).json({ error: `${type} not found` });
+    }
+
+    // Build sentiment filter clause
+    let sentimentClause = '';
+    if (sentiment === 'positive') {
+      sentimentClause = 'AND r.sentiment_score >= 0.6';
+    } else if (sentiment === 'negative') {
+      sentimentClause = 'AND r.sentiment_score < 0.4';
+    } else if (sentiment === 'neutral') {
+      sentimentClause = 'AND r.sentiment_score >= 0.4 AND r.sentiment_score < 0.6';
+    }
+
+    const reviewsResult = await pool.query(`
+      SELECT r.review_id, r.text, r.sentiment_score, u.username 
+      FROM Review r 
+      JOIN Users u ON r.user_id = u.user_id 
+      WHERE r.item_id = $1 ${sentimentClause}
+      ORDER BY r.sentiment_score DESC
+    `, [id]);
+
+    res.json(reviewsResult.rows);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.get("/content/:type/:id/friendRatings", async (req, res) => {
+  const { type, id } = req.params;
+  const userId = req.session.userId;
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  const allowed = ['Book', 'Movie', 'TV Show'];
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
+  if (!allowed.includes(canonicalType)){ 
+    return res.status(400).json({ error: "Invalid content type" });
+  }
+
+  try {
+    // Validate item and its content type
+    const itemCheck = await pool.query(
+      "SELECT content_type FROM ContentItem WHERE item_id = $1",
+      [id]
+    );
+    if (itemCheck.rows.length === 0 || itemCheck.rows[0].content_type !== canonicalType) {
+      return res.status(404).json({ error: `${type} not found` });
+    }
+
+    const result = await pool.query(`
+      SELECT r.rating_value,
+             u.username AS friend_name
+      FROM Rating r
+      JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+      JOIN "User" u ON u.user_id = r.user_id
+      WHERE r.item_id = $2 
+        AND r.is_private = false
+        AND u.is_rating_private = false;
+    `, [userId, id]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching friend ratings:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});

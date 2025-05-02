@@ -7,8 +7,6 @@ CREATE TABLE Users (
     profile_picture_url TEXT,
     is_profile_private BOOLEAN DEFAULT FALSE,
     is_rating_private BOOLEAN DEFAULT FALSE
-    is_watchlist_private BOOLEAN DEFAULT FALSE,
-    is_profile_pic_private BOOLEAN DEFAULT FALSE,
 );
 
 -- Friendship Table
