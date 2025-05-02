@@ -16,7 +16,7 @@ import {
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 
-const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
 
 
 const getSentimentColor = (score) => {

@@ -32,21 +32,21 @@ app.use(express.json());
 
 // CORS: Give permission to localhost:3000 (ie our React app)
 // to use this backend API
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3000", "http://localhost:3001"],
-//     credentials: true,
-//   })
-// );
-
-/// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
 app.use(
   cors({
-    origin: "http://10.129.6.179:3000", // ✅ add this IP
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
   })
 );
-// -------------------------------
+
+// /// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
+// app.use(
+//   cors({
+//     origin: "http://10.129.6.179:3000", // ✅ add this IP
+//     credentials: true,
+//   })
+// );
+// // -------------------------------
 
 
 // Get a user's username by ID
