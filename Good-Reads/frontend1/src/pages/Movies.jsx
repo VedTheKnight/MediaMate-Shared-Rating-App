@@ -261,7 +261,7 @@ function Movies() {
                     color="secondary"
                     size="small"
                     style={{ marginLeft: "10px", height: "fit-content" }}
-                    onClick={() => navigate(`/items/content/movie/${book.item_id}`)}
+                    onClick={() => navigate(`/content/movie/${book.item_id}`)}
                   >
                     View Details
                   </Button>

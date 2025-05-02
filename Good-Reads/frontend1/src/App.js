@@ -20,6 +20,9 @@ import Notfound from "./pages/Notfound";
 import UserWatchlist from "./pages/UserWatchlist";
 import UserBooksWatchlist from "./pages/UserBooksWatchlist";
 import UserHome from "./pages/UserHome";
+import MovieDetails from "./pages/MovieDetails";
+import TVShowDetails from "./pages/TVShowDetails";
+
 
 function App() {
   return (
@@ -49,6 +52,9 @@ function App() {
         <Route path="/watchlist2/:userId/movies" element={<MoviesWatchlist/>} />
         <Route path="/watchlist2/:userId/tvshows" element={<TVShowsWatchlist/>} />
         <Route path="/dashboard/:userId" element={<UserHome/>} />
+        <Route path="/content/movie/:id" element={<MovieDetails />} />
+        <Route path="/content/book/:id" element={<BookDetails />} />
+        <Route path="/content/tv/:id" element={<TVShowDetails />} />
       </Routes>
     </Router>
   );

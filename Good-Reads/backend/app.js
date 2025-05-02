@@ -1413,8 +1413,10 @@ app.post("/content/:type/:id/review", async (req, res) => {
 
 
 app.get("/content/:type/:id", async (req, res) => {
+
   const { type, id } = req.params;
   const allowed = ['Book', 'Movie', 'TV Show'];
+  // console.log("REQ:", type, id); // 👈 Log type and id
 
   const canonicalType = typeMap[type?.toLowerCase()];
   if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  

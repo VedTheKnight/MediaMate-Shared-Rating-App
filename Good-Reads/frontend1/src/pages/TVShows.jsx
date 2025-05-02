@@ -258,7 +258,7 @@ function TVShows() {
                     color="secondary"
                     size="small"
                     style={{ marginLeft: "10px", height: "fit-content" }}
-                    onClick={() => navigate(`/items/content/tv/${book.item_id}`)}
+                    onClick={() => navigate(`/content/tv/${book.item_id}`)}
                   >
                     View Details
                   </Button>

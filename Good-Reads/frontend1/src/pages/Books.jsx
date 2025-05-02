@@ -263,7 +263,7 @@ function Books() {
                     color="secondary"
                     size="small"
                     style={{ marginLeft: "10px", height: "fit-content" }}
-                    onClick={() => navigate(`/items/content/book/${book.item_id}`)}
+                    onClick={() => navigate(`/content/book/${book.item_id}`)}
                   >
                     View Details
                   </Button>
