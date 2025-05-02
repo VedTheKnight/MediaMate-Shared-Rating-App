@@ -119,7 +119,7 @@ app.post("/signup", async (req, res) => {
     // Insert the new user into the database
     await pool.query(
      `INSERT INTO users 
-      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private) 
+      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private,is_review_private) 
       VALUES ($1, $2, $3, $4, $5, $6)`,
       [
         username,
@@ -127,7 +127,8 @@ app.post("/signup", async (req, res) => {
         hashedPassword,
         null, // Default to null if not provided
         false, // Default value for is_profile_private
-        false  // Default value for is_rating_private
+        0, // Default value for is_rating_private
+        0  
       ]
     );
 
