@@ -20,7 +20,8 @@ function Navbar() {
     "/watchlist/tvshows",
     "/groups",
     "/friends",
-    "/settings"
+    "/settings",
+    "/chatbot"
   ];
 
   // Only show navbar on specified routes
@@ -81,6 +82,10 @@ function Navbar() {
           <Link to="/friends" style={styles.link}>
             <span style={styles.icon}>👫</span>
             <span style={styles.linkText}>Friends</span>
+          </Link>
+          <Link to="/chatbot" style={styles.link}>
+            <span style={styles.icon}>💬</span>
+            <span style={styles.linkText}>Chatbot</span>
           </Link>
           <Link to="/settings" style={styles.link}>
             <span style={styles.icon}>⚙️</span>

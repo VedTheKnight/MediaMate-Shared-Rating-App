@@ -58,6 +58,7 @@ CREATE TABLE Review (
     user_id INT REFERENCES Users(user_id),
     item_id INT REFERENCES ContentItem(item_id),
     text TEXT NOT NULL,
+    sentiment_score FLOAT CHECK (sentiment_score BETWEEN 0 AND 1),
     timestamp TIMESTAMP DEFAULT now()
 );
 

@@ -10,9 +10,27 @@ import {
   Button,
   Select,
   MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
+
+const getSentimentColor = (score) => {
+  if (score >= 0.8) return '#4CAF50'; // Very positive - green
+  if (score >= 0.6) return '#8BC34A'; // Positive - light green
+  if (score >= 0.4) return '#FFC107'; // Neutral - yellow
+  if (score >= 0.2) return '#FF9800'; // Negative - orange
+  return '#F44336'; // Very negative - red
+};
+
+const getSentimentText = (score) => {
+  if (score >= 0.8) return 'Very Positive';
+  if (score >= 0.6) return 'Positive';
+  if (score >= 0.4) return 'Neutral';
+  if (score >= 0.2) return 'Negative';
+  return 'Very Negative';
+};
 
 function Books() {
   const navigate = useNavigate();
@@ -20,6 +38,7 @@ function Books() {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [minRating, setMinRating] = useState(0);
+  const [sentimentFilter, setSentimentFilter] = useState("all");
   const [statusMap, setStatusMap] = useState({});
 
   useEffect(() => {
@@ -105,7 +124,11 @@ function Books() {
   const filteredBooks = books.filter(
     (book) =>
       (!selectedGenre || book.genre === selectedGenre) &&
-      book.rating >= minRating
+      book.rating >= minRating &&
+      (sentimentFilter === "all" ||
+        (sentimentFilter === "positive" && (book.average_sentiment || 0.5) >= 0.6) ||
+        (sentimentFilter === "neutral" && (book.average_sentiment || 0.5) >= 0.4 && (book.average_sentiment || 0.5) < 0.6) ||
+        (sentimentFilter === "negative" && (book.average_sentiment || 0.5) < 0.4))
   );
 
   return (
@@ -116,22 +139,50 @@ function Books() {
 
       {/* Filters */}
       <div style={styles.filters}>
-        <Select value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)} displayEmpty>
-          <MenuItem value="">All Genres</MenuItem>
-          {genres.map((genre) => (
-            <MenuItem key={genre.genre_id} value={genre.name}>
-              {genre.name}
-            </MenuItem>
-          ))}
-        </Select>
+        <FormControl variant="outlined" style={styles.filterControl}>
+          <InputLabel>Genre</InputLabel>
+          <Select
+            value={selectedGenre}
+            onChange={(e) => setSelectedGenre(e.target.value)}
+            label="Genre"
+          >
+            <MenuItem value="">All Genres</MenuItem>
+            {genres.map((genre) => (
+              <MenuItem key={genre.genre_id} value={genre.name}>
+                {genre.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <Select value={minRating} onChange={(e) => setMinRating(e.target.value)} displayEmpty>
-          <MenuItem value={0}>All Ratings</MenuItem>
-          <MenuItem value={1}>1 Star & Up</MenuItem>
-          <MenuItem value={2}>2 Stars & Up</MenuItem>
-          <MenuItem value={3}>3 Stars & Up</MenuItem>
-          <MenuItem value={4}>4 Stars & Up</MenuItem>
-        </Select>
+        <FormControl variant="outlined" style={styles.filterControl}>
+          <InputLabel>Min Rating</InputLabel>
+          <Select
+            value={minRating}
+            onChange={(e) => setMinRating(e.target.value)}
+            label="Min Rating"
+          >
+            <MenuItem value={0}>All Ratings</MenuItem>
+            <MenuItem value={1}>1 Star & Up</MenuItem>
+            <MenuItem value={2}>2 Stars & Up</MenuItem>
+            <MenuItem value={3}>3 Stars & Up</MenuItem>
+            <MenuItem value={4}>4 Stars & Up</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl variant="outlined" style={styles.filterControl}>
+          <InputLabel>Sentiment</InputLabel>
+          <Select
+            value={sentimentFilter}
+            onChange={(e) => setSentimentFilter(e.target.value)}
+            label="Sentiment"
+          >
+            <MenuItem value="all">All Sentiments</MenuItem>
+            <MenuItem value="positive">Positive (60% or more)</MenuItem>
+            <MenuItem value="neutral">Neutral (40% to 60%)</MenuItem>
+            <MenuItem value="negative">Negative (less than 40%)</MenuItem>
+          </Select>
+        </FormControl>
       </div>
 
       {/* Book Cards */}
@@ -143,25 +194,16 @@ function Books() {
                 component="img"
                 image={book.image_url}
                 alt={book.title}
-                style={{
-                  objectFit: "cover",
-                  height: "300px",
-                  width: "100%",
-                }}
+                style={styles.cardMedia}
               />
-              <CardContent style={{ padding: "20px" }}>
+              <CardContent style={styles.cardContent}>
                 <Typography variant="h5" style={styles.cardTitle}>
                   {book.title}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  style={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    marginBottom: "15px",
-                  }}
+                  style={styles.description}
                 >
                   {book.description}
                 </Typography>
@@ -182,6 +224,28 @@ function Books() {
                   >
                     View Details
                   </Button>
+                </div>
+
+                {/* Sentiment Indicator */}
+                <div style={styles.sentimentContainer}>
+                  <Typography variant="subtitle2" style={styles.sentimentLabel}>
+                    User Sentiment
+                  </Typography>
+                  <div style={styles.sentimentBar}>
+                    <div 
+                      style={{
+                        ...styles.sentimentFill,
+                        width: `${(book.average_sentiment || 0.5) * 100}%`,
+                        backgroundColor: getSentimentColor(book.average_sentiment || 0.5)
+                      }}
+                    />
+                  </div>
+                  <Typography style={styles.sentimentText}>
+                    {book.average_sentiment ? 
+                      `${getSentimentText(book.average_sentiment)} (${Math.round(book.average_sentiment * 100)}%)` :
+                      'No reviews yet'
+                    }
+                  </Typography>
                 </div>
 
                 {/* Watchlist Dropdown */}
@@ -222,27 +286,79 @@ const styles = {
     marginBottom: "30px",
     justifyContent: "center",
   },
+  filterControl: {
+    minWidth: "200px",
+  },
   card: {
     boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
     transition: "transform 0.3s ease-in-out",
     width: "350px",
-    height: "550px",
+    height: "600px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     borderRadius: "10px",
     overflow: "hidden",
   },
+  cardMedia: {
+    height: "200px",
+    objectFit: "cover",
+  },
+  cardContent: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    padding: "16px",
+  },
   cardTitle: {
     color: "#222",
     fontWeight: "bold",
     fontSize: "20px",
+    marginBottom: "10px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+  },
+  description: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: "vertical",
     marginBottom: "10px",
   },
   ratingDetailsContainer: {
     display: "flex",
     alignItems: "center",
     marginTop: "10px",
+  },
+  sentimentContainer: {
+    marginTop: '10px',
+    marginBottom: '10px',
+    minHeight: '60px',
+  },
+  sentimentLabel: {
+    fontSize: '0.8rem',
+    color: '#666',
+    marginBottom: '4px'
+  },
+  sentimentBar: {
+    height: '6px',
+    borderRadius: '3px',
+    backgroundColor: '#e0e0e0',
+    overflow: 'hidden',
+    marginBottom: '4px'
+  },
+  sentimentFill: {
+    height: '100%',
+    transition: 'width 0.3s ease-in-out'
+  },
+  sentimentText: {
+    fontSize: '0.75rem',
+    color: '#666'
   },
 };
 

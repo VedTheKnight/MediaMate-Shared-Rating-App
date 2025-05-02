@@ -15,6 +15,7 @@ import Groups from "./pages/Groups";
 import CommunityPage from "./pages/CommunityPage";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
+import Chatbot from "./pages/Chatbot";
 import Notfound from "./pages/Notfound";
 
 function App() {
@@ -38,10 +39,11 @@ function App() {
         <Route path="/groups/:id" element={<CommunityPage />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/*" element={<Notfound />} />
       </Routes>
     </Router>
   );
 }
 
-export default App;
+export default App; 
