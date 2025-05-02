@@ -6,7 +6,8 @@ CREATE TABLE Users (
     password_hash VARCHAR(255) NOT NULL,
     profile_picture_url TEXT,
     is_profile_private BOOLEAN DEFAULT FALSE,
-    is_rating_private BOOLEAN DEFAULT FALSE
+    is_rating_private BOOLEAN DEFAULT FALSE,
+    is_watchlist_private INT DEFAULT 0, -- 0: public, 1: friends only, 2: private
 );
 
 -- Friendship Table
