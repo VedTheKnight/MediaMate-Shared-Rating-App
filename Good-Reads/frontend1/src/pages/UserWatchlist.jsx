@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Container, Typography, Grid, Card, CardContent } from "@mui/material";
 
-const API_BASE = "http://10.129.6.179:4000"; // 🔁 your backend IP/port
+const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
 
 function UserWatchlist() {
   const { userId } = useParams(); // Grab user ID from URL

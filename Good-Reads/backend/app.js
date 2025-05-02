@@ -38,21 +38,31 @@ app.use(express.json());
 
 // CORS: Give permission to localhost:3000 (ie our React app)
 // to use this backend API
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3000", "http://localhost:3001"],
-//     credentials: true,
-//   })
-// );
-
-/// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
 app.use(
   cors({
-    origin: "http://10.129.6.179:3000", // ✅ add this IP
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
   })
 );
+
+// /// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
+// app.use(
+//   cors({
+//     origin: "http://10.129.6.179:3000", // ✅ add this IP
+//     credentials: true,
+//   })
+// );
 // -------------------------------
+
+
+// /// Geet -------------------------------- HAD TO CONFIGURE FOR USING THE IP ADDRESS 
+// app.use(
+//   cors({
+//     origin: "http://10.129.6.179:3000", // ✅ add this IP
+//     credentials: true,
+//   })
+// );
+// // -------------------------------
 
 
 // Get a user's username by ID
@@ -125,7 +135,7 @@ app.post("/signup", async (req, res) => {
     // Insert the new user into the database
     await pool.query(
      `INSERT INTO users 
-      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private) 
+      (username, email, password_hash, profile_picture_url, is_profile_private, is_rating_private,is_review_private) 
       VALUES ($1, $2, $3, $4, $5, $6)`,
       [
         username,
@@ -364,13 +374,13 @@ app.get("/friendship-status/:friendId", isAuthenticated, async (req, res) => {
 });
 
 // Start the server
-// app.listen(port, () => {
-//   console.log(`Server running at http://localhost:${port}`);
-// });
-
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server running at http://0.0.0.0:${port}`);
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
+
+// app.listen(port, '0.0.0.0', () => {
+//   console.log(`Server running at http://0.0.0.0:${port}`);
+// });
 
 
 //______________________________________________________________ Content APIs ____________________________________________________________
@@ -1552,6 +1562,3 @@ app.get("/content/:type/:id/friendRatings", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-
-
