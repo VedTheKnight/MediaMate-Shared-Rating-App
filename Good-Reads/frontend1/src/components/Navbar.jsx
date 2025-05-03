@@ -87,6 +87,10 @@ function Navbar() {
             <span style={styles.icon}>👫</span>
             <span style={styles.linkText}>Friends</span>
           </Link>
+          <Link to="/activity" style={styles.link}>
+            <span style={styles.icon}>📈</span>
+            <span style={styles.linkText}>Activity</span>
+          </Link>
           <Link to="/chatbot" style={styles.link}>
             <span style={styles.icon}>💬</span>
             <span style={styles.linkText}>Chatbot</span>
@@ -119,16 +123,19 @@ const styles = {
   },
   container: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",       // center all items horizontally
     alignItems: "center",
-    maxWidth: "1200px",
+    maxWidth: "100%",               // full width
     margin: "0 auto",
-    padding: "0 30px",
-    width: "100%",
+    padding: "0 20px",
+    flexWrap: "wrap",               // allow wrapping on small screens
   },
   navLinks: {
     display: "flex",
-    gap: "35px",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "30px",
     flexGrow: 1,
   },
   link: {
@@ -139,16 +146,12 @@ const styles = {
     transition: "all 0.3s ease",
     display: "flex",
     alignItems: "center",
-    gap: "8px",
-    padding: "8px 12px",
+    gap: "6px",
+    padding: "8px 10px",
     borderRadius: "6px",
-    "&:hover": {
-      color: "#3498db",
-      backgroundColor: "rgba(255, 255, 255, 0.1)"
-    }
   },
   linkText: {
-    letterSpacing: "0.5px"
+    letterSpacing: "0.3px"
   },
   icon: {
     fontSize: "18px"
@@ -157,24 +160,21 @@ const styles = {
     backgroundColor: "#3498db",
     color: "white",
     border: "none",
-    padding: "12px 24px",
+    padding: "10px 20px",
     cursor: "pointer",
     fontSize: "16px",
     fontWeight: "500",
     borderRadius: "6px",
     transition: "all 0.3s ease",
-    marginLeft: "auto",
+    marginLeft: "20px",
     display: "flex",
     alignItems: "center",
-    gap: "8px",
-    "&:hover": {
-      backgroundColor: "#2980b9",
-      transform: "translateY(-2px)"
-    }
+    gap: "6px",
   },
   buttonText: {
-    letterSpacing: "0.5px"
+    letterSpacing: "0.3px"
   }
 };
+
 
 export default Navbar;
