@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -18,15 +19,69 @@ const getColorFromSentiment = (score) => {
 };
 
 function FriendsActivity() {
+  const navigate = useNavigate();
   const [activity, setActivity] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/friends-activity`, {
-      credentials: "include"
-    })
-      .then(res => res.json())
-      .then(data => setActivity(data))
-      .catch(console.error);
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" });
+        const data = await res.json();
+        if (data.message !== "Logged in") {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Authentication check failed:", error);
+        navigate("/login");
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchActivity = async () => {
+      try {
+        const [ratingsRes, reviewsRes] = await Promise.all([
+          fetch(`${API_BASE}/friends-ratings`, { credentials: "include" }),
+          fetch(`${API_BASE}/friends-reviews`, { credentials: "include" }),
+        ]);
+
+        const ratings = await ratingsRes.json();
+        const reviews = await reviewsRes.json();
+
+        const formattedRatings = ratings.map((r) => ({
+          type: "rating",
+          username: r.username,
+          content_id: r.content_id,
+          value: r.rating,
+          title: r.title,
+          content_type: r.content_type,
+          timestamp: r.timestamp,
+        }));
+
+        const formattedReviews = reviews.map((r) => ({
+          type: "review",
+          username: r.username,
+          content_id: r.content_id,
+          text: r.review,
+          sentiment_score: r.sentiment_score,
+          title: r.title,
+          content_type: r.content_type,
+          timestamp: r.timestamp,
+        }));
+
+        const merged = [...formattedRatings, ...formattedReviews];
+        merged.sort(
+          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+
+        setActivity(merged);
+      } catch (err) {
+        console.error("Error fetching activity:", err);
+      }
+    };
+
+    fetchActivity();
   }, []);
 
   return (
@@ -41,7 +96,9 @@ function FriendsActivity() {
             <Card style={styles.card}>
               <CardContent>
                 <Typography variant="subtitle1" style={styles.primaryText}>
-                  <strong>{item.username}</strong> {item.type === "rating" ? "rated" : "reviewed"} <strong>{item.title}</strong> ({item.content_type})
+                  <strong>{item.username}</strong>{" "}
+                  {item.type === "rating" ? "rated" : "reviewed"}{" "}
+                  <strong>{item.title}</strong> ({item.content_type})
                 </Typography>
 
                 {item.type === "rating" && (
@@ -50,7 +107,9 @@ function FriendsActivity() {
 
                 {item.type === "review" && (
                   <>
-                    <Typography style={styles.reviewText}>"{item.text}"</Typography>
+                    <Typography style={styles.reviewText}>
+                      "{item.text}"
+                    </Typography>
                     <Typography
                       style={{
                         ...styles.sentimentScore,

@@ -1618,50 +1618,86 @@ app.get("/content/:type/:id/friendRatings", async (req, res) => {
   }
 });
 
-
-app.get("/friends-activity", isAuthenticated, async (req, res) => {
-  const { userId } = req.session;
+//////////////////////////// activity ///////////////////////////////
+app.get("/friends-ratings", async (req, res) => {
+  const user_id = req.session.userId;
+  // console.log(req.session,user_id); // Debugging line
+  if (!user_id) {
+    console.log("User not logged in"); // Debugging line
+    return res.status(401).json({ error: "Not logged in" });
+  }
 
   try {
     const result = await pool.query(`
-      SELECT 'rating' AS type,
-             r.item_id,
-             ci.title,
-             ci.content_type,
-             r.rating_value AS value,
-             NULL AS text,
-             NULL AS sentiment_score,
-             r.timestamp,
-             u.username
+      WITH friends AS (
+        SELECT user2_id AS friend_id FROM Friendship 
+        WHERE user1_id = $1 AND status = 'accepted'
+        UNION
+        SELECT user1_id AS friend_id FROM Friendship 
+        WHERE user2_id = $1 AND status = 'accepted'
+      )
+      SELECT 
+        r.rating_value AS rating,
+        r.timestamp,
+        u.username,
+        u.user_id,
+        c.item_id AS content_id,
+        c.title,
+        c.content_type
       FROM Rating r
-      JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+      JOIN friends f ON r.user_id = f.friend_id
       JOIN Users u ON u.user_id = r.user_id
-      JOIN ContentItem ci ON ci.item_id = r.item_id
-      WHERE u.is_rating_private != 2 AND r.is_private = FALSE AND r.timestamp >= NOW() - INTERVAL '7 days'
+      JOIN ContentItem c ON c.item_id = r.item_id
+      WHERE r.timestamp >= now() - INTERVAL '7 days'
+        AND r.is_private = FALSE
+        AND u.is_rating_private = 0
+      ORDER BY r.timestamp DESC
+    `, [user_id]);
+      // console.log("Result:", result.rows); // Debugging line
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error in /friends-ratings:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
-      UNION ALL
 
-      SELECT 'review' AS type,
-             rv.item_id,
-             ci.title,
-             ci.content_type,
-             NULL AS value,
-             rv.text,
-             rv.sentiment_score,
-             rv.timestamp,
-             u.username
+app.get("/friends-reviews", async (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) return res.status(401).json({ error: "Not logged in" });
+
+  try {
+    const result = await pool.query(`
+      WITH friends AS (
+        SELECT user2_id AS friend_id FROM Friendship 
+        WHERE user1_id = $1 AND status = 'accepted'
+        UNION
+        SELECT user1_id AS friend_id FROM Friendship 
+        WHERE user2_id = $1 AND status = 'accepted'
+      )
+      SELECT 
+        rv.text AS review,
+        rv.timestamp,
+        u.username,
+        u.user_id,
+        c.item_id AS content_id,
+        c.title,
+        c.content_type,
+        rv.sentiment_score
       FROM Review rv
-      JOIN Friendship f ON f.user2_id = rv.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+      JOIN friends f ON rv.user_id = f.friend_id
       JOIN Users u ON u.user_id = rv.user_id
-      JOIN ContentItem ci ON ci.item_id = rv.item_id
-      WHERE u.is_review_private != 2 AND rv.timestamp >= NOW() - INTERVAL '7 days'
-
-      ORDER BY timestamp DESC
+      JOIN ContentItem c ON c.item_id = rv.item_id
+      WHERE rv.timestamp >= now() - INTERVAL '7 days'
+        AND u.is_review_private = 0
+      ORDER BY rv.timestamp DESC
     `, [userId]);
 
     res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching activity:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+  } catch (err) {
+    console.error("Error in /friends-reviews:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
+/////////////////////////////////////////////////////////////////////
