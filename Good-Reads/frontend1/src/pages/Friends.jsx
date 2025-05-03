@@ -22,6 +22,7 @@ function Friends() {
   const [friends, setFriends] = useState([]);
   const [friendshipStatuses, setFriendshipStatuses] = useState({});
   const [activeFriendId, setActiveFriendId] = useState(null);
+  const [similarUsers, setSimilarUsers] = useState([]); // State for similar users
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -61,11 +62,25 @@ function Friends() {
       } catch (error) {
         console.error("Error fetching friend requests:", error);
       }
+
+      const fetchSimilarUsers = async () => {
+        try {
+          const res = await fetch(`${API_BASE}/users/similar`, {
+            credentials: "include",
+          });
+          const data = await res.json();
+          setSimilarUsers(data);
+        } catch (error) {
+          console.error("Error fetching similar users:", error);
+        }
+      };
+
     };
 
     checkAuth();
     fetchFriends();
     fetchFriendRequests();
+    fetchSimilarUsers();
   }, [navigate]);
 
   const handleSearch = async () => {
