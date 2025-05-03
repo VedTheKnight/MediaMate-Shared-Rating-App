@@ -33,7 +33,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'rating_app',
-  password: '12345678',
+  password: 'Harijanvi1!',
   port: 5432,
 });
 
@@ -2275,6 +2275,47 @@ app.get("/users/similar", isAuthenticated, async (req, res) => {
   }
 });
 
+app.get("/friends-ratings", async (req, res) => {
+  const user_id = req.session.userId;
+  // console.log(req.session,user_id); // Debugging line
+  if (!user_id) {
+    console.log("User not logged in"); // Debugging line
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  try {
+    const result = await pool.query(`
+      WITH friends AS (
+        SELECT user2_id AS friend_id FROM Friendship 
+        WHERE user1_id = $1 AND status = 'accepted'
+        UNION
+        SELECT user1_id AS friend_id FROM Friendship 
+        WHERE user2_id = $1 AND status = 'accepted'
+      )
+      SELECT 
+        r.rating_value AS rating,
+        r.timestamp,
+        u.username,
+        u.user_id,
+        c.item_id AS content_id,
+        c.title,
+        c.content_type
+      FROM Rating r
+      JOIN friends f ON r.user_id = f.friend_id
+      JOIN Users u ON u.user_id = r.user_id
+      JOIN ContentItem c ON c.item_id = r.item_id
+      WHERE r.timestamp >= now() - INTERVAL '7 days'
+        AND r.is_private = FALSE
+        AND u.is_rating_private = FALSE
+      ORDER BY r.timestamp DESC
+    `, [user_id]);
+      // console.log("Result:", result.rows); // Debugging line
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error in /friends-ratings:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 
 app.get("/friends-reviews", async (req, res) => {
