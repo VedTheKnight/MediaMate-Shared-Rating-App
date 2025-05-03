@@ -14,6 +14,7 @@ import {
   InputLabel,
   FormControlLabel,
   Checkbox,
+  TextField,
 } from "@mui/material";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
@@ -45,6 +46,7 @@ function Books() {
   const [sentimentFilter, setSentimentFilter] = useState("all");
   const [statusMap, setStatusMap] = useState({});
   const [filterByFriends, setFilterByFriends] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -140,7 +142,8 @@ function Books() {
       (sentimentFilter === "all" ||
         (sentimentFilter === "positive" && (book.average_sentiment || 0.5) >= 0.6) ||
         (sentimentFilter === "neutral" && (book.average_sentiment || 0.5) >= 0.4 && (book.average_sentiment || 0.5) < 0.6) ||
-        (sentimentFilter === "negative" && (book.average_sentiment || 0.5) < 0.4))
+        (sentimentFilter === "negative" && (book.average_sentiment || 0.5) < 0.4)) &&
+      book.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -149,8 +152,15 @@ function Books() {
         Books
       </Typography>
 
-      {/* Filters */}
+      {/* Search and Filters */}
       <div style={styles.filters}>
+        <TextField
+          label="Search Books"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={styles.searchField}
+        />
         <FormControl variant="outlined" style={styles.filterControl}>
           <InputLabel>Genre</InputLabel>
           <Select
@@ -374,6 +384,10 @@ const styles = {
   sentimentText: {
     fontSize: "0.75rem",
     color: "#666",
+  },
+  searchField: {
+    minWidth: "200px",
+    marginRight: "20px",
   },
 };
 
