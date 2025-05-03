@@ -62,19 +62,18 @@ function Friends() {
       } catch (error) {
         console.error("Error fetching friend requests:", error);
       }
+    };
 
-      const fetchSimilarUsers = async () => {
-        try {
-          const res = await fetch(`${API_BASE}/users/similar`, {
-            credentials: "include",
-          });
-          const data = await res.json();
-          setSimilarUsers(data);
-        } catch (error) {
-          console.error("Error fetching similar users:", error);
-        }
-      };
-
+    const fetchSimilarUsers = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/users/similar`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setSimilarUsers(data);
+      } catch (error) {
+        console.error("Error fetching similar users:", error);
+      }
     };
 
     checkAuth();
@@ -317,6 +316,14 @@ function Friends() {
       <Section title="Your Friends">
         {friends.map((friend) => renderUserCard(friend, null, true))}
       </Section>
+
+       {/* New Section for Similar Users */}
+       <Section title="Users Similar to You">
+        {similarUsers.map((user) =>
+          renderUserCard(user, getFriendshipButton(user))
+        )}
+      </Section>
+
     </Container>
   );
 }

@@ -2003,95 +2003,240 @@ app.get("/content/:type", async (req, res) => {
   }
 });
 
+// app.get("/users/similar", isAuthenticated, async (req, res) => {
+//   const { userId } = req.session;
+//   console.log("Finding similar users for:", userId);
+//   let client;
+
+//   try {
+//     client = await pool.connect();
+
+//     // 1) Fetch all ratings with metadata
+//     const { rows: allRatings } = await client.query(`
+//       SELECT r.user_id, r.item_id, r.rating_value,
+//              ci.genre_id, ci.description
+//       FROM Rating r
+//       JOIN ContentItem ci ON ci.item_id = r.item_id
+//     `);
+
+//     // 2) Group by user
+//     const userRatingsMap = _.groupBy(allRatings, "user_id");
+
+//     // 3) Build one vector per user
+//     const userVectors = Object.entries(userRatingsMap).map(
+//       ([otherUserId, ratings]) => {
+//         // TF‑IDF on this user’s descriptions
+//         const tfidf = new natural.TfIdf();
+//         ratings.forEach(r =>
+//           tfidf.addDocument(r.description || "", String(r.item_id))
+//         );
+
+//         // Vocabulary
+//         const termSet = new Set();
+//         ratings.forEach((_, idx) =>
+//           tfidf.listTerms(idx).forEach(({ term }) => termSet.add(term))
+//         );
+//         const vocab = Array.from(termSet);
+
+//         // Genre one‑hot
+//         const genreIds = _.uniq(ratings.map(r => r.genre_id));
+//         const genreIndex = Object.fromEntries(
+//           genreIds.map((g, i) => [g, i])
+//         );
+
+//         // Normalize helper
+//         const normalize = vec => {
+//           const mag = Math.sqrt(vec.reduce((s, v) => s + v * v, 0));
+//           return mag ? vec.map(v => v / mag) : vec;
+//         };
+
+//         // Build weighted vectors and average
+//         const vectors = ratings.map((r, idx) => {
+//           const descVec = normalize(
+//             vocab.map(term => tfidf.tfidf(term, idx))
+//           );
+//           const genreVec = Array(genreIds.length).fill(0);
+//           genreVec[genreIndex[r.genre_id]] = 1;
+//           const full = [...descVec, ...genreVec];
+//           return full.map(v => v * r.rating_value);
+//         });
+
+//         const userVector = vectors[0].map((_, idx) => {
+//           const sum = vectors.reduce((acc, vec) => acc + vec[idx], 0);
+//           return sum / vectors.length;
+//         });
+
+//         return { userId: Number(otherUserId), vector: userVector };
+//       }
+//     );
+
+//     // 4) Find this user’s vector
+//     const me = userVectors.find(uv => uv.userId === userId);
+//     if (!me) {
+//       console.log(`No ratings for user ${userId}, returning empty similar list`);
+//       return res.json([]); // <— return empty array, not an object
+//     }
+
+//     // 5) Cosine similarity
+//     const similar = userVectors
+//       .filter(uv => uv.userId !== userId)
+//       .map(uv => {
+//         const dot  = uv.vector.reduce((s, v, i) => s + v * me.vector[i], 0);
+//         const magA = Math.sqrt(uv.vector.reduce((s, v) => s + v * v, 0));
+//         const magB = Math.sqrt(me.vector.reduce((s, v) => s + v * v, 0));
+//         const similarity = magA && magB ? dot / (magA * magB) : 0;
+//         return { userId: uv.userId, similarity };
+//       })
+//       .sort((a, b) => b.similarity - a.similarity)
+//       .slice(0, 5);
+//     console.log("Similar users:", similar);
+
+//     // 6) Fetch usernames for only *valid* integer user IDs
+//     const ids = similar
+//      .map(u => u.userId)
+//      .filter(id => Number.isInteger(id));
+//     if (ids.length === 0) {
+//            return res.json([]);
+//          }
+
+//     const { rows: users } = await client.query(
+//                `SELECT user_id, username FROM Users WHERE user_id = ANY($1)`,
+//                [ids]
+//              );
+
+//     // Map into final array
+//     const results = similar.map(u => ({
+//       user_id:   u.userId,
+//       username:  users.find(x => x.user_id === u.userId)?.username || null,
+//       similarity: u.similarity,
+//     }));
+
+//     return res.json(results);
+//   } catch (err) {
+//     console.error("Error fetching similar users:", err);
+//     // On error, return empty array
+//     return res.json([]);
+//   } finally {
+//     if (client) client.release();
+//   }
+// });
+
 app.get("/users/similar", isAuthenticated, async (req, res) => {
   const { userId } = req.session;
+  console.log("Finding similar users for:", userId);
+  let client;
 
   try {
-    const client = await pool.connect();
+    client = await pool.connect();
 
-    // 1) Fetch all users' ratings
-    const { rows: allRatings } = await client.query(`
-      SELECT r.user_id, r.item_id, r.rating_value, ci.genre_id, ci.description
-      FROM Rating r
-      JOIN ContentItem ci ON ci.item_id = r.item_id
+    // 1) Load all items
+    const { rows: items } = await client.query(`
+      SELECT item_id, description, genre_id
+      FROM ContentItem
     `);
 
-    // 2) Group ratings by user
-    const userRatingsMap = _.groupBy(allRatings, "user_id");
+    // 2) Global TF‑IDF
+    const tfidf = new natural.TfIdf();
+    items.forEach(it => tfidf.addDocument(it.description || '', String(it.item_id)));
 
-    // 3) Compute user vectors
-    const userVectors = Object.entries(userRatingsMap).map(([otherUserId, ratings]) => {
-      // Build TF-IDF model for this user's rated items
-      const tfidf = new natural.TfIdf();
-      ratings.forEach(r => tfidf.addDocument(r.description || "", String(r.item_id)));
+    // 3) Vocabulary
+    const termSet = new Set();
+    items.forEach((_, idx) =>
+      tfidf.listTerms(idx).forEach(({ term }) => termSet.add(term))
+    );
+    const vocab = Array.from(termSet);
 
-      // Build vocabulary
-      const termSet = new Set();
-      ratings.forEach((_, idx) => {
-        tfidf.listTerms(idx).forEach(({ term }) => termSet.add(term));
+    // 4) Genre one‑hot index
+    const allGenreIds = _.uniq(items.map(it => it.genre_id));
+    const genreIndex  = Object.fromEntries(allGenreIds.map((g, i) => [g, i]));
+
+    // 5) Build itemVectorsMap with NaN→0 guard
+    const itemVectorsMap = {};
+    items.forEach((it, idx) => {
+      const descVec = vocab.map(term => {
+        const w = tfidf.tfidf(term, idx);
+        return Number.isFinite(w) ? w : 0;
       });
-      const vocab = Array.from(termSet);
-
-      // One-hot encode genres
-      const genreIds = _.uniq(ratings.map(r => r.genre_id));
-      const genreIndex = Object.fromEntries(genreIds.map((g, i) => [g, i]));
-
-      // Normalize function
-      const normalize = vec => {
-        const magnitude = Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
-        return magnitude ? vec.map(val => val / magnitude) : vec;
-      };
-
-      // Compute vector
-      const vector = ratings.map((r, idx) => {
-        const descVec = normalize(vocab.map(term => tfidf.tfidf(term, idx)));
-        const genreVec = Array(genreIds.length).fill(0);
-        genreVec[genreIndex[r.genre_id]] = 1;
-        return [...descVec, ...genreVec].map(value => value * r.rating_value);
-      });
-
-      // Average the vector dimensions
-      const userVector = vector[0].map((_, idx) => _.meanBy(vector, vec => vec[idx]));
-
-      return { userId: otherUserId, vector: userVector };
+      const genreVec = Array(allGenreIds.length).fill(0);
+      genreVec[genreIndex[it.genre_id]] = 1;
+      itemVectorsMap[it.item_id] = [...descVec, ...genreVec];
     });
+    console.log(`Built vectors for ${items.length} items.`);
 
-    // 4) Get the logged-in user's vector
-    const loggedInUserVector = userVectors.find(uv => uv.userId === userId)?.vector;
-    if (!loggedInUserVector) {
-      return res.status(404).json({ error: "No ratings found for the logged-in user" });
+    // 6) Fetch all ratings
+    const { rows: allRatings } = await client.query(`
+      SELECT user_id, item_id, rating_value
+      FROM Rating
+    `);
+
+    // 7) Group by user
+    const ratingsByUser = _.groupBy(allRatings, 'user_id');
+
+    // 8) Build userProfiles with NaN→0 guard on averaging
+    const userProfiles = Object.entries(ratingsByUser)
+      .map(([uid, ratings]) => {
+        const weighted = ratings
+          .map(r => {
+            const vec = itemVectorsMap[r.item_id];
+            if (!vec) return null;
+            return vec.map(v => v * r.rating_value);
+          })
+          .filter(Boolean);
+        if (!weighted.length) return null;
+
+        const profile = weighted[0].map((_, i) => {
+          const sum = weighted.reduce((acc, vec) => acc + (Number.isFinite(vec[i]) ? vec[i] : 0), 0);
+          const avg = sum / weighted.length;
+          return Number.isFinite(avg) ? avg : 0;
+        });
+
+        return { userId: Number(uid), vector: profile };
+      })
+      .filter(Boolean);
+
+    // 9) Find our profile
+    const me = userProfiles.find(u => u.userId === userId);
+    if (!me) {
+      console.log(`No profile for user ${userId}, returning [].`);
+      return res.json([]);
     }
 
-    // 5) Compute cosine similarity with other users
-    const similarUsers = userVectors
-      .filter(uv => uv.userId !== userId) // Exclude the logged-in user
-      .map(uv => {
-        const dot = uv.vector.reduce((sum, v, i) => sum + v * loggedInUserVector[i], 0);
-        const magA = Math.sqrt(uv.vector.reduce((s, v) => s + v * v, 0));
-        const magB = Math.sqrt(loggedInUserVector.reduce((s, v) => s + v * v, 0));
-        const score = magA && magB ? dot / (magA * magB) : 0;
-        return { userId: uv.userId, similarity: score };
+    // 10) Compute cosine similarities, force NaN→0
+    const similar = userProfiles
+      .filter(u => u.userId !== userId)
+      .map(u => {
+        const dot  = u.vector.reduce((s, v, i) => s + (Number.isFinite(v) ? v : 0) * (Number.isFinite(me.vector[i]) ? me.vector[i] : 0), 0);
+        const magA = Math.sqrt(u.vector.reduce((s, v) => s + (Number.isFinite(v) ? v*v : 0), 0));
+        const magB = Math.sqrt(me.vector.reduce((s, v) => s + (Number.isFinite(v) ? v*v : 0), 0));
+        let similarity = (magA && magB) ? dot/(magA*magB) : 0;
+        if (!Number.isFinite(similarity)) similarity = 0;
+        return { userId: u.userId, similarity };
       })
-      .sort((a, b) => b.similarity - a.similarity) // Sort by similarity
-      .slice(0, 10); // Return top 10 similar users
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 10);
+    console.log("Top similar users:", similar);
 
-    // 6) Fetch usernames for similar users
-    const userIds = similarUsers.map(u => u.userId);
-    const { rows: userDetails } = await client.query(
+    // 11) Fetch usernames
+    const ids = similar.map(u => u.userId).filter(id => Number.isInteger(id));
+    if (!ids.length) return res.json([]);
+    const { rows: users } = await client.query(
       `SELECT user_id, username FROM Users WHERE user_id = ANY($1)`,
-      [userIds]
+      [ids]
     );
 
-    // Map usernames to the results
-    const results = similarUsers.map(u => ({
-      userId: u.userId,
-      username: userDetails.find(d => d.user_id === u.userId)?.username || "Unknown",
+    // 12) Return array
+    const results = similar.map(u => ({
+      user_id:   u.userId,
+      username:  users.find(x => x.user_id === u.userId)?.username || null,
       similarity: u.similarity,
     }));
+    console.log("Final similar users:", results);
+    return res.json(results);
 
-    res.json(results);
-  } catch (error) {
-    console.error("Error fetching similar users:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+  } catch (err) {
+    console.error("Error fetching similar users:", err);
+    return res.json([]);
+  } finally {
+    if (client) client.release();
   }
 });
