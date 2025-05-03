@@ -1617,3 +1617,51 @@ app.get("/content/:type/:id/friendRatings", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+app.get("/friends-activity", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+
+  try {
+    const result = await pool.query(`
+      SELECT 'rating' AS type,
+             r.item_id,
+             ci.title,
+             ci.content_type,
+             r.rating_value AS value,
+             NULL AS text,
+             NULL AS sentiment_score,
+             r.timestamp,
+             u.username
+      FROM Rating r
+      JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+      JOIN Users u ON u.user_id = r.user_id
+      JOIN ContentItem ci ON ci.item_id = r.item_id
+      WHERE u.is_rating_private != 2 AND r.is_private = FALSE AND r.timestamp >= NOW() - INTERVAL '7 days'
+
+      UNION ALL
+
+      SELECT 'review' AS type,
+             rv.item_id,
+             ci.title,
+             ci.content_type,
+             NULL AS value,
+             rv.text,
+             rv.sentiment_score,
+             rv.timestamp,
+             u.username
+      FROM Review rv
+      JOIN Friendship f ON f.user2_id = rv.user_id AND f.user1_id = $1 AND f.status = 'accepted'
+      JOIN Users u ON u.user_id = rv.user_id
+      JOIN ContentItem ci ON ci.item_id = rv.item_id
+      WHERE u.is_review_private != 2 AND rv.timestamp >= NOW() - INTERVAL '7 days'
+
+      ORDER BY timestamp DESC
+    `, [userId]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching activity:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
