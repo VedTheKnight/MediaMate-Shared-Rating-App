@@ -22,13 +22,14 @@ function Friends() {
   const [friends, setFriends] = useState([]);
   const [friendshipStatuses, setFriendshipStatuses] = useState({});
   const [activeFriendId, setActiveFriendId] = useState(null);
+  const [similarUsers, setSimilarUsers] = useState([]); // State for similar users
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         // const res = await fetch("http://localhost:4000/isLoggedIn", {
         const res = await fetch(`${API_BASE}/isLoggedIn`, {
-        credentials: "include",
+          credentials: "include",
         });
         const data = await res.json();
         if (data.message !== "Logged in") navigate("/login");
@@ -41,7 +42,7 @@ function Friends() {
       try {
         // const res = await fetch("http://localhost:4000/friends", {
         const res = await fetch(`${API_BASE}/friends`, {
-        credentials: "include",
+          credentials: "include",
         });
         const data = await res.json();
         setFriends(data);
@@ -54,18 +55,33 @@ function Friends() {
       try {
         // const res = await fetch("http://localhost:4000/friend-requests", {
         const res = await fetch(`${API_BASE}/friend-requests`, {
-        credentials: "include",
+          credentials: "include",
         });
         const data = await res.json();
         setFriendRequests(data);
+
       } catch (error) {
         console.error("Error fetching friend requests:", error);
+      }
+
+    };
+
+    const fetchSimilarUsers = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/users/similar`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setSimilarUsers(data);
+      } catch (error) {
+        console.error("Error fetching similar users:", error);
       }
     };
 
     checkAuth();
     fetchFriends();
     fetchFriendRequests();
+    fetchSimilarUsers();
   }, [navigate]);
 
   const handleSearch = async () => {
@@ -191,11 +207,13 @@ function Friends() {
   };
 
   const Section = ({ title, children }) => (
-    <Box sx={{ marginTop: 5 }}>
+    <Box sx={{ marginTop: 5, width: "100%" }}>
       <Typography variant="h5" sx={styles.sectionTitle}>
         {title}
       </Typography>
-      <Grid container spacing={3}>{children}</Grid>
+      <Grid container spacing={3} sx={{ width: "100%" }}>
+        {children}
+      </Grid>
     </Box>
   );
 
@@ -272,13 +290,15 @@ function Friends() {
         </Button>
       </Stack>
 
-      <Section title="Search Results">
+      
+      <Section title="Search Results" styles={styles.sectionTitle}>
+        </Section>
         {searchResults.map((user) =>
           renderUserCard(user, getFriendshipButton(user))
         )}
-      </Section>
 
-      <Section title="Friend Requests">
+      <Section title="Friend Requests" styles={styles.sectionTitle}>
+        </Section>
         {friendRequests.map((request) =>
           renderUserCard(request, [
             <Button
@@ -297,11 +317,16 @@ function Friends() {
             </Button>,
           ])
         )}
-      </Section>
 
-      <Section title="Your Friends">
-        {friends.map((friend) => renderUserCard(friend, null, true))}
+      <Section title="Your Friends" styles={styles.sectionTitle}>
       </Section>
+        {friends.map((friend) => renderUserCard(friend, null, true))}
+
+      <Section title="Users Similar to you" styles={styles.sectionTitle}>
+        </Section>
+        {similarUsers.map((user) =>
+          renderUserCard(user, getFriendshipButton(user))
+        )}
     </Container>
   );
 }
@@ -321,6 +346,7 @@ const styles = {
     mb: 2,
     fontWeight: "bold",
     color: "#34495e",
+    textAlign: "center",
   },
   card: {
     transition: "transform 0.2s",

@@ -127,7 +127,7 @@ const styles = {
     flexWrap: "wrap",
   },
   logo: {
-    height: "80px",
+    height: "50px",
     marginRight: "20px",
     cursor: "pointer",
   },

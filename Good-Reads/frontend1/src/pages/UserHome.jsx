@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
-import { Container, Typography, Grid, Card, CardContent, Box } from "@mui/material";
+import { Container, Typography, Grid, Card, CardContent, CardActionArea, Box } from "@mui/material";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import MovieIcon from "@mui/icons-material/Movie";
+import TvIcon from "@mui/icons-material/Tv";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Groups as GroupIcon, PeopleAlt as PeopleIcon } from "@mui/icons-material"
+import { Timeline as ActivityIcon } from "@mui/icons-material";  // Import a better Activity Icon
 
-const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
-
+const API_BASE = "http://localhost:4000";
 
 function UserHome() {
-  const { userId } = useParams();  // undefined for /dashboard
+  const { userId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();  // to check where we came from
+  const location = useLocation();
 
   const [userData, setUserData] = useState({
     username: "Loading...",
@@ -16,10 +21,15 @@ function UserHome() {
     friendCount: 0
   });
 
+  const [recommendations, setRecommendations] = useState({
+    books: [],
+    movies: [],
+    tvshows: []
+  });
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // const res = await fetch("http://localhost:4000/isLoggedIn", { credentials: "include" });
         const res = await fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" });
         const data = await res.json();
         if (data.message !== "Logged in") {
@@ -33,20 +43,15 @@ function UserHome() {
 
     const fetchUserData = async () => {
       try {
-        // If viewing a friend's dashboard, make sure we came from /friends
         if (userId && (!location.state || location.state.from !== "friends")) {
           console.warn("Unauthorized profile access attempt");
           navigate("/dashboard");
           return;
         }
 
-        // const endpoint = userId
-        //   ? `http://localhost:4000/user2/${userId}`  // friend view
-        //   : "http://localhost:4000/user/profile";           // self view
         const endpoint = userId
-          ? `${API_BASE}/user2/${userId}`  // friend view
-          : `${API_BASE}/user/profile`;           // self view
-        console.log(endpoint)
+          ? `${API_BASE}/user2/${userId}`
+          : `${API_BASE}/user/profile`;
 
         const res = await fetch(endpoint, { credentials: "include" });
         if (!res.ok) throw new Error("Failed to fetch profile");
@@ -57,93 +62,168 @@ function UserHome() {
       }
     };
 
+    const fetchRecommendations = async () => {
+      try {
+        const [bookRes, movieRes, tvRes] = await Promise.all([
+          fetch(`${API_BASE}/recommendation/Book`, { credentials: "include" }),
+          fetch(`${API_BASE}/recommendation/Movie`, { credentials: "include" }),
+          fetch(`${API_BASE}/recommendation/tv`, { credentials: "include" }),
+        ]);
+        const [bookData, movieData, tvData] = await Promise.all([
+          bookRes.json(),
+          movieRes.json(),
+          tvRes.json(),
+        ]);
+        setRecommendations({
+          books: bookData.slice(0, 3),
+          movies: movieData.slice(0, 3),
+          tvshows: tvData.slice(0, 3),
+        });
+      } catch (err) {
+        console.error("Failed to fetch recommendations:", err);
+      }
+    };
+
     checkAuth();
     fetchUserData();
+    fetchRecommendations();
   }, [navigate, userId, location.state]);
 
-
-  const recommendations = {
-    books: [
-      { id: 1, title: "The Great Gatsby", rating: "★★★★★" },
-      { id: 2, title: "1984", rating: "★★★★☆" },
-    ],
-    movies: [
-      { id: 3, title: "The Shawshank Redemption", rating: "★★★★★" },
-      { id: 4, title: "Inception", rating: "★★★★☆" },
-    ]
-  };
-
-  const recentActivities = [
-    { id: 1, activity: "Friend A rated The Matrix: ★★★★★" },
-    { id: 2, activity: "Friend B reviewed Game of Thrones" },
+  const watchlistTypes = [
+    {
+      title: "Books",
+      path: "/watchlist/books",
+      icon: <MenuBookIcon style={styles.icon} />,
+      bg: "#E3F2FD",
+    },
+    {
+      title: "Movies",
+      path: "/watchlist/movies",
+      icon: <MovieIcon style={styles.icon} />,
+      bg: "#FFF3E0",
+    },
+    {
+      title: "TV Shows",
+      path: "/watchlist/tvshows",
+      icon: <TvIcon style={styles.icon} />,
+      bg: "#EDE7F6",
+    },
   ];
+
+  const renderRecommendationCard = (item) => (
+    <Card key={item.item_id} style={styles.compactCard}>
+      <CardContent style={styles.cardContent}>
+        <img
+          src={item.image_url || "/placeholder.jpg"}
+          alt={item.title}
+          style={styles.image}
+        />
+        <Box>
+          <Typography variant="body1" style={styles.itemTitle}>{item.title}</Typography>
+          <Typography variant="body2">⭐ {item.avg_rating?.toFixed(1) ?? "N/A"}</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Container style={styles.container}>
+      {/* Profile Section */}
       <Card style={styles.profileCard}>
         <CardContent>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h4" style={styles.username}>{userData.username}</Typography>
-              <Typography variant="body1" style={styles.userInfo}>{userData.email}</Typography>
-              <Typography variant="body1" style={styles.userInfo}>Friends: {userData.friendCount}</Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box style={styles.watchlistLinks}>
-                <Typography variant="h6" gutterBottom>Your Watchlists</Typography>
-                <Link to={`/watchlist/books/`} style={styles.link}>📚 Books Watchlist</Link>
-                <Link to={`/watchlist/movies/`} style={styles.link}>🎬 Movies Watchlist</Link>
-                <Link to={`/watchlist/tvshows/`} style={styles.link}>📺 TV Shows Watchlist</Link>
-              </Box>
-            </Grid>
-          </Grid>
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box>
+              <Typography variant="h4" style={styles.username}>
+                Username: {userData.username}
+              </Typography>
+              <Typography variant="body1" style={styles.userInfo}>
+                Email: {userData.email}
+              </Typography>
+              <Typography variant="body1" style={styles.userInfo}>
+                Friends: {userData.friendCount}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Link to="/settings" style={styles.iconLink}>
+                <SettingsIcon style={styles.icon} />
+              </Link>
+              <Link to="/groups" style={styles.iconLink}>
+                <GroupIcon style={styles.icon} />
+              </Link>
+              <Link to="/friends" style={styles.iconLink}>
+                <PeopleIcon style={styles.icon} />
+              </Link>
+              <Link to="/activity" style={styles.iconLink}>  {/* Add the link for the activity icon */}
+                <ActivityIcon style={styles.icon} />
+              </Link>
+            </Box>
+          </Box>
         </CardContent>
       </Card>
 
-      <Grid container spacing={4} style={styles.recommendationsSection}>
-        <Grid item xs={12} md={6}>
+      {/* Watchlist Section */}
+      <Box style={styles.watchlistSection}>
+        <Typography variant="h5" style={styles.sectionTitle}>Your Watchlists</Typography>
+        <Grid container spacing={0} justifyContent="space-between" alignItems="stretch">
+          {watchlistTypes.map((watchlist, index) => (
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{
+                display: "flex",
+                justifyContent:
+                  index === 0 ? "flex-start" : index === 1 ? "center" : "flex-end",
+              }}
+              key={watchlist.title}
+            >
+              <Card
+                style={{
+                  ...styles.card,
+                  backgroundColor: watchlist.bg,
+                  width: "95%", // make it wider
+                  margin: "5px", // minimal spacing
+                  height: "180px", // taller cards
+                }}
+                elevation={6}
+              >
+                <CardActionArea component={Link} to={watchlist.path} style={styles.linkArea}>
+                  <CardContent style={styles.cardContentWatchlist2}>
+                    {React.cloneElement(watchlist.icon, { style: styles.largeIcon })}
+                    <Typography variant="h6" style={styles.linkText}>
+                      {watchlist.title}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Recommendations Section */}
+      <Box style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', marginTop: '40px' }}>
+        <Box flex="1" maxWidth="32%">
           <Typography variant="h5" gutterBottom style={styles.sectionTitle}>
             Book Recommendations
           </Typography>
-          {recommendations.books.map((book) => (
-            <Card key={book.id} style={styles.compactCard}>
-              <CardContent>
-                <Typography variant="body1">{book.title} • {book.rating}</Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </Grid>
+          {recommendations.books.map(renderRecommendationCard)}
+        </Box>
 
-        <Grid item xs={12} md={6}>
+        <Box flex="1" maxWidth="32%" textAlign="center">
           <Typography variant="h5" gutterBottom style={styles.sectionTitle}>
             Movie Recommendations
           </Typography>
-          {recommendations.movies.map((movie) => (
-            <Card key={movie.id} style={styles.compactCard}>
-              <CardContent>
-                <Typography variant="body1">{movie.title} • {movie.rating}</Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </Grid>
-      </Grid>
+          {recommendations.movies.map(renderRecommendationCard)}
+        </Box>
 
-      <Typography variant="h5" gutterBottom style={{ ...styles.sectionTitle, marginTop: "40px" }}>
-        Recent Friend Activity
-      </Typography>
-      <Grid container spacing={2}>
-        {recentActivities.map((activity) => (
-          <Grid item xs={12} key={activity.id}>
-            <Card style={styles.activityCard}>
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {activity.activity}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+        <Box flex="1" maxWidth="32%" textAlign="right">
+          <Typography variant="h5" gutterBottom style={styles.sectionTitle}>
+            TV Show Recommendations
+          </Typography>
+          {recommendations.tvshows.map(renderRecommendationCard)}
+        </Box>
+      </Box>
     </Container>
   );
 }
@@ -170,36 +250,84 @@ const styles = {
     color: "#34495e",
     marginBottom: "8px",
   },
-  watchlistLinks: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  link: {
-    color: "#3498db",
-    textDecoration: "none",
-    padding: "8px",
-    borderRadius: "4px",
-    transition: "background-color 0.3s",
-    '&:hover': {
-      backgroundColor: "#f0f0f0",
-    },
-  },
   sectionTitle: {
     color: "#2c3e50",
     fontWeight: "bold",
     marginBottom: "20px",
+    alignItems: "center",
+    textAlign: "center",
   },
   recommendationsSection: {
     marginTop: "30px",
   },
   compactCard: {
-    marginBottom: "10px",
+    marginBottom: "15px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
   },
-  activityCard: {
-    background: "#fff",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+  cardContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+  },
+  image: {
+    width: "60px",
+    height: "90px",
+    objectFit: "cover",
+    borderRadius: "4px",
+  },
+  itemTitle: {
+    fontWeight: "bold",
+    color: "#2c3e50",
+  },
+  card: {
+    borderRadius: "12px",
+    transition: "transform 0.2s ease-in-out",
+  },
+  icon: {
+    fontSize: 28,
+    marginRight: "15px",
+    color: "#555",
+    width: "60px",
+    height: "60px",
+    padding: "40px",
+  },
+  linkText: {
+    fontWeight: 600,
+    color: "#333",
+  },
+  linkArea: {
+    textDecoration: "none",
+  },
+  watchlistSection: {
+    marginTop: "40px",
+    marginBottom: "30px",
+  },
+  cardContentWatchlist: {
+    textAlign: "center",
+    padding: "50px 50px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+  },
+  cardContentWatchlist2: {
+    textAlign: "center",
+    padding: "30px 135px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+  },
+  largeIcon: {
+    fontSize: 100,
+    marginBottom: "12px",
+    color: "#333",
+  },
+  iconLink: {
+    textDecoration: "none",
+    color: "#333",
   },
 };
 

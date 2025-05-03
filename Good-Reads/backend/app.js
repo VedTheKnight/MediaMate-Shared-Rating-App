@@ -23,6 +23,10 @@ const sentiment = new Sentiment();
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+//recommendations
+const natural = require('natural');
+const _ = require('lodash');
+
 // PostgreSQL connection
 // NOTE: use YOUR postgres username and password here
 const pool = new Pool({
@@ -495,7 +499,7 @@ app.get("/getwatchlist", async (req, res) => {
 app.post("/postReview", async (req, res) => {
   const userId = req.session.userId;
   const { item_id, text } = req.body;
-  console.log("item_id", item_id,"text",text);
+  // console.log("item_id", item_id,"text",text);
   if (!userId || !item_id || !text) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -1207,7 +1211,7 @@ app.post("/chatbot", isAuthenticated, async (req, res) => {
     
     // Create the prompt with context
     const prompt = createPromptWithContext(message, watchlistContext);
-    console.log("Generated prompt:", prompt);
+    // console.log("Generated prompt:", prompt);
 
     // Initialize Gemini API
     const genAI = new GoogleGenerativeAI(config.geminiApiKey);
@@ -1228,7 +1232,7 @@ app.post("/chatbot", isAuthenticated, async (req, res) => {
 // Helper function to format watchlist data for the prompt
 function formatWatchlistForPrompt(watchlistData) {
   if (!watchlistData || !Array.isArray(watchlistData)){
-    console.log("No watchlist data provided");
+    // console.log("No watchlist data provided");
     return "";
   } 
 
@@ -1249,13 +1253,13 @@ function formatWatchlistForPrompt(watchlistData) {
     
     if (categorized[mappedCategory]) {
       if (!categorized[mappedCategory][status]) {
-        console.log(`Unknown status: ${status} for item: ${item.title}`);
+        // console.log(`Unknown status: ${status} for item: ${item.title}`);
         categorized[mappedCategory]['planned'].push(item.title); // Default to planned
       } else {
         categorized[mappedCategory][status].push(item.title);
       }
     } else {
-      console.log(`Unknown category: ${category} for item: ${item.title}`);
+      // console.log(`Unknown category: ${category} for item: ${item.title}`);
       categorized.books[status].push(item.title); // Default to books
     }
   });
@@ -1276,7 +1280,7 @@ function formatWatchlistForPrompt(watchlistData) {
     }
   });
   
-  console.log("Generated watchlist prompt:", prompt);
+  // console.log("Generated watchlist prompt:", prompt);
   return prompt;
 }
 
@@ -1488,7 +1492,7 @@ app.get("/content/:type/friends", isAuthenticated, async (req, res) => {
             FROM Rating r
             JOIN Friendship f ON f.user2_id = r.user_id AND f.user1_id = $2 AND f.status = 'accepted'
             JOIN Users u ON u.user_id = r.user_id
-            WHERE r.is_private = false AND u.is_rating_private != 2
+            WHERE r.is_private = false AND u.is_rating_private != true
 
             UNION
 
@@ -1496,7 +1500,7 @@ app.get("/content/:type/friends", isAuthenticated, async (req, res) => {
             FROM Review rv
             JOIN Friendship f ON f.user2_id = rv.user_id AND f.user1_id = $2 AND f.status = 'accepted'
             JOIN Users u ON u.user_id = rv.user_id
-            WHERE u.is_review_private != 2
+            WHERE u.is_review_private != true
           ) AS friend_items
         )
       GROUP BY ci.item_id, g.name
@@ -1538,7 +1542,7 @@ app.post("/content/:type/:id/rating", async (req, res) => {
       "SELECT * FROM Rating WHERE user_id = $1 AND item_id = $2",
       [userId, id]
     );
-    console.log("Existing rating:", existing.rows,userId,id); // Debugging line
+    // console.log("Existing rating:", existing.rows,userId,id); // Debugging line
     if (existing.rows.length > 0) {
       await pool.query(
         "UPDATE Rating SET rating_value = $1 WHERE user_id = $2 AND item_id = $3",
@@ -1751,48 +1755,526 @@ app.get("/content/:type/:id/friendRatings", async (req, res) => {
   }
 });
 
-//////////////////////////// activity ///////////////////////////////
-app.get("/friends-ratings", async (req, res) => {
-  const user_id = req.session.userId;
-  // console.log(req.session,user_id); // Debugging line
-  if (!user_id) {
-    console.log("User not logged in"); // Debugging line
-    return res.status(401).json({ error: "Not logged in" });
+//------------------------RECOMMENDATIONS------------------------
+
+// app.get("/content/:type", async (req, res) => {
+
+//   const { type } = req.params;
+//   const canonicalType = typeMap[type?.toLowerCase()];
+//   if (!canonicalType) {
+//     return res.status(400).json({ error: "Invalid content type" });
+//   }
+
+//   // If user is logged in, return content‑based recommendations
+//   if (req.session.userId) {
+//     const userId = user.session.userId;
+//     const client = await pool.connect();
+
+//     const { rows: userRatings } = await client.query(`
+//       SELECT r.item_id, r.rating_value
+//       FROM Rating r
+//       JOIN ContentItem ci ON ci.item_id = r.item_id
+//       WHERE r.user_id = $1
+//         AND ci.content_type = $2
+//     `, [userId, canonicalType]);
+    
+//     console.log(`Fetched ${userRatings.length} ratings for user ${userId} and type ${canonicalType}`);
+//     console.log("Generating recommendations for user:", req.session.userId);
+
+//     try {
+//       // 1) Load all items of this type (including genre_id)
+//       const { rows: items } = await client.query(`
+//         SELECT
+//           ci.item_id,
+//           ci.title,
+//           ci.description,
+//           ci.genre_id,
+//           ci.image_url,
+//           g.name AS genre_name
+//         FROM ContentItem ci
+//         JOIN Genre g ON g.genre_id = ci.genre_id
+//         WHERE ci.content_type = $1
+//       `, [canonicalType]);
+
+//       // 2) Build TF‑IDF model over descriptions
+//       const tfidf = new natural.TfIdf();
+//       items.forEach(it =>
+//         tfidf.addDocument(it.description || '', String(it.item_id))
+//       );
+
+//       // 2a) Extract full vocabulary of terms
+//       const vocab = [];
+//       tfidf.documents.forEach(doc =>
+//         Object.keys(doc).forEach(term => {
+//           if (!vocab.includes(term)) vocab.push(term);
+//         })
+//       );
+
+//       // 3) Prepare one‑hot index for genres
+//       const genreIds   = _.uniq(items.map(it => it.genre_id));
+//       const genreIndex = Object.fromEntries(
+//         genreIds.map((g, i) => [g, i])
+//       );
+
+//       // 4) Assemble each item’s combined feature vector
+//       const itemVectors = items.map((it, idx) => {
+//         // TF‑IDF portion: one weight per vocab term
+//         const descVec = vocab.map(term => tfidf.tfidf(term, idx));
+
+//         // One‑hot genre portion
+//         const genreVec = Array(genreIds.length).fill(0);
+//         genreVec[genreIndex[it.genre_id]] = 1;
+
+//         return {
+//           item_id:    it.item_id,
+//           title:      it.title,
+//           description:it.description,
+//           genre:      it.genre_name,
+//           image_url:  it.image_url,
+//           vector:     descVec.concat(genreVec),
+//         };
+//       });
+
+//       // 5) Fetch this user's ratings for this type
+//       const { rows: userRatings } = await client.query(`
+//         SELECT r.item_id, r.rating_value
+//         FROM Rating r
+//         JOIN ContentItem ci ON ci.item_id = r.item_id
+//         WHERE r.user_id = $1
+//           AND ci.content_type = $2
+//       `, [userId, canonicalType]);
+
+//       // 5a) If no ratings, fall back to full list
+//       if (!userRatings.length) {
+//         console.log("No ratings found for user, falling back to all items.");
+//         const fallback = await client.query(`
+//           SELECT
+//             ci.item_id,
+//             ci.title,
+//             ci.description,
+//             ci.content_type,
+//             ci.release_date,
+//             ci.image_url,
+//             g.name AS genre,
+//             COALESCE(AVG(r.rating_value), 0)      AS rating,
+//             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+//           FROM ContentItem ci
+//           LEFT JOIN Genre g    ON ci.genre_id = g.genre_id
+//           LEFT JOIN Rating r   ON r.item_id = ci.item_id
+//           LEFT JOIN Review rev ON rev.item_id = ci.item_id
+//           WHERE ci.content_type = $1
+//           GROUP BY ci.item_id, g.name
+//         `, [canonicalType]);
+//         return res.json(fallback.rows);
+//       }
+//       console.log("User ratings:", userRatings);
+//       // 6) Build the user profile vector (weighted by high ratings ≥8)
+//       const liked = userRatings.filter(r => r.rating_value >= 8);
+//       const weighted = liked.map(r => {
+//         const iv = itemVectors.find(iv => iv.item_id === r.item_id);
+//         return iv.vector.map(x => x * r.rating_value);
+//       });
+//       const userProfile = weighted[0].map((_, idx) =>
+//         _.meanBy(weighted, vec => vec[idx])
+//       );
+
+//       // 7) Compute cosine similarity for each unseen item & take top 10
+//       const seen = new Set(userRatings.map(r => r.item_id));
+//       const recommendations = itemVectors
+//         .filter(iv => !seen.has(iv.item_id))
+//         .map(iv => {
+//           const dot  = iv.vector.reduce((sum, v, i) => sum + v * userProfile[i], 0);
+//           const magA = Math.sqrt(iv.vector.reduce((s, v) => s + v * v, 0));
+//           const magB = Math.sqrt(userProfile.reduce((s, v) => s + v * v, 0));
+//           const score = (magA && magB) ? dot / (magA * magB) : 0;
+//           return { ...iv, score };
+//         })
+//         .sort((a, b) => b.score - a.score)
+//         .slice(0, 10);
+//       console.log("Recommendations:", recommendations);
+//       return res.json(recommendations);
+
+//     } catch (err) {
+//       console.error("Rec error:", err);
+//       return res.status(500).json({ error: "Failed to generate recommendations" });
+//     } finally {
+//       client.release();
+//     }
+//   }
+
+//   // Not logged in → original "all items" query
+//   try {
+//     const result = await pool.query(`
+//       SELECT
+//         ci.item_id,
+//         ci.title,
+//         ci.description,
+//         ci.content_type,
+//         ci.release_date,
+//         ci.image_url,
+//         g.name AS genre,
+//         COALESCE(AVG(r.rating_value), 0)      AS rating,
+//         COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+//       FROM ContentItem ci
+//       LEFT JOIN Genre g    ON ci.genre_id = g.genre_id
+//       LEFT JOIN Rating r   ON ci.item_id = r.item_id
+//       LEFT JOIN Review rev ON ci.item_id = rev.item_id
+//       WHERE ci.content_type = $1
+//       GROUP BY ci.item_id, g.name
+//     `, [canonicalType]);
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error("Error fetching content:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+app.get("/recommendation/:type", async (req, res) => {
+  const { type } = req.params;
+  const canonicalType = typeMap[type?.toLowerCase()];
+  if (!canonicalType) {
+    return res.status(400).json({ error: "Invalid content type" });
   }
 
+  const userId = req.session.userId; // undefined if not logged in
+
+  // — Recommendation branch for logged‑in users —
+  if (userId) {
+    const client = await pool.connect();
+    try {
+      // 1) Pull the user's ratings for this content_type
+      const { rows: userRatings } = await client.query(`
+        SELECT r.item_id, r.rating_value
+        FROM Rating r
+        JOIN ContentItem ci ON ci.item_id = r.item_id
+        WHERE r.user_id = $1
+          AND ci.content_type = $2
+      `, [userId, canonicalType]);
+      // console.log(`Fetched ${userRatings.length} ratings for user ${userId} and type ${canonicalType}`);
+
+      // 2) Pull all items of this type
+      const { rows: items } = await client.query(`
+        SELECT
+          ci.item_id,
+          ci.title,
+          ci.description,
+          ci.content_type,
+          ci.release_date,
+          ci.image_url,
+          g.name                AS genre_name,
+          COALESCE(AVG(r.rating_value), 0)      AS rating,
+          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+        FROM ContentItem ci
+        JOIN Genre g ON g.genre_id = ci.genre_id
+        LEFT JOIN Rating r   ON r.item_id    = ci.item_id
+        LEFT JOIN Review rev ON rev.item_id  = ci.item_id
+        WHERE ci.content_type = $1
+        GROUP BY
+          ci.item_id, ci.title, ci.description,
+          ci.content_type, ci.release_date,
+          ci.image_url, g.name
+      `, [canonicalType]);
+      // console.log(`Fetched ${items.length} items of type ${canonicalType}`);
+
+      // 3) Build TF‑IDF model over descriptions
+      const tfidf = new natural.TfIdf();
+      items.forEach(it =>
+        tfidf.addDocument(it.description || '', String(it.item_id))
+      );
+
+      // 4) Build a global vocabulary from tfidf.listTerms()
+      const termSet = new Set();
+      items.forEach((_, idx) => {
+        tfidf.listTerms(idx).forEach(({ term }) => {
+          termSet.add(term);
+        });
+      });
+      const vocab = Array.from(termSet);
+
+      // 5) One‑hot encode genres
+      const genreIds   = _.uniq(items.map(it => it.genre_id));
+      const genreIndex = Object.fromEntries(genreIds.map((g, i) => [g, i]));
+
+      const normalize = vec => {
+        const magnitude = Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
+        return magnitude ? vec.map(val => val / magnitude) : vec;
+      };
+
+      // 6) Vectorize each item: [TF‑IDF … , one‑hot genre …]
+      const itemVectors = items.map((it, idx) => {
+        // TF‑IDF vector
+        const descVec = normalize(vocab.map(term => tfidf.tfidf(term, idx)));
+
+        // Genre one‑hot
+        genreVec = Array(genreIds.length).fill(0);
+        genreVec[genreIndex[it.genre_id]] = 1;
+
+        // Scale the genre vector by the weight
+        const genreWeight = 2.0; // Adjust this weight as needed
+        genreVec = genreVec.map(value => value * genreWeight);
+
+        return {
+          item_id:    it.item_id,
+          title:      it.title,
+          description:it.description,
+          genre:      it.genre_name,
+          image_url:  it.image_url,
+          vector:     [...descVec, ...genreVec],
+        };
+      });
+      // console.log(`Vectorized ${itemVectors.length} items`);
+
+      // 7) If no ratings, fall back to original full listing
+      if (!userRatings.length) {
+        console.log("No ratings found for user, falling back to all items.");
+        const fallback = await client.query(`
+          SELECT
+          ci.item_id,
+          ci.title,
+          ci.description,
+          ci.content_type,
+          ci.release_date,
+          ci.image_url,
+          g.name                AS genre_name,
+          COALESCE(AVG(r.rating_value), 0)      AS rating,
+          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+        FROM ContentItem ci
+        JOIN Genre g ON g.genre_id = ci.genre_id
+        LEFT JOIN Rating r   ON r.item_id    = ci.item_id
+        LEFT JOIN Review rev ON rev.item_id  = ci.item_id
+        WHERE ci.content_type = $1
+        GROUP BY
+          ci.item_id, ci.title, ci.description,
+          ci.content_type, ci.release_date,
+          ci.image_url, g.name
+        `, [canonicalType]);
+        // console.log(fallback.rows);
+        return res.json(fallback.rows);
+      }
+
+      // 1) Choose which ratings to use (either high ratings ≥3, or fallback to all)
+      const liked  = userRatings.filter(r => r.rating_value >= 3);
+      const toUse  = liked.length > 0 ? liked : userRatings;
+
+      // 2) Build weighted vectors
+      const weighted = toUse.map(r => {
+        const iv = itemVectors.find(iv => iv.item_id === r.item_id);
+        return iv.vector.map(value => value * r.rating_value);
+      });
+
+      // 3) Compute userProfile by averaging each dimension
+      //    Notice we rename the callback args so `_` remains Lodash
+      const userProfile = weighted[0].map((__element, idx) =>
+        // here `_` is Lodash, not the element
+        _.meanBy(weighted, vec => vec[idx])
+      );
+      // console.log("User profile vector:", userProfile);
+
+      // 9) Score unseen items by cosine similarity & return top 10
+      const seen = new Set(userRatings.map(r => r.item_id));
+      const recommendations = itemVectors
+        .filter(iv => !seen.has(iv.item_id))
+        .map(iv => {
+          const dot  = iv.vector.reduce((sum, v, i) => sum + v * userProfile[i], 0);
+          const magA = Math.sqrt(iv.vector.reduce((s, v) => s + v*v, 0));
+          const magB = Math.sqrt(userProfile.reduce((s, v) => s + v*v, 0));
+          const score = magA && magB ? dot/(magA*magB) : 0;
+          const item = items.find(item => item.item_id === iv.item_id);
+          // console.log(item.item_id, item.title, iv.vector, score);
+          return {
+            item_id: item.item_id,
+            title: item.title,
+            description: item.description,
+            content_type: item.content_type,
+            release_date: item.release_date,
+            image_url: item.image_url,
+            genre_name: item.genre_name,
+            rating: item.rating, // Average rating
+            average_sentiment: item.average_sentiment, // Average sentiment
+            score, // Recommendation score
+          };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 20);
+      // console.log("Recommendations:", recommendations);
+        console.log("Recommendations:", recommendations.map(r => r.title));
+      return res.json(recommendations);
+    } catch (err) {
+      console.error("Rec error:", err);
+      return res.status(500).json({ error: "Failed to generate recommendations" });
+    } finally {
+      client.release();
+    }
+  }
+
+  // — Fallback for anonymous users: original catalog listing —
   try {
     const result = await pool.query(`
-      WITH friends AS (
-        SELECT user2_id AS friend_id FROM Friendship 
-        WHERE user1_id = $1 AND status = 'accepted'
-        UNION
-        SELECT user1_id AS friend_id FROM Friendship 
-        WHERE user2_id = $1 AND status = 'accepted'
-      )
-      SELECT 
-        r.rating_value AS rating,
-        r.timestamp,
-        u.username,
-        u.user_id,
-        c.item_id AS content_id,
-        c.title,
-        c.content_type
-      FROM Rating r
-      JOIN friends f ON r.user_id = f.friend_id
-      JOIN Users u ON u.user_id = r.user_id
-      JOIN ContentItem c ON c.item_id = r.item_id
-      WHERE r.timestamp >= now() - INTERVAL '7 days'
-        AND r.is_private = FALSE
-        AND u.is_rating_private = 0
-      ORDER BY r.timestamp DESC
-    `, [user_id]);
-      // console.log("Result:", result.rows); // Debugging line
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Error in /friends-ratings:", err);
-    res.status(500).json({ error: "Server error" });
+      SELECT
+          ci.item_id,
+          ci.title,
+          ci.description,
+          ci.content_type,
+          ci.release_date,
+          ci.image_url,
+          g.name                AS genre_name,
+          COALESCE(AVG(r.rating_value), 0)      AS rating,
+          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+        FROM ContentItem ci
+        JOIN Genre g ON g.genre_id = ci.genre_id
+        LEFT JOIN Rating r   ON r.item_id    = ci.item_id
+        LEFT JOIN Review rev ON rev.item_id  = ci.item_id
+        WHERE ci.content_type = $1
+        GROUP BY
+          ci.item_id, ci.title, ci.description,
+          ci.content_type, ci.release_date,
+          ci.image_url, g.name
+    `, [canonicalType]);
+    return res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching content:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+app.get("/users/similar", isAuthenticated, async (req, res) => {
+  const { userId } = req.session;
+  console.log("Finding similar users for:", userId);
+  let client;
+
+  try {
+    client = await pool.connect();
+
+    // 1) Load all items
+    const { rows: items } = await client.query(`
+      SELECT item_id, description, genre_id
+      FROM ContentItem
+    `);
+
+    // 2) Global TF‑IDF
+    const tfidf = new natural.TfIdf();
+    items.forEach(it => tfidf.addDocument(it.description || '', String(it.item_id)));
+
+    // 3) Vocabulary
+    const termSet = new Set();
+    items.forEach((_, idx) =>
+      tfidf.listTerms(idx).forEach(({ term }) => termSet.add(term))
+    );
+    const vocab = Array.from(termSet);
+
+    // 4) Genre one‑hot index
+    const allGenreIds = _.uniq(items.map(it => it.genre_id));
+    const genreIndex  = Object.fromEntries(allGenreIds.map((g, i) => [g, i]));
+
+    // 5) Build itemVectorsMap with NaN→0 guard
+    const itemVectorsMap = {};
+    items.forEach((it, idx) => {
+      const descVec = vocab.map(term => {
+        const w = tfidf.tfidf(term, idx);
+        return Number.isFinite(w) ? w : 0;
+      });
+      const genreVec = Array(allGenreIds.length).fill(0);
+      genreVec[genreIndex[it.genre_id]] = 1;
+      itemVectorsMap[it.item_id] = [...descVec, ...genreVec];
+    });
+    console.log(`Built vectors for ${items.length} items.`);
+
+    // 6) Fetch all ratings
+    const { rows: allRatings } = await client.query(`
+      SELECT user_id, item_id, rating_value
+      FROM Rating
+    `);
+
+    // 7) Group by user
+    const ratingsByUser = _.groupBy(allRatings, 'user_id');
+
+    // 8) Build userProfiles with NaN→0 guard on averaging
+    const userProfiles = Object.entries(ratingsByUser)
+      .map(([uid, ratings]) => {
+        const weighted = ratings
+          .map(r => {
+            const vec = itemVectorsMap[r.item_id];
+            if (!vec) return null;
+            return vec.map(v => v * r.rating_value);
+          })
+          .filter(Boolean);
+        if (!weighted.length) return null;
+
+        const profile = weighted[0].map((_, i) => {
+          const sum = weighted.reduce((acc, vec) => acc + (Number.isFinite(vec[i]) ? vec[i] : 0), 0);
+          const avg = sum / weighted.length;
+          return Number.isFinite(avg) ? avg : 0;
+        });
+
+        return { userId: Number(uid), vector: profile };
+      })
+      .filter(Boolean);
+
+    // 9) Find our profile
+    const me = userProfiles.find(u => u.userId === userId);
+    if (!me) {
+      console.log(`No profile for user ${userId}, returning [].`);
+      return res.json([]);
+    }
+
+    // 10) Compute cosine similarities, force NaN→0
+    const similar = userProfiles
+      .filter(u => u.userId !== userId)
+      .map(u => {
+        const dot  = u.vector.reduce((s, v, i) => s + (Number.isFinite(v) ? v : 0) * (Number.isFinite(me.vector[i]) ? me.vector[i] : 0), 0);
+        const magA = Math.sqrt(u.vector.reduce((s, v) => s + (Number.isFinite(v) ? v*v : 0), 0));
+        const magB = Math.sqrt(me.vector.reduce((s, v) => s + (Number.isFinite(v) ? v*v : 0), 0));
+        let similarity = (magA && magB) ? dot/(magA*magB) : 0;
+        if (!Number.isFinite(similarity)) similarity = 0;
+        return { userId: u.userId, similarity };
+      })
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 10);
+    console.log("Top similar users:", similar);
+
+    // 11) Fetch usernames
+    const ids = similar.map(u => u.userId).filter(id => Number.isInteger(id));
+    if (!ids.length) return res.json([]);
+    const { rows: users } = await client.query(
+      `
+      SELECT user_id, username 
+      FROM Users 
+      WHERE user_id = ANY($1)
+        AND NOT EXISTS (
+          SELECT 1 
+          FROM Friendship f
+          WHERE (
+            (f.user1_id = $2 AND f.user2_id = Users.user_id) OR 
+            (f.user2_id = $2 AND f.user1_id = Users.user_id)
+          )
+          AND f.status = 'accepted'
+        )
+      `,
+      [ids, userId]
+    );
+    
+    // 12) Return array
+    const validUserIds = new Set(users.map(u => u.user_id));
+    const results = similar
+      .filter(u => validUserIds.has(u.userId))
+      .map(u => ({
+        user_id:   u.userId,
+        username:  users.find(x => x.user_id === u.userId).username,
+        similarity: u.similarity,
+      }));
+    
+    console.log("Final similar users:", results);
+    return res.json(results);
+
+  } catch (err) {
+    console.error("Error fetching similar users:", err);
+    return res.json([]);
+  } finally {
+    if (client) client.release();
+  }
+});
+
 
 
 app.get("/friends-reviews", async (req, res) => {
@@ -1822,7 +2304,7 @@ app.get("/friends-reviews", async (req, res) => {
       JOIN Users u ON u.user_id = rv.user_id
       JOIN ContentItem c ON c.item_id = rv.item_id
       WHERE rv.timestamp >= now() - INTERVAL '7 days'
-        AND u.is_review_private = 0
+        AND u.is_review_private = FALSE
       ORDER BY rv.timestamp DESC
     `, [userId]);
 
