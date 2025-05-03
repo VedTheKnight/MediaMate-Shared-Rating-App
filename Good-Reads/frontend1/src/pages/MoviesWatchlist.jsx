@@ -17,6 +17,22 @@ function MoviesWatchlist() {
   const [movies, setMovies] = useState([]);
   const [filteredStatus, setFilteredStatus] = useState("Planned");
 
+  // Fetch watchlist from backend
+  const fetchWatchlist = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/getwatchlist`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      console.log("Full watchlist data:", data); // 🔍 Debug log
+      const moviesData = data.filter(item => item.content_type === "Movie");
+      setMovies(moviesData); // ✅ Reset state cleanly
+    } catch (error) {
+      console.error("Failed to fetch watchlist:", error);
+    }
+  };
+
+  // Check authentication and then fetch watchlist
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -27,7 +43,7 @@ function MoviesWatchlist() {
         if (data.message !== "Logged in") {
           navigate("/login");
         } else {
-          fetchWatchlist(); // fetch movies after auth passes
+          fetchWatchlist();
         }
       } catch (error) {
         console.error("Authentication check failed:", error);
@@ -35,26 +51,10 @@ function MoviesWatchlist() {
       }
     };
 
-    const fetchWatchlist = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/getwatchlist`, {
-          credentials: "include",
-        });
-        const data = await res.json();
-        // Filter for movies only
-        const moviesData = data.filter(item => item.content_type === 'Movie');
-        setMovies(moviesData);
-      } catch (error) {
-        console.error("Failed to fetch watchlist:", error);
-      }
-    };
-
     checkAuth();
   }, [navigate]);
 
-  const filteredMovies = movies.filter((movie) => 
-    movie.status === filteredStatus
-  );
+  const filteredMovies = movies.filter((movie) => movie.status === filteredStatus);
 
   return (
     <Container style={styles.container}>
@@ -63,11 +63,7 @@ function MoviesWatchlist() {
       </Typography>
 
       {/* Filter Buttons */}
-      <ButtonGroup
-        variant="contained"
-        color="primary"
-        style={styles.buttonGroup}
-      >
+      <ButtonGroup variant="contained" color="primary" style={styles.buttonGroup}>
         <Button
           onClick={() => setFilteredStatus("Planned")}
           variant={filteredStatus === "Planned" ? "contained" : "outlined"}
@@ -145,4 +141,4 @@ const styles = {
   },
 };
 
-export default MoviesWatchlist; 
+export default MoviesWatchlist;

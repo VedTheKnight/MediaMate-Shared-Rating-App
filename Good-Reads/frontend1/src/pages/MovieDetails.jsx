@@ -89,8 +89,12 @@ function MovieDetails() {
       const checkResponse = await fetch(`${API_BASE}/getwatchlist`, {
         credentials: "include",
       });
-      const watchlistItems = await checkResponse.json();
-      const existingItem = watchlistItems.find(item => item.item_id === id);
+        const watchlistItems = await checkResponse.json();
+        const existingItem = watchlistItems.find(item => item.item_id == id);
+
+        // console.log("existingItem = ",existingItem,"watchlistItems = ",watchlistItems)
+        // console.log("id = ",id)
+      // console.log("existingItem = ",existingItem,"id = ",id)
 
       if (existingItem) {
         // If item exists, update it

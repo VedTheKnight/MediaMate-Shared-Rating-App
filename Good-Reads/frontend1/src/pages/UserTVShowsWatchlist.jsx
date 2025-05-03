@@ -12,7 +12,7 @@ import {
 
 const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
 
-function UserBooksWatchlist() {
+function UserTVShowsWatchlist() {
   const { userId } = useParams(); // Get userId from URL
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
@@ -44,7 +44,8 @@ function UserBooksWatchlist() {
           credentials: "include",
         });
         const data2 = await res.json();
-        const data = data2.filter(item => item.content_type === 'Book'); // Filter for books only
+        const data = data2.filter(item => item.content_type === 'TV Show'); // Filter for books only
+        console.log("data = ",data,"data2 = ",data2);
         setBooks(data); // Assuming API returns an array like [{ item_id, title, status }]
       } catch (error) {
         console.error("Failed to fetch watchlist:", error);
@@ -141,4 +142,4 @@ const styles = {
   },
 };
 
-export default UserBooksWatchlist;
+export default UserTVShowsWatchlist;

@@ -37,7 +37,7 @@ function UserWatchlist() {
         const data = await res.json();
         console.log(data)
         setUsername(data.username || `User ${userId}`);
-        setViewable(data.is_watchlist_private); // Set viewable status based on response
+        setViewable(!data.is_watchlist_private); // Set viewable status based on response
       } catch (err) {
         console.error("Failed to fetch username:", err);
       }

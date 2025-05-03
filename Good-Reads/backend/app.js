@@ -79,7 +79,7 @@ app.get("/user2/:userId", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ username: result.rows[0].username });
+    res.status(200).json({ username: result.rows[0].username , is_watchlist_private: result.rows[0].is_watchlist_private });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -419,7 +419,7 @@ app.get("/genres", async (req, res) => {
 app.get("/getwatchlist2/:userId", isAuthenticated, async (req, res) => {
   const { userId } = req.params; // Extract userId from the URL
   const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
+    "SELECT w.item_id, b.title, w.status,b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
     [userId]
   );
   res.json(result.rows);
@@ -434,21 +434,60 @@ app.get("/getwatchlist", async (req, res) => {
   );
   res.json(result.rows);
 });
-
 app.post("/watchlist", async (req, res) => {
   const { bookId, status } = req.body;
-  const userId = req.session.userId; // Assuming user ID is stored in session
+  const userId = req.session.userId;
 
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
   try {
-    await pool.query(
-      "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
-      [userId, bookId, status ]
+    const result = await pool.query(
+      "SELECT * FROM Watchlist WHERE user_id = $1 AND item_id = $2",
+      [userId, bookId]
     );
-    res.json({ message: "Book added to watchlist" });
+
+    if (result.rows.length > 0) {
+      // Update if exists
+      await pool.query(
+        "UPDATE Watchlist SET status = $1 WHERE user_id = $2 AND item_id = $3",
+        [status, userId, bookId]
+      );
+    } else {
+      // Insert if not
+      await pool.query(
+        "INSERT INTO Watchlist (user_id, item_id, status) VALUES ($1, $2, $3)",
+        [userId, bookId, status]
+      );
+    }
+
+    res.json({ message: "Watchlist updated" });
   } catch (error) {
-    console.error("Error adding to watchlist:", error);
+    console.error("Error updating watchlist:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.put("/watchlist/:id", async (req, res) => {
+  const itemId = req.params.id;
+  const { status } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const result = await pool.query(
+      "UPDATE Watchlist SET status = $1 WHERE user_id = $2 AND item_id = $3",
+      [status, userId, itemId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Item not found in watchlist" });
+    }
+
+    res.json({ message: "Watchlist item updated" });
+  } catch (error) {
+    console.error("Error updating watchlist:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -1261,6 +1300,7 @@ const typeMap = {
 app.get("/content/:type", async (req, res) => {
   const { type } = req.params;
   const allowed = ['Book', 'Movie', 'TV Show'];
+  const userId = req.session.userId; // Assuming user ID is stored in session
   const canonicalType = typeMap[type?.toLowerCase()];
   if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
   if (!allowed.includes(canonicalType)){ 
@@ -1268,16 +1308,30 @@ app.get("/content/:type", async (req, res) => {
   }
   try {
     const result = await pool.query(`
-      SELECT ci.item_id, ci.title, ci.description, ci.content_type, ci.release_date, ci.image_url, g.name AS genre, 
-             COALESCE(AVG(r.rating_value), 0) AS rating,
-             COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+      SELECT
+        ci.item_id,
+        ci.title,
+        ci.description,
+        ci.content_type,
+        ci.release_date,
+        ci.image_url,
+        g.name AS genre,
+        COALESCE(AVG(r.rating_value), 0) AS rating,
+        COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment,
+        ur.rating_value AS user_rating
       FROM ContentItem ci
       LEFT JOIN Genre g ON ci.genre_id = g.genre_id
       LEFT JOIN Rating r ON ci.item_id = r.item_id
       LEFT JOIN Review rev ON ci.item_id = rev.item_id
+      LEFT JOIN (
+          SELECT item_id, rating_value
+          FROM Rating
+          WHERE user_id = $2
+      ) ur ON ci.item_id = ur.item_id
       WHERE ci.content_type = $1
-      GROUP BY ci.item_id, g.name
-    `, [canonicalType]);
+      GROUP BY ci.item_id, g.name, ur.rating_value;
+
+    `, [canonicalType,userId]);
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching content:", error);
@@ -1339,7 +1393,7 @@ app.get("/content/:type/friends", isAuthenticated, async (req, res) => {
 app.post("/content/:type/:id/rating", async (req, res) => {
   const { type, id } = req.params;
   const { rating } = req.body;
-  const userId = req.user; // Assumes authentication middleware sets req.user
+  const userId = req.session.userId; // Assumes authentication middleware sets req.user
 
   const allowed = ['Book', 'Movie', 'TV Show'];
   const canonicalType = typeMap[type?.toLowerCase()];
@@ -1363,7 +1417,7 @@ app.post("/content/:type/:id/rating", async (req, res) => {
       "SELECT * FROM Rating WHERE user_id = $1 AND item_id = $2",
       [userId, id]
     );
-
+    console.log("Existing rating:", existing.rows,userId,id); // Debugging line
     if (existing.rows.length > 0) {
       await pool.query(
         "UPDATE Rating SET rating_value = $1 WHERE user_id = $2 AND item_id = $3",

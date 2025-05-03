@@ -19,6 +19,8 @@ import Chatbot from "./pages/Chatbot";
 import Notfound from "./pages/Notfound";
 import UserWatchlist from "./pages/UserWatchlist";
 import UserBooksWatchlist from "./pages/UserBooksWatchlist";
+import UserTVShowsWatchlist from "./pages/UserTVShowsWatchlist";
+import UserMoviesWatchlist from "./pages/UserMoviesWatchlist";
 import UserHome from "./pages/UserHome";
 import MovieDetails from "./pages/MovieDetails";
 import TVShowDetails from "./pages/TVShowDetails";
@@ -48,12 +50,13 @@ function App() {
         <Route path="/*" element={<Notfound />} />
         <Route path="/watchlist2/:userId" element={<UserWatchlist/>} />
         <Route path="/watchlist2/:userId/books" element={<UserBooksWatchlist/>} />
-        <Route path="/watchlist2/:userId/movies" element={<MoviesWatchlist/>} />
-        <Route path="/watchlist2/:userId/tvshows" element={<TVShowsWatchlist/>} />
+        <Route path="/watchlist2/:userId/movies" element={<UserMoviesWatchlist/>} />
+        <Route path="/watchlist2/:userId/tvshows" element={<UserTVShowsWatchlist/>} />
         <Route path="/dashboard/:userId" element={<UserHome/>} />
         <Route path="/content/movie/:id" element={<MovieDetails />} />
         <Route path="/content/book/:id" element={<BookDetails />} />
         <Route path="/content/tv/:id" element={<TVShowDetails />} />
+        <Route path="/content/:id" element={<MovieDetails />} />
       </Routes>
     </Router>
   );
