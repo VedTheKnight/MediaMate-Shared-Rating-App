@@ -24,6 +24,7 @@ import UserMoviesWatchlist from "./pages/UserMoviesWatchlist";
 import UserHome from "./pages/UserHome";
 import MovieDetails from "./pages/MovieDetails";
 import TVShowDetails from "./pages/TVShowDetails";
+import FriendsActivity from "./pages/FriendsActivity";
 
 
 function App() {
