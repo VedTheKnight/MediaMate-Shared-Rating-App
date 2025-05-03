@@ -1,0 +1,1505 @@
+2025-05-03 12:59:26,890 - 🚀 Starting generation...
+2025-05-03 12:59:26,890 - 🎥 Fetching top 250 movies from imdb_top_250.csv...
+2025-05-03 12:59:26,890 - 001/250 🎬 IMDb Title: The Shawshank Redemption
+2025-05-03 12:59:26,890 - Querying OMDB for Movie: 'The Shawshank Redemption'
+2025-05-03 12:59:26,978 - ✅ Found: The Shawshank Redemption (1994)
+2025-05-03 12:59:27,280 - 002/250 🎬 IMDb Title: The Godfather
+2025-05-03 12:59:27,281 - Querying OMDB for Movie: 'The Godfather'
+2025-05-03 12:59:27,422 - ✅ Found: The Godfather (1972)
+2025-05-03 12:59:27,723 - 003/250 🎬 IMDb Title: The Godfather: Part II
+2025-05-03 12:59:27,723 - Querying OMDB for Movie: 'The Godfather: Part II'
+2025-05-03 12:59:27,818 - ✅ Found: The Godfather Part II (1974)
+2025-05-03 12:59:28,118 - 004/250 🎬 IMDb Title: The Dark Knight
+2025-05-03 12:59:28,119 - Querying OMDB for Movie: 'The Dark Knight'
+2025-05-03 12:59:28,214 - ✅ Found: The Dark Knight (2008)
+2025-05-03 12:59:28,515 - 005/250 🎬 IMDb Title: 12 Angry Men
+2025-05-03 12:59:28,515 - Querying OMDB for Movie: '12 Angry Men'
+2025-05-03 12:59:28,611 - ✅ Found: 12 Angry Men (1957)
+2025-05-03 12:59:28,912 - 006/250 🎬 IMDb Title: Schindler's List
+2025-05-03 12:59:28,912 - Querying OMDB for Movie: 'Schindler's List'
+2025-05-03 12:59:29,003 - ✅ Found: Schindler's List (1993)
+2025-05-03 12:59:29,303 - 007/250 🎬 IMDb Title: The Lord of the Rings: The Return of the King
+2025-05-03 12:59:29,304 - Querying OMDB for Movie: 'The Lord of the Rings: The Return of the King'
+2025-05-03 12:59:29,407 - ✅ Found: The Lord of the Rings: The Return of the King (2003)
+2025-05-03 12:59:29,708 - 008/250 🎬 IMDb Title: Pulp Fiction
+2025-05-03 12:59:29,708 - Querying OMDB for Movie: 'Pulp Fiction'
+2025-05-03 12:59:29,802 - ✅ Found: Pulp Fiction (1994)
+2025-05-03 12:59:30,103 - 009/250 🎬 IMDb Title: Il buono, il brutto, il cattivo
+2025-05-03 12:59:30,103 - Querying OMDB for Movie: 'Il buono, il brutto, il cattivo'
+2025-05-03 12:59:30,206 - ❌ OMDB No Result for 'Il buono, il brutto, il cattivo' — Error: Movie not found!
+2025-05-03 12:59:30,506 - 010/250 🎬 IMDb Title: Fight Club
+2025-05-03 12:59:30,507 - Querying OMDB for Movie: 'Fight Club'
+2025-05-03 12:59:30,627 - ✅ Found: Fight Club (1999)
+2025-05-03 12:59:30,928 - 011/250 🎬 IMDb Title: The Lord of the Rings: The Fellowship of the Ring
+2025-05-03 12:59:30,928 - Querying OMDB for Movie: 'The Lord of the Rings: The Fellowship of the Ring'
+2025-05-03 12:59:31,036 - ✅ Found: The Lord of the Rings: The Fellowship of the Ring (2001)
+2025-05-03 12:59:31,337 - 012/250 🎬 IMDb Title: Forrest Gump
+2025-05-03 12:59:31,337 - Querying OMDB for Movie: 'Forrest Gump'
+2025-05-03 12:59:31,431 - ✅ Found: Forrest Gump (1994)
+2025-05-03 12:59:31,732 - 013/250 🎬 IMDb Title: Star Wars: Episode V - The Empire Strikes Back
+2025-05-03 12:59:31,732 - Querying OMDB for Movie: 'Star Wars: Episode V - The Empire Strikes Back'
+2025-05-03 12:59:31,834 - ✅ Found: Star Wars: Episode V - The Empire Strikes Back (1980)
+2025-05-03 12:59:32,135 - 014/250 🎬 IMDb Title: Inception
+2025-05-03 12:59:32,135 - Querying OMDB for Movie: 'Inception'
+2025-05-03 12:59:32,239 - ✅ Found: Inception (2010)
+2025-05-03 12:59:32,539 - 015/250 🎬 IMDb Title: The Lord of the Rings: The Two Towers
+2025-05-03 12:59:32,540 - Querying OMDB for Movie: 'The Lord of the Rings: The Two Towers'
+2025-05-03 12:59:32,635 - ✅ Found: The Lord of the Rings: The Two Towers (2002)
+2025-05-03 12:59:32,936 - 016/250 🎬 IMDb Title: One Flew Over the Cuckoo's Nest
+2025-05-03 12:59:32,936 - Querying OMDB for Movie: 'One Flew Over the Cuckoo's Nest'
+2025-05-03 12:59:33,098 - ✅ Found: One Flew Over the Cuckoo's Nest (1975)
+2025-05-03 12:59:33,399 - 017/250 🎬 IMDb Title: Goodfellas
+2025-05-03 12:59:33,399 - Querying OMDB for Movie: 'Goodfellas'
+2025-05-03 12:59:33,503 - ✅ Found: Goodfellas (1990)
+2025-05-03 12:59:33,804 - 018/250 🎬 IMDb Title: The Matrix
+2025-05-03 12:59:33,804 - Querying OMDB for Movie: 'The Matrix'
+2025-05-03 12:59:33,889 - ✅ Found: The Matrix (1999)
+2025-05-03 12:59:34,190 - 019/250 🎬 IMDb Title: Shichinin no samurai
+2025-05-03 12:59:34,190 - Querying OMDB for Movie: 'Shichinin no samurai'
+2025-05-03 12:59:34,300 - ❌ OMDB No Result for 'Shichinin no samurai' — Error: Movie not found!
+2025-05-03 12:59:34,601 - 020/250 🎬 IMDb Title: Cidade de Deus
+2025-05-03 12:59:34,601 - Querying OMDB for Movie: 'Cidade de Deus'
+2025-05-03 12:59:34,689 - ✅ Found: Cidade de Deus (2023)
+2025-05-03 12:59:34,990 - 021/250 🎬 IMDb Title: Se7en
+2025-05-03 12:59:34,990 - Querying OMDB for Movie: 'Se7en'
+2025-05-03 12:59:35,080 - ✅ Found: Se7en (1995)
+2025-05-03 12:59:35,381 - 022/250 🎬 IMDb Title: Star Wars
+2025-05-03 12:59:35,381 - Querying OMDB for Movie: 'Star Wars'
+2025-05-03 12:59:35,479 - ✅ Found: Star Wars: Episode IV - A New Hope (1977)
+2025-05-03 12:59:35,780 - 023/250 🎬 IMDb Title: The Silence of the Lambs
+2025-05-03 12:59:35,780 - Querying OMDB for Movie: 'The Silence of the Lambs'
+2025-05-03 12:59:35,869 - ✅ Found: The Silence of the Lambs (1991)
+2025-05-03 12:59:36,170 - 024/250 🎬 IMDb Title: It's a Wonderful Life
+2025-05-03 12:59:36,170 - Querying OMDB for Movie: 'It's a Wonderful Life'
+2025-05-03 12:59:36,263 - ✅ Found: It's a Wonderful Life (1946)
+2025-05-03 12:59:36,564 - 025/250 🎬 IMDb Title: La vita è bella
+2025-05-03 12:59:36,564 - Querying OMDB for Movie: 'La vita è bella'
+2025-05-03 12:59:36,656 - ✅ Found: La vita è bella (1943)
+2025-05-03 12:59:36,956 - 026/250 🎬 IMDb Title: The Usual Suspects
+2025-05-03 12:59:36,957 - Querying OMDB for Movie: 'The Usual Suspects'
+2025-05-03 12:59:37,056 - ✅ Found: The Usual Suspects (1995)
+2025-05-03 12:59:37,357 - 027/250 🎬 IMDb Title: Sen to Chihiro no kamikakushi
+2025-05-03 12:59:37,357 - Querying OMDB for Movie: 'Sen to Chihiro no kamikakushi'
+2025-05-03 12:59:37,452 - ❌ OMDB No Result for 'Sen to Chihiro no kamikakushi' — Error: Movie not found!
+2025-05-03 12:59:37,752 - 028/250 🎬 IMDb Title: Saving Private Ryan
+2025-05-03 12:59:37,752 - Querying OMDB for Movie: 'Saving Private Ryan'
+2025-05-03 12:59:37,844 - ✅ Found: Saving Private Ryan (1998)
+2025-05-03 12:59:38,145 - 029/250 🎬 IMDb Title: Léon
+2025-05-03 12:59:38,145 - Querying OMDB for Movie: 'Léon'
+2025-05-03 12:59:38,231 - ✅ Found: Léon: The Professional (1994)
+2025-05-03 12:59:38,531 - 030/250 🎬 IMDb Title: Spider-Man: Into the Spider-Verse
+2025-05-03 12:59:38,532 - Querying OMDB for Movie: 'Spider-Man: Into the Spider-Verse'
+2025-05-03 12:59:38,621 - ✅ Found: Spider-Man: Into the Spider-Verse (2018)
+2025-05-03 12:59:38,922 - 031/250 🎬 IMDb Title: The Green Mile
+2025-05-03 12:59:38,922 - Querying OMDB for Movie: 'The Green Mile'
+2025-05-03 12:59:39,639 - ✅ Found: The Green Mile (1999)
+2025-05-03 12:59:39,940 - 032/250 🎬 IMDb Title: Interstellar
+2025-05-03 12:59:39,940 - Querying OMDB for Movie: 'Interstellar'
+2025-05-03 12:59:39,993 - ✅ Found: Interstellar (2014)
+2025-05-03 12:59:40,294 - 033/250 🎬 IMDb Title: Psycho
+2025-05-03 12:59:40,294 - Querying OMDB for Movie: 'Psycho'
+2025-05-03 12:59:41,330 - ✅ Found: Psycho (1960)
+2025-05-03 12:59:41,631 - 034/250 🎬 IMDb Title: American History X
+2025-05-03 12:59:41,631 - Querying OMDB for Movie: 'American History X'
+2025-05-03 12:59:42,314 - ✅ Found: American History X (1998)
+2025-05-03 12:59:42,615 - 035/250 🎬 IMDb Title: City Lights
+2025-05-03 12:59:42,616 - Querying OMDB for Movie: 'City Lights'
+2025-05-03 12:59:43,655 - ✅ Found: City Lights (1931)
+2025-05-03 12:59:43,956 - 036/250 🎬 IMDb Title: C'era una volta il West
+2025-05-03 12:59:43,956 - Querying OMDB for Movie: 'C'era una volta il West'
+2025-05-03 12:59:44,585 - ❌ OMDB No Result for 'C'era una volta il West' — Error: Movie not found!
+2025-05-03 12:59:44,885 - 037/250 🎬 IMDb Title: Casablanca
+2025-05-03 12:59:44,885 - Querying OMDB for Movie: 'Casablanca'
+2025-05-03 12:59:45,926 - ✅ Found: Casablanca (1942)
+2025-05-03 12:59:46,227 - 038/250 🎬 IMDb Title: Modern Times
+2025-05-03 12:59:46,227 - Querying OMDB for Movie: 'Modern Times'
+2025-05-03 12:59:46,850 - ✅ Found: Modern Times (1936)
+2025-05-03 12:59:47,151 - 039/250 🎬 IMDb Title: The Pianist
+2025-05-03 12:59:47,151 - Querying OMDB for Movie: 'The Pianist'
+2025-05-03 12:59:47,804 - ✅ Found: The Pianist (2002)
+2025-05-03 12:59:48,105 - 040/250 🎬 IMDb Title: Intouchables
+2025-05-03 12:59:48,105 - Querying OMDB for Movie: 'Intouchables'
+2025-05-03 12:59:49,166 - ✅ Found: Intouchables (2016)
+2025-05-03 12:59:49,467 - 041/250 🎬 IMDb Title: The Departed
+2025-05-03 12:59:49,467 - Querying OMDB for Movie: 'The Departed'
+2025-05-03 12:59:50,140 - ✅ Found: The Departed (2006)
+2025-05-03 12:59:50,441 - 042/250 🎬 IMDb Title: Terminator 2: Judgment Day
+2025-05-03 12:59:50,441 - Querying OMDB for Movie: 'Terminator 2: Judgment Day'
+2025-05-03 12:59:50,834 - ✅ Found: Terminator 2: Judgment Day (1991)
+2025-05-03 12:59:51,135 - 043/250 🎬 IMDb Title: Back to the Future
+2025-05-03 12:59:51,135 - Querying OMDB for Movie: 'Back to the Future'
+2025-05-03 12:59:52,210 - ✅ Found: Back to the Future (1985)
+2025-05-03 12:59:52,510 - 044/250 🎬 IMDb Title: Whiplash
+2025-05-03 12:59:52,511 - Querying OMDB for Movie: 'Whiplash'
+2025-05-03 12:59:53,572 - ✅ Found: Whiplash (2014)
+2025-05-03 12:59:53,873 - 045/250 🎬 IMDb Title: Rear Window
+2025-05-03 12:59:53,873 - Querying OMDB for Movie: 'Rear Window'
+2025-05-03 12:59:54,507 - ✅ Found: Rear Window (1954)
+2025-05-03 12:59:54,808 - 046/250 🎬 IMDb Title: Raiders of the Lost Ark
+2025-05-03 12:59:54,808 - Querying OMDB for Movie: 'Raiders of the Lost Ark'
+2025-05-03 12:59:55,507 - ✅ Found: Raiders of the Lost Ark (1981)
+2025-05-03 12:59:55,808 - 047/250 🎬 IMDb Title: The Lion King
+2025-05-03 12:59:55,808 - Querying OMDB for Movie: 'The Lion King'
+2025-05-03 12:59:56,200 - ✅ Found: The Lion King (1994)
+2025-05-03 12:59:56,501 - 048/250 🎬 IMDb Title: Gladiator
+2025-05-03 12:59:56,501 - Querying OMDB for Movie: 'Gladiator'
+2025-05-03 12:59:57,585 - ✅ Found: Gladiator (2000)
+2025-05-03 12:59:57,886 - 049/250 🎬 IMDb Title: The Prestige
+2025-05-03 12:59:57,886 - Querying OMDB for Movie: 'The Prestige'
+2025-05-03 12:59:59,024 - ✅ Found: The Prestige (2006)
+2025-05-03 12:59:59,325 - 050/250 🎬 IMDb Title: Apocalypse Now
+2025-05-03 12:59:59,325 - Querying OMDB for Movie: 'Apocalypse Now'
+2025-05-03 13:00:00,407 - ✅ Found: Apocalypse Now (1979)
+2025-05-03 13:00:00,708 - 051/250 🎬 IMDb Title: Memento
+2025-05-03 13:00:00,708 - Querying OMDB for Movie: 'Memento'
+2025-05-03 13:00:01,409 - ✅ Found: Memento (2000)
+2025-05-03 13:00:01,710 - 052/250 🎬 IMDb Title: Alien
+2025-05-03 13:00:01,710 - Querying OMDB for Movie: 'Alien'
+2025-05-03 13:00:02,767 - ✅ Found: Alien (1979)
+2025-05-03 13:00:03,068 - 053/250 🎬 IMDb Title: The Great Dictator
+2025-05-03 13:00:03,068 - Querying OMDB for Movie: 'The Great Dictator'
+2025-05-03 13:00:03,881 - ✅ Found: The Great Dictator (1940)
+2025-05-03 13:00:04,182 - 054/250 🎬 IMDb Title: Nuovo Cinema Paradiso
+2025-05-03 13:00:04,182 - Querying OMDB for Movie: 'Nuovo Cinema Paradiso'
+2025-05-03 13:00:04,569 - ❌ OMDB No Result for 'Nuovo Cinema Paradiso' — Error: Movie not found!
+2025-05-03 13:00:04,870 - 055/250 🎬 IMDb Title: Hotaru no haka
+2025-05-03 13:00:04,870 - Querying OMDB for Movie: 'Hotaru no haka'
+2025-05-03 13:00:05,255 - ❌ OMDB No Result for 'Hotaru no haka' — Error: Movie not found!
+2025-05-03 13:00:05,556 - 056/250 🎬 IMDb Title: Avengers: Infinity War
+2025-05-03 13:00:05,556 - Querying OMDB for Movie: 'Avengers: Infinity War'
+2025-05-03 13:00:06,329 - ✅ Found: Avengers: Infinity War (2018)
+2025-05-03 13:00:06,629 - 057/250 🎬 IMDb Title: Sunset Blvd.
+2025-05-03 13:00:06,630 - Querying OMDB for Movie: 'Sunset Blvd.'
+2025-05-03 13:00:07,430 - ✅ Found: Sunset Blvd. (2012)
+2025-05-03 13:00:07,732 - 058/250 🎬 IMDb Title: Das Leben der Anderen
+2025-05-03 13:00:07,732 - Querying OMDB for Movie: 'Das Leben der Anderen'
+2025-05-03 13:00:08,363 - ❌ OMDB No Result for 'Das Leben der Anderen' — Error: Movie not found!
+2025-05-03 13:00:08,664 - 059/250 🎬 IMDb Title: Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb
+2025-05-03 13:00:08,664 - Querying OMDB for Movie: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb'
+2025-05-03 13:00:09,454 - ✅ Found: Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1964)
+2025-05-03 13:00:09,755 - 060/250 🎬 IMDb Title: Paths of Glory
+2025-05-03 13:00:09,755 - Querying OMDB for Movie: 'Paths of Glory'
+2025-05-03 13:00:10,607 - ✅ Found: Paths of Glory (1957)
+2025-05-03 13:00:10,908 - 061/250 🎬 IMDb Title: The Shining
+2025-05-03 13:00:10,908 - Querying OMDB for Movie: 'The Shining'
+2025-05-03 13:00:11,647 - ✅ Found: The Shining (1980)
+2025-05-03 13:00:11,948 - 062/250 🎬 IMDb Title: Django Unchained
+2025-05-03 13:00:11,949 - Querying OMDB for Movie: 'Django Unchained'
+2025-05-03 13:00:12,793 - ✅ Found: Django Unchained (2012)
+2025-05-03 13:00:13,094 - 063/250 🎬 IMDb Title: WALL·E
+2025-05-03 13:00:13,094 - Querying OMDB for Movie: 'WALL·E'
+2025-05-03 13:00:13,903 - ✅ Found: WALL·E (2008)
+2025-05-03 13:00:14,204 - 064/250 🎬 IMDb Title: Mononoke-hime
+2025-05-03 13:00:14,204 - Querying OMDB for Movie: 'Mononoke-hime'
+2025-05-03 13:00:14,633 - ❌ OMDB No Result for 'Mononoke-hime' — Error: Movie not found!
+2025-05-03 13:00:14,934 - 065/250 🎬 IMDb Title: Witness for the Prosecution
+2025-05-03 13:00:14,934 - Querying OMDB for Movie: 'Witness for the Prosecution'
+2025-05-03 13:00:15,726 - ✅ Found: Witness for the Prosecution (1957)
+2025-05-03 13:00:16,027 - 066/250 🎬 IMDb Title: American Beauty
+2025-05-03 13:00:16,027 - Querying OMDB for Movie: 'American Beauty'
+2025-05-03 13:00:16,802 - ✅ Found: American Beauty (1999)
+2025-05-03 13:00:17,103 - 067/250 🎬 IMDb Title: The Dark Knight Rises
+2025-05-03 13:00:17,103 - Querying OMDB for Movie: 'The Dark Knight Rises'
+2025-05-03 13:00:17,486 - ✅ Found: The Dark Knight Rises (2012)
+2025-05-03 13:00:17,787 - 068/250 🎬 IMDb Title: Oldeuboi
+2025-05-03 13:00:17,787 - Querying OMDB for Movie: 'Oldeuboi'
+2025-05-03 13:00:18,156 - ❌ OMDB No Result for 'Oldeuboi' — Error: Movie not found!
+2025-05-03 13:00:18,457 - 069/250 🎬 IMDb Title: Aliens
+2025-05-03 13:00:18,457 - Querying OMDB for Movie: 'Aliens'
+2025-05-03 13:00:19,221 - ✅ Found: Aliens (1986)
+2025-05-03 13:00:19,522 - 070/250 🎬 IMDb Title: Once Upon a Time in America
+2025-05-03 13:00:19,522 - Querying OMDB for Movie: 'Once Upon a Time in America'
+2025-05-03 13:00:20,299 - ✅ Found: Once Upon a Time in America (1984)
+2025-05-03 13:00:20,600 - 071/250 🎬 IMDb Title: Coco
+2025-05-03 13:00:20,600 - Querying OMDB for Movie: 'Coco'
+2025-05-03 13:00:21,002 - ✅ Found: Coco (2017)
+2025-05-03 13:00:21,303 - 072/250 🎬 IMDb Title: Das Boot
+2025-05-03 13:00:21,303 - Querying OMDB for Movie: 'Das Boot'
+2025-05-03 13:00:22,357 - ✅ Found: Das Boot (1981)
+2025-05-03 13:00:22,658 - 073/250 🎬 IMDb Title: Citizen Kane
+2025-05-03 13:00:22,658 - Querying OMDB for Movie: 'Citizen Kane'
+2025-05-03 13:00:23,017 - ✅ Found: Citizen Kane (1941)
+2025-05-03 13:00:23,318 - 074/250 🎬 IMDb Title: Braveheart
+2025-05-03 13:00:23,318 - Querying OMDB for Movie: 'Braveheart'
+2025-05-03 13:00:24,065 - ✅ Found: Braveheart (1995)
+2025-05-03 13:00:24,366 - 075/250 🎬 IMDb Title: Vertigo
+2025-05-03 13:00:24,366 - Querying OMDB for Movie: 'Vertigo'
+2025-05-03 13:00:24,704 - ✅ Found: Vertigo (1958)
+2025-05-03 13:00:25,005 - 076/250 🎬 IMDb Title: North by Northwest
+2025-05-03 13:00:25,005 - Querying OMDB for Movie: 'North by Northwest'
+2025-05-03 13:00:25,759 - ✅ Found: North by Northwest (1959)
+2025-05-03 13:00:26,059 - 077/250 🎬 IMDb Title: Reservoir Dogs
+2025-05-03 13:00:26,060 - Querying OMDB for Movie: 'Reservoir Dogs'
+2025-05-03 13:00:26,882 - ✅ Found: Reservoir Dogs (1992)
+2025-05-03 13:00:27,183 - 078/250 🎬 IMDb Title: Star Wars: Episode VI - Return of the Jedi
+2025-05-03 13:00:27,183 - Querying OMDB for Movie: 'Star Wars: Episode VI - Return of the Jedi'
+2025-05-03 13:00:27,577 - ✅ Found: Star Wars: Episode VI - Return of the Jedi (1983)
+2025-05-03 13:00:27,878 - 079/250 🎬 IMDb Title: M - Eine Stadt sucht einen Mörder
+2025-05-03 13:00:27,878 - Querying OMDB for Movie: 'M - Eine Stadt sucht einen Mörder'
+2025-05-03 13:00:28,205 - ❌ OMDB No Result for 'M - Eine Stadt sucht einen Mörder' — Error: Movie not found!
+2025-05-03 13:00:28,506 - 080/250 🎬 IMDb Title: Kimi no na wa.
+2025-05-03 13:00:28,506 - Querying OMDB for Movie: 'Kimi no na wa.'
+2025-05-03 13:00:29,255 - ✅ Found: Kimi no na wa no shison-tachi (1955)
+2025-05-03 13:00:29,556 - 081/250 🎬 IMDb Title: Amadeus
+2025-05-03 13:00:29,556 - Querying OMDB for Movie: 'Amadeus'
+2025-05-03 13:00:30,364 - ✅ Found: Amadeus (1984)
+2025-05-03 13:00:30,665 - 082/250 🎬 IMDb Title: Requiem for a Dream
+2025-05-03 13:00:30,665 - Querying OMDB for Movie: 'Requiem for a Dream'
+2025-05-03 13:00:31,076 - ✅ Found: Requiem for a Dream (2000)
+2025-05-03 13:00:31,377 - 083/250 🎬 IMDb Title: Dangal
+2025-05-03 13:00:31,377 - Querying OMDB for Movie: 'Dangal'
+2025-05-03 13:00:32,276 - ✅ Found: Dangal (2016)
+2025-05-03 13:00:32,577 - 084/250 🎬 IMDb Title: Taare Zameen Par
+2025-05-03 13:00:32,577 - Querying OMDB for Movie: 'Taare Zameen Par'
+2025-05-03 13:00:32,938 - ❌ OMDB No Result for 'Taare Zameen Par' — Error: Movie not found!
+2025-05-03 13:00:33,239 - 085/250 🎬 IMDb Title: Lawrence of Arabia
+2025-05-03 13:00:33,239 - Querying OMDB for Movie: 'Lawrence of Arabia'
+2025-05-03 13:00:34,012 - ✅ Found: Lawrence of Arabia (1962)
+2025-05-03 13:00:34,313 - 086/250 🎬 IMDb Title: Eternal Sunshine of the Spotless Mind
+2025-05-03 13:00:34,313 - Querying OMDB for Movie: 'Eternal Sunshine of the Spotless Mind'
+2025-05-03 13:00:35,151 - ✅ Found: Eternal Sunshine of the Spotless Mind (2004)
+2025-05-03 13:00:35,452 - 087/250 🎬 IMDb Title: A Clockwork Orange
+2025-05-03 13:00:35,452 - Querying OMDB for Movie: 'A Clockwork Orange'
+2025-05-03 13:00:35,827 - ✅ Found: A Clockwork Orange (1971)
+2025-05-03 13:00:36,128 - 088/250 🎬 IMDb Title: 3 Idiots
+2025-05-03 13:00:36,128 - Querying OMDB for Movie: '3 Idiots'
+2025-05-03 13:00:36,534 - ✅ Found: 3 Idiots (2009)
+2025-05-03 13:00:36,835 - 089/250 🎬 IMDb Title: 2001: A Space Odyssey
+2025-05-03 13:00:36,835 - Querying OMDB for Movie: '2001: A Space Odyssey'
+2025-05-03 13:00:37,635 - ✅ Found: 2001: A Space Odyssey (1968)
+2025-05-03 13:00:37,936 - 090/250 🎬 IMDb Title: Le fabuleux destin d'Amélie Poulain
+2025-05-03 13:00:37,937 - Querying OMDB for Movie: 'Le fabuleux destin d'Amélie Poulain'
+2025-05-03 13:00:38,693 - ✅ Found: À la manière de - Le fabuleux destin d'Amélie Poulain (2018)
+2025-05-03 13:00:38,994 - 091/250 🎬 IMDb Title: Toy Story
+2025-05-03 13:00:38,994 - Querying OMDB for Movie: 'Toy Story'
+2025-05-03 13:00:39,374 - ✅ Found: Toy Story (1995)
+2025-05-03 13:00:39,675 - 092/250 🎬 IMDb Title: Double Indemnity
+2025-05-03 13:00:39,675 - Querying OMDB for Movie: 'Double Indemnity'
+2025-05-03 13:00:40,428 - ✅ Found: Double Indemnity (1944)
+2025-05-03 13:00:40,728 - 093/250 🎬 IMDb Title: Taxi Driver
+2025-05-03 13:00:40,729 - Querying OMDB for Movie: 'Taxi Driver'
+2025-05-03 13:00:41,116 - ✅ Found: Taxi Driver (1976)
+2025-05-03 13:00:41,417 - 094/250 🎬 IMDb Title: Singin' in the Rain
+2025-05-03 13:00:41,417 - Querying OMDB for Movie: 'Singin' in the Rain'
+2025-05-03 13:00:41,792 - ✅ Found: Singin' in the Rain (1952)
+2025-05-03 13:00:42,093 - 095/250 🎬 IMDb Title: Inglourious Basterds
+2025-05-03 13:00:42,093 - Querying OMDB for Movie: 'Inglourious Basterds'
+2025-05-03 13:00:42,845 - ✅ Found: Inglourious Basterds (2009)
+2025-05-03 13:00:43,146 - 096/250 🎬 IMDb Title: Full Metal Jacket
+2025-05-03 13:00:43,146 - Querying OMDB for Movie: 'Full Metal Jacket'
+2025-05-03 13:00:43,912 - ✅ Found: Full Metal Jacket (1987)
+2025-05-03 13:00:44,213 - 097/250 🎬 IMDb Title: To Kill a Mockingbird
+2025-05-03 13:00:44,213 - Querying OMDB for Movie: 'To Kill a Mockingbird'
+2025-05-03 13:00:44,979 - ✅ Found: To Kill a Mockingbird (1962)
+2025-05-03 13:00:45,280 - 098/250 🎬 IMDb Title: Ladri di biciclette
+2025-05-03 13:00:45,280 - Querying OMDB for Movie: 'Ladri di biciclette'
+2025-05-03 13:00:45,651 - ❌ OMDB No Result for 'Ladri di biciclette' — Error: Movie not found!
+2025-05-03 13:00:45,952 - 099/250 🎬 IMDb Title: The Kid
+2025-05-03 13:00:45,952 - Querying OMDB for Movie: 'The Kid'
+2025-05-03 13:00:46,716 - ✅ Found: The Kid (1921)
+2025-05-03 13:00:47,017 - 100/250 🎬 IMDb Title: The Sting
+2025-05-03 13:00:47,017 - Querying OMDB for Movie: 'The Sting'
+2025-05-03 13:00:47,392 - ✅ Found: The Sting (1973)
+2025-05-03 13:00:47,693 - 101/250 🎬 IMDb Title: Good Will Hunting
+2025-05-03 13:00:47,693 - Querying OMDB for Movie: 'Good Will Hunting'
+2025-05-03 13:00:48,077 - ✅ Found: Good Will Hunting (1997)
+2025-05-03 13:00:48,377 - 102/250 🎬 IMDb Title: Toy Story 3
+2025-05-03 13:00:48,378 - Querying OMDB for Movie: 'Toy Story 3'
+2025-05-03 13:00:48,750 - ✅ Found: Toy Story 3 (2010)
+2025-05-03 13:00:49,051 - 103/250 🎬 IMDb Title: Jagten
+2025-05-03 13:00:49,051 - Querying OMDB for Movie: 'Jagten'
+2025-05-03 13:00:49,810 - ✅ Found: Jagten på TV-Fuskerne (2012)
+2025-05-03 13:00:50,111 - 104/250 🎬 IMDb Title: Snatch
+2025-05-03 13:00:50,111 - Querying OMDB for Movie: 'Snatch'
+2025-05-03 13:00:50,869 - ✅ Found: Snatch (2000)
+2025-05-03 13:00:51,170 - 105/250 🎬 IMDb Title: Scarface
+2025-05-03 13:00:51,170 - Querying OMDB for Movie: 'Scarface'
+2025-05-03 13:00:51,960 - ✅ Found: Scarface (1983)
+2025-05-03 13:00:52,260 - 106/250 🎬 IMDb Title: Monty Python and the Holy Grail
+2025-05-03 13:00:52,261 - Querying OMDB for Movie: 'Monty Python and the Holy Grail'
+2025-05-03 13:00:53,112 - ✅ Found: Monty Python and the Holy Grail (1975)
+2025-05-03 13:00:53,413 - 107/250 🎬 IMDb Title: Per qualche dollaro in più
+2025-05-03 13:00:53,413 - Querying OMDB for Movie: 'Per qualche dollaro in più'
+2025-05-03 13:00:53,783 - ❌ OMDB No Result for 'Per qualche dollaro in più' — Error: Movie not found!
+2025-05-03 13:00:54,084 - 108/250 🎬 IMDb Title: L.A. Confidential
+2025-05-03 13:00:54,084 - Querying OMDB for Movie: 'L.A. Confidential'
+2025-05-03 13:00:54,859 - ✅ Found: L.A. Confidential (1997)
+2025-05-03 13:00:55,160 - 109/250 🎬 IMDb Title: The Apartment
+2025-05-03 13:00:55,160 - Querying OMDB for Movie: 'The Apartment'
+2025-05-03 13:00:55,494 - ✅ Found: The Apartment (1960)
+2025-05-03 13:00:55,795 - 110/250 🎬 IMDb Title: Metropolis
+2025-05-03 13:00:55,795 - Querying OMDB for Movie: 'Metropolis'
+2025-05-03 13:00:56,622 - ✅ Found: Metropolis (1927)
+2025-05-03 13:00:56,922 - 111/250 🎬 IMDb Title: Jodaeiye Nader az Simin
+2025-05-03 13:00:56,923 - Querying OMDB for Movie: 'Jodaeiye Nader az Simin'
+2025-05-03 13:00:57,287 - ❌ OMDB No Result for 'Jodaeiye Nader az Simin' — Error: Movie not found!
+2025-05-03 13:00:57,588 - 112/250 🎬 IMDb Title: Indiana Jones and the Last Crusade
+2025-05-03 13:00:57,588 - Querying OMDB for Movie: 'Indiana Jones and the Last Crusade'
+2025-05-03 13:00:58,360 - ✅ Found: Indiana Jones and the Last Crusade (1989)
+2025-05-03 13:00:58,661 - 113/250 🎬 IMDb Title: Rashômon
+2025-05-03 13:00:58,661 - Querying OMDB for Movie: 'Rashômon'
+2025-05-03 13:00:59,393 - ✅ Found: Rashômon (1941)
+2025-05-03 13:00:59,694 - 114/250 🎬 IMDb Title: Up
+2025-05-03 13:00:59,694 - Querying OMDB for Movie: 'Up'
+2025-05-03 13:01:00,583 - ✅ Found: Up (2009)
+2025-05-03 13:01:00,884 - 115/250 🎬 IMDb Title: All About Eve
+2025-05-03 13:01:00,884 - Querying OMDB for Movie: 'All About Eve'
+2025-05-03 13:01:01,310 - ✅ Found: All About Eve (1950)
+2025-05-03 13:01:01,611 - 116/250 🎬 IMDb Title: Batman Begins
+2025-05-03 13:01:01,611 - Querying OMDB for Movie: 'Batman Begins'
+2025-05-03 13:01:02,078 - ✅ Found: Batman Begins (2005)
+2025-05-03 13:01:02,379 - 117/250 🎬 IMDb Title: Yôjinbô
+2025-05-03 13:01:02,379 - Querying OMDB for Movie: 'Yôjinbô'
+2025-05-03 13:01:03,163 - ✅ Found: Yôjinbô (1929)
+2025-05-03 13:01:03,464 - 118/250 🎬 IMDb Title: Some Like It Hot
+2025-05-03 13:01:03,464 - Querying OMDB for Movie: 'Some Like It Hot'
+2025-05-03 13:01:04,217 - ✅ Found: Some Like It Hot (1959)
+2025-05-03 13:01:04,518 - 119/250 🎬 IMDb Title: Unforgiven
+2025-05-03 13:01:04,518 - Querying OMDB for Movie: 'Unforgiven'
+2025-05-03 13:01:05,634 - ✅ Found: Unforgiven (1992)
+2025-05-03 13:01:05,935 - 120/250 🎬 IMDb Title: Der Untergang
+2025-05-03 13:01:05,935 - Querying OMDB for Movie: 'Der Untergang'
+2025-05-03 13:01:06,710 - ✅ Found: Der Untergang der Pamir (2006)
+2025-05-03 13:01:07,011 - 121/250 🎬 IMDb Title: Die Hard
+2025-05-03 13:01:07,011 - Querying OMDB for Movie: 'Die Hard'
+2025-05-03 13:01:07,346 - ✅ Found: Die Hard (1988)
+2025-05-03 13:01:07,647 - 122/250 🎬 IMDb Title: The Treasure of the Sierra Madre
+2025-05-03 13:01:07,647 - Querying OMDB for Movie: 'The Treasure of the Sierra Madre'
+2025-05-03 13:01:08,926 - ✅ Found: The Treasure of the Sierra Madre (1948)
+2025-05-03 13:01:09,227 - 123/250 🎬 IMDb Title: Heat
+2025-05-03 13:01:09,227 - Querying OMDB for Movie: 'Heat'
+2025-05-03 13:01:10,028 - ✅ Found: Heat (1995)
+2025-05-03 13:01:10,329 - 124/250 🎬 IMDb Title: Ikiru
+2025-05-03 13:01:10,329 - Querying OMDB for Movie: 'Ikiru'
+2025-05-03 13:01:11,100 - ✅ Found: Ikiru (1952)
+2025-05-03 13:01:11,401 - 125/250 🎬 IMDb Title: Incendies
+2025-05-03 13:01:11,401 - Querying OMDB for Movie: 'Incendies'
+2025-05-03 13:01:12,175 - ✅ Found: Incendies (2010)
+2025-05-03 13:01:12,476 - 126/250 🎬 IMDb Title: Raging Bull
+2025-05-03 13:01:12,476 - Querying OMDB for Movie: 'Raging Bull'
+2025-05-03 13:01:13,242 - ✅ Found: Raging Bull (1980)
+2025-05-03 13:01:13,543 - 127/250 🎬 IMDb Title: The Great Escape
+2025-05-03 13:01:13,543 - Querying OMDB for Movie: 'The Great Escape'
+2025-05-03 13:01:13,981 - ✅ Found: The Great Escape (1963)
+2025-05-03 13:01:14,282 - 128/250 🎬 IMDb Title: Bacheha-Ye aseman
+2025-05-03 13:01:14,282 - Querying OMDB for Movie: 'Bacheha-Ye aseman'
+2025-05-03 13:01:14,650 - ❌ OMDB No Result for 'Bacheha-Ye aseman' — Error: Movie not found!
+2025-05-03 13:01:14,950 - 129/250 🎬 IMDb Title: El laberinto del fauno
+2025-05-03 13:01:14,951 - Querying OMDB for Movie: 'El laberinto del fauno'
+2025-05-03 13:01:15,724 - ✅ Found: El laberinto del fauno: Detras de las camaras (2006)
+2025-05-03 13:01:16,025 - 130/250 🎬 IMDb Title: Babam ve Oglum
+2025-05-03 13:01:16,025 - Querying OMDB for Movie: 'Babam ve Oglum'
+2025-05-03 13:01:16,403 - ❌ OMDB No Result for 'Babam ve Oglum' — Error: Movie not found!
+2025-05-03 13:01:16,704 - 131/250 🎬 IMDb Title: Chinatown
+2025-05-03 13:01:16,704 - Querying OMDB for Movie: 'Chinatown'
+2025-05-03 13:01:17,076 - ✅ Found: Chinatown (1974)
+2025-05-03 13:01:17,377 - 132/250 🎬 IMDb Title: The Third Man
+2025-05-03 13:01:17,377 - Querying OMDB for Movie: 'The Third Man'
+2025-05-03 13:01:18,163 - ✅ Found: The Third Man (1949)
+2025-05-03 13:01:18,464 - 133/250 🎬 IMDb Title: Bohemian Rhapsody
+2025-05-03 13:01:18,464 - Querying OMDB for Movie: 'Bohemian Rhapsody'
+2025-05-03 13:01:19,372 - ✅ Found: Bohemian Rhapsody (2018)
+2025-05-03 13:01:19,673 - 134/250 🎬 IMDb Title: Tonari no Totoro
+2025-05-03 13:01:19,673 - Querying OMDB for Movie: 'Tonari no Totoro'
+2025-05-03 13:01:20,041 - ❌ OMDB No Result for 'Tonari no Totoro' — Error: Movie not found!
+2025-05-03 13:01:20,342 - 135/250 🎬 IMDb Title: Hauru no ugoku shiro
+2025-05-03 13:01:20,342 - Querying OMDB for Movie: 'Hauru no ugoku shiro'
+2025-05-03 13:01:20,711 - ❌ OMDB No Result for 'Hauru no ugoku shiro' — Error: Movie not found!
+2025-05-03 13:01:21,011 - 136/250 🎬 IMDb Title: Ran
+2025-05-03 13:01:21,012 - Querying OMDB for Movie: 'Ran'
+2025-05-03 13:01:21,820 - ✅ Found: Ran (1985)
+2025-05-03 13:01:22,121 - 137/250 🎬 IMDb Title: Judgment at Nuremberg
+2025-05-03 13:01:22,122 - Querying OMDB for Movie: 'Judgment at Nuremberg'
+2025-05-03 13:01:22,905 - ✅ Found: Judgment at Nuremberg (1961)
+2025-05-03 13:01:23,206 - 138/250 🎬 IMDb Title: El secreto de sus ojos
+2025-05-03 13:01:23,206 - Querying OMDB for Movie: 'El secreto de sus ojos'
+2025-05-03 13:01:23,577 - ❌ OMDB No Result for 'El secreto de sus ojos' — Error: Movie not found!
+2025-05-03 13:01:23,877 - 139/250 🎬 IMDb Title: The Gold Rush
+2025-05-03 13:01:23,878 - Querying OMDB for Movie: 'The Gold Rush'
+2025-05-03 13:01:24,253 - ✅ Found: The Gold Rush (1925)
+2025-05-03 13:01:24,554 - 140/250 🎬 IMDb Title: The Bridge on the River Kwai
+2025-05-03 13:01:24,554 - Querying OMDB for Movie: 'The Bridge on the River Kwai'
+2025-05-03 13:01:24,938 - ✅ Found: The Bridge on the River Kwai (1957)
+2025-05-03 13:01:25,239 - 141/250 🎬 IMDb Title: A Beautiful Mind
+2025-05-03 13:01:25,239 - Querying OMDB for Movie: 'A Beautiful Mind'
+2025-05-03 13:01:25,620 - ✅ Found: A Beautiful Mind (2001)
+2025-05-03 13:01:25,921 - 142/250 🎬 IMDb Title: Lock, Stock and Two Smoking Barrels
+2025-05-03 13:01:25,921 - Querying OMDB for Movie: 'Lock, Stock and Two Smoking Barrels'
+2025-05-03 13:01:26,293 - ✅ Found: Lock, Stock and Two Smoking Barrels (1998)
+2025-05-03 13:01:26,594 - 143/250 🎬 IMDb Title: Casino
+2025-05-03 13:01:26,594 - Querying OMDB for Movie: 'Casino'
+2025-05-03 13:01:27,365 - ✅ Found: Casino (1995)
+2025-05-03 13:01:27,666 - 144/250 🎬 IMDb Title: Three Billboards Outside Ebbing, Missouri
+2025-05-03 13:01:27,666 - Querying OMDB for Movie: 'Three Billboards Outside Ebbing, Missouri'
+2025-05-03 13:01:28,465 - ✅ Found: Three Billboards Outside Ebbing, Missouri (2017)
+2025-05-03 13:01:28,766 - 145/250 🎬 IMDb Title: On the Waterfront
+2025-05-03 13:01:28,766 - Querying OMDB for Movie: 'On the Waterfront'
+2025-05-03 13:01:29,457 - ✅ Found: On the Waterfront (1954)
+2025-05-03 13:01:29,758 - 146/250 🎬 IMDb Title: Det sjunde inseglet
+2025-05-03 13:01:29,758 - Querying OMDB for Movie: 'Det sjunde inseglet'
+2025-05-03 13:01:30,520 - ✅ Found: The Seventh Seal (Det sjunde inseglet) (1957) (1957)
+2025-05-03 13:01:30,821 - 147/250 🎬 IMDb Title: Inside Out
+2025-05-03 13:01:30,821 - Querying OMDB for Movie: 'Inside Out'
+2025-05-03 13:01:31,201 - ✅ Found: Inside Out (2015)
+2025-05-03 13:01:31,502 - 148/250 🎬 IMDb Title: The Elephant Man
+2025-05-03 13:01:31,503 - Querying OMDB for Movie: 'The Elephant Man'
+2025-05-03 13:01:32,287 - ✅ Found: The Elephant Man (1980)
+2025-05-03 13:01:32,588 - 149/250 🎬 IMDb Title: Room
+2025-05-03 13:01:32,588 - Querying OMDB for Movie: 'Room'
+2025-05-03 13:01:33,023 - ✅ Found: Room (2015)
+2025-05-03 13:01:33,324 - 150/250 🎬 IMDb Title: The Wolf of Wall Street
+2025-05-03 13:01:33,324 - Querying OMDB for Movie: 'The Wolf of Wall Street'
+2025-05-03 13:01:34,118 - ✅ Found: The Wolf of Wall Street (2013)
+2025-05-03 13:01:34,419 - 151/250 🎬 IMDb Title: Mr. Smith Goes to Washington
+2025-05-03 13:01:34,419 - Querying OMDB for Movie: 'Mr. Smith Goes to Washington'
+2025-05-03 13:01:35,251 - ✅ Found: Mr. Smith Goes to Washington (1939)
+2025-05-03 13:01:35,552 - 152/250 🎬 IMDb Title: V for Vendetta
+2025-05-03 13:01:35,552 - Querying OMDB for Movie: 'V for Vendetta'
+2025-05-03 13:01:35,887 - ✅ Found: V for Vendetta (2005)
+2025-05-03 13:01:36,188 - 153/250 🎬 IMDb Title: Warrior
+2025-05-03 13:01:36,188 - Querying OMDB for Movie: 'Warrior'
+2025-05-03 13:01:36,949 - ✅ Found: Warrior (2011)
+2025-05-03 13:01:37,250 - 154/250 🎬 IMDb Title: Blade Runner
+2025-05-03 13:01:37,250 - Querying OMDB for Movie: 'Blade Runner'
+2025-05-03 13:01:38,016 - ✅ Found: Blade Runner (1982)
+2025-05-03 13:01:38,317 - 155/250 🎬 IMDb Title: Dial M for Murder
+2025-05-03 13:01:38,318 - Querying OMDB for Movie: 'Dial M for Murder'
+2025-05-03 13:01:39,078 - ✅ Found: Dial M for Murder (1954)
+2025-05-03 13:01:39,378 - 156/250 🎬 IMDb Title: Smultronstället
+2025-05-03 13:01:39,379 - Querying OMDB for Movie: 'Smultronstället'
+2025-05-03 13:01:40,121 - ✅ Found: Bakomfilm Smultronstället (1957)
+2025-05-03 13:01:40,422 - 157/250 🎬 IMDb Title: The General
+2025-05-03 13:01:40,422 - Querying OMDB for Movie: 'The General'
+2025-05-03 13:01:41,187 - ✅ Found: The General (1926)
+2025-05-03 13:01:41,488 - 158/250 🎬 IMDb Title: No Country for Old Men
+2025-05-03 13:01:41,488 - Querying OMDB for Movie: 'No Country for Old Men'
+2025-05-03 13:01:42,554 - ✅ Found: No Country for Old Men (2007)
+2025-05-03 13:01:42,855 - 159/250 🎬 IMDb Title: Trainspotting
+2025-05-03 13:01:42,855 - Querying OMDB for Movie: 'Trainspotting'
+2025-05-03 13:01:43,631 - ✅ Found: Trainspotting (1996)
+2025-05-03 13:01:43,932 - 160/250 🎬 IMDb Title: There Will Be Blood
+2025-05-03 13:01:43,932 - Querying OMDB for Movie: 'There Will Be Blood'
+2025-05-03 13:01:44,303 - ✅ Found: There Will Be Blood (2007)
+2025-05-03 13:01:44,603 - 161/250 🎬 IMDb Title: The Sixth Sense
+2025-05-03 13:01:44,604 - Querying OMDB for Movie: 'The Sixth Sense'
+2025-05-03 13:01:44,975 - ✅ Found: The Sixth Sense (1999)
+2025-05-03 13:01:45,275 - 162/250 🎬 IMDb Title: Gone with the Wind
+2025-05-03 13:01:45,276 - Querying OMDB for Movie: 'Gone with the Wind'
+2025-05-03 13:01:45,654 - ✅ Found: Gone with the Wind (1939)
+2025-05-03 13:01:45,954 - 163/250 🎬 IMDb Title: The Thing
+2025-05-03 13:01:45,955 - Querying OMDB for Movie: 'The Thing'
+2025-05-03 13:01:46,768 - ✅ Found: The Thing (1982)
+2025-05-03 13:01:47,069 - 164/250 🎬 IMDb Title: Fargo
+2025-05-03 13:01:47,069 - Querying OMDB for Movie: 'Fargo'
+2025-05-03 13:01:47,431 - ✅ Found: Fargo (1996)
+2025-05-03 13:01:47,732 - 165/250 🎬 IMDb Title: Gran Torino
+2025-05-03 13:01:47,732 - Querying OMDB for Movie: 'Gran Torino'
+2025-05-03 13:01:48,543 - ✅ Found: Gran Torino (2008)
+2025-05-03 13:01:48,844 - 166/250 🎬 IMDb Title: Roma
+2025-05-03 13:01:48,844 - Querying OMDB for Movie: 'Roma'
+2025-05-03 13:01:49,842 - ✅ Found: Roma (2018)
+2025-05-03 13:01:50,143 - 167/250 🎬 IMDb Title: The Deer Hunter
+2025-05-03 13:01:50,143 - Querying OMDB for Movie: 'The Deer Hunter'
+2025-05-03 13:01:50,516 - ✅ Found: The Deer Hunter (1978)
+2025-05-03 13:01:50,817 - 168/250 🎬 IMDb Title: Finding Nemo
+2025-05-03 13:01:50,818 - Querying OMDB for Movie: 'Finding Nemo'
+2025-05-03 13:01:51,184 - ✅ Found: Finding Nemo (2003)
+2025-05-03 13:01:51,484 - 169/250 🎬 IMDb Title: Idi i smotri
+2025-05-03 13:01:51,485 - Querying OMDB for Movie: 'Idi i smotri'
+2025-05-03 13:01:51,857 - ❌ OMDB No Result for 'Idi i smotri' — Error: Movie not found!
+2025-05-03 13:01:52,158 - 170/250 🎬 IMDb Title: The Big Lebowski
+2025-05-03 13:01:52,158 - Querying OMDB for Movie: 'The Big Lebowski'
+2025-05-03 13:01:52,932 - ✅ Found: The Big Lebowski (1998)
+2025-05-03 13:01:53,233 - 171/250 🎬 IMDb Title: Shutter Island
+2025-05-03 13:01:53,233 - Querying OMDB for Movie: 'Shutter Island'
+2025-05-03 13:01:53,986 - ✅ Found: Shutter Island (2010)
+2025-05-03 13:01:54,286 - 172/250 🎬 IMDb Title: Sherlock Jr.
+2025-05-03 13:01:54,287 - Querying OMDB for Movie: 'Sherlock Jr.'
+2025-05-03 13:01:55,035 - ✅ Found: Sherlock Jr. (1924)
+2025-05-03 13:01:55,336 - 173/250 🎬 IMDb Title: Kill Bill: Vol. 1
+2025-05-03 13:01:55,336 - Querying OMDB for Movie: 'Kill Bill: Vol. 1'
+2025-05-03 13:01:55,711 - ✅ Found: Kill Bill: Vol. 1 (2003)
+2025-05-03 13:01:56,012 - 174/250 🎬 IMDb Title: Cool Hand Luke
+2025-05-03 13:01:56,012 - Querying OMDB for Movie: 'Cool Hand Luke'
+2025-05-03 13:01:56,372 - ✅ Found: Cool Hand Luke (1967)
+2025-05-03 13:01:56,672 - 175/250 🎬 IMDb Title: Rebecca
+2025-05-03 13:01:56,673 - Querying OMDB for Movie: 'Rebecca'
+2025-05-03 13:01:57,446 - ✅ Found: Rebecca (1940)
+2025-05-03 13:01:57,747 - 176/250 🎬 IMDb Title: Tôkyô monogatari
+2025-05-03 13:01:57,747 - Querying OMDB for Movie: 'Tôkyô monogatari'
+2025-05-03 13:01:58,532 - ✅ Found: Tôkyô monogatari (2002)
+2025-05-03 13:01:58,833 - 177/250 🎬 IMDb Title: Mary and Max
+2025-05-03 13:01:58,833 - Querying OMDB for Movie: 'Mary and Max'
+2025-05-03 13:01:59,200 - ✅ Found: Mary and Max (2009)
+2025-05-03 13:01:59,501 - 178/250 🎬 IMDb Title: Hacksaw Ridge
+2025-05-03 13:01:59,501 - Querying OMDB for Movie: 'Hacksaw Ridge'
+2025-05-03 13:02:00,311 - ✅ Found: Hacksaw Ridge (2016)
+2025-05-03 13:02:00,612 - 179/250 🎬 IMDb Title: Gone Girl
+2025-05-03 13:02:00,612 - Querying OMDB for Movie: 'Gone Girl'
+2025-05-03 13:02:01,368 - ✅ Found: Gone Girl (2014)
+2025-05-03 13:02:01,669 - 180/250 🎬 IMDb Title: How to Train Your Dragon
+2025-05-03 13:02:01,669 - Querying OMDB for Movie: 'How to Train Your Dragon'
+2025-05-03 13:02:02,051 - ✅ Found: How to Train Your Dragon (2010)
+2025-05-03 13:02:02,352 - 181/250 🎬 IMDb Title: Sunrise: A Song of Two Humans
+2025-05-03 13:02:02,352 - Querying OMDB for Movie: 'Sunrise: A Song of Two Humans'
+2025-05-03 13:02:02,732 - ❌ OMDB No Result for 'Sunrise: A Song of Two Humans' — Error: Movie not found!
+2025-05-03 13:02:03,033 - 182/250 🎬 IMDb Title: Relatos salvajes
+2025-05-03 13:02:03,033 - Querying OMDB for Movie: 'Relatos salvajes'
+2025-05-03 13:02:03,425 - ❌ OMDB No Result for 'Relatos salvajes' — Error: Movie not found!
+2025-05-03 13:02:03,726 - 183/250 🎬 IMDb Title: Jurassic Park
+2025-05-03 13:02:03,726 - Querying OMDB for Movie: 'Jurassic Park'
+2025-05-03 13:02:04,094 - ✅ Found: Jurassic Park (1993)
+2025-05-03 13:02:04,395 - 184/250 🎬 IMDb Title: Into the Wild
+2025-05-03 13:02:04,395 - Querying OMDB for Movie: 'Into the Wild'
+2025-05-03 13:02:05,196 - ✅ Found: Into the Wild (2007)
+2025-05-03 13:02:05,497 - 185/250 🎬 IMDb Title: Life of Brian
+2025-05-03 13:02:05,497 - Querying OMDB for Movie: 'Life of Brian'
+2025-05-03 13:02:06,262 - ✅ Found: Monty Python's Life of Brian (1979)
+2025-05-03 13:02:06,563 - 186/250 🎬 IMDb Title: In the Name of the Father
+2025-05-03 13:02:06,563 - Querying OMDB for Movie: 'In the Name of the Father'
+2025-05-03 13:02:07,345 - ✅ Found: In the Name of the Father (1993)
+2025-05-03 13:02:07,646 - 187/250 🎬 IMDb Title: The Truman Show
+2025-05-03 13:02:07,646 - Querying OMDB for Movie: 'The Truman Show'
+2025-05-03 13:02:08,491 - ✅ Found: The Truman Show (1998)
+2025-05-03 13:02:08,792 - 188/250 🎬 IMDb Title: The Grand Budapest Hotel
+2025-05-03 13:02:08,792 - Querying OMDB for Movie: 'The Grand Budapest Hotel'
+2025-05-03 13:02:09,615 - ✅ Found: The Grand Budapest Hotel (2014)
+2025-05-03 13:02:09,916 - 189/250 🎬 IMDb Title: Platoon
+2025-05-03 13:02:09,916 - Querying OMDB for Movie: 'Platoon'
+2025-05-03 13:02:10,252 - ✅ Found: Platoon (1986)
+2025-05-03 13:02:10,552 - 190/250 🎬 IMDb Title: Stand by Me
+2025-05-03 13:02:10,553 - Querying OMDB for Movie: 'Stand by Me'
+2025-05-03 13:02:10,911 - ✅ Found: Stand by Me (1986)
+2025-05-03 13:02:11,212 - 191/250 🎬 IMDb Title: It Happened One Night
+2025-05-03 13:02:11,212 - Querying OMDB for Movie: 'It Happened One Night'
+2025-05-03 13:02:11,590 - ✅ Found: It Happened One Night (1934)
+2025-05-03 13:02:11,891 - 192/250 🎬 IMDb Title: Eskiya
+2025-05-03 13:02:11,891 - Querying OMDB for Movie: 'Eskiya'
+2025-05-03 13:02:12,732 - ✅ Found: Eskiya (1966)
+2025-05-03 13:02:13,033 - 193/250 🎬 IMDb Title: Network
+2025-05-03 13:02:13,033 - Querying OMDB for Movie: 'Network'
+2025-05-03 13:02:14,075 - ✅ Found: Network (1976)
+2025-05-03 13:02:14,376 - 194/250 🎬 IMDb Title: Stalker
+2025-05-03 13:02:14,376 - Querying OMDB for Movie: 'Stalker'
+2025-05-03 13:02:16,162 - ✅ Found: Stalker (1979)
+2025-05-03 13:02:16,463 - 195/250 🎬 IMDb Title: Persona
+2025-05-03 13:02:16,463 - Querying OMDB for Movie: 'Persona'
+2025-05-03 13:02:17,234 - ✅ Found: Persona (1966)
+2025-05-03 13:02:17,534 - 196/250 🎬 IMDb Title: Salinui chueok
+2025-05-03 13:02:17,535 - Querying OMDB for Movie: 'Salinui chueok'
+2025-05-03 13:02:17,907 - ❌ OMDB No Result for 'Salinui chueok' — Error: Movie not found!
+2025-05-03 13:02:18,208 - 197/250 🎬 IMDb Title: Ben-Hur
+2025-05-03 13:02:18,208 - Querying OMDB for Movie: 'Ben-Hur'
+2025-05-03 13:02:18,999 - ✅ Found: Ben-Hur (1959)
+2025-05-03 13:02:19,300 - 198/250 🎬 IMDb Title: Hotel Rwanda
+2025-05-03 13:02:19,300 - Querying OMDB for Movie: 'Hotel Rwanda'
+2025-05-03 13:02:19,662 - ✅ Found: Hotel Rwanda (2004)
+2025-05-03 13:02:19,962 - 199/250 🎬 IMDb Title: 12 Years a Slave
+2025-05-03 13:02:19,963 - Querying OMDB for Movie: '12 Years a Slave'
+2025-05-03 13:02:20,754 - ✅ Found: 12 Years a Slave (2013)
+2025-05-03 13:02:21,055 - 200/250 🎬 IMDb Title: Million Dollar Baby
+2025-05-03 13:02:21,055 - Querying OMDB for Movie: 'Million Dollar Baby'
+2025-05-03 13:02:21,433 - ✅ Found: Million Dollar Baby (2004)
+2025-05-03 13:02:21,734 - 201/250 🎬 IMDb Title: La passion de Jeanne d'Arc
+2025-05-03 13:02:21,734 - Querying OMDB for Movie: 'La passion de Jeanne d'Arc'
+2025-05-03 13:02:22,089 - ❌ OMDB No Result for 'La passion de Jeanne d'Arc' — Error: Movie not found!
+2025-05-03 13:02:22,390 - 202/250 🎬 IMDb Title: Rush
+2025-05-03 13:02:22,390 - Querying OMDB for Movie: 'Rush'
+2025-05-03 13:02:22,768 - ✅ Found: Rush (2013)
+2025-05-03 13:02:23,069 - 203/250 🎬 IMDb Title: Andrey Rublev
+2025-05-03 13:02:23,069 - Querying OMDB for Movie: 'Andrey Rublev'
+2025-05-03 13:02:23,841 - ✅ Found: Andrey Rublev. Vospominaniya o filme (2024)
+2025-05-03 13:02:24,142 - 204/250 🎬 IMDb Title: Le salaire de la peur
+2025-05-03 13:02:24,142 - Querying OMDB for Movie: 'Le salaire de la peur'
+2025-05-03 13:02:24,546 - ❌ OMDB No Result for 'Le salaire de la peur' — Error: Movie not found!
+2025-05-03 13:02:24,847 - 205/250 🎬 IMDb Title: Before Sunrise
+2025-05-03 13:02:24,847 - Querying OMDB for Movie: 'Before Sunrise'
+2025-05-03 13:02:25,237 - ✅ Found: Before Sunrise (1995)
+2025-05-03 13:02:25,538 - 206/250 🎬 IMDb Title: Mad Max: Fury Road
+2025-05-03 13:02:25,538 - Querying OMDB for Movie: 'Mad Max: Fury Road'
+2025-05-03 13:02:26,313 - ✅ Found: Mad Max: Fury Road (2015)
+2025-05-03 13:02:26,613 - 207/250 🎬 IMDb Title: Les quatre cents coups
+2025-05-03 13:02:26,614 - Querying OMDB for Movie: 'Les quatre cents coups'
+2025-05-03 13:02:26,987 - ❌ OMDB No Result for 'Les quatre cents coups' — Error: Movie not found!
+2025-05-03 13:02:27,288 - 208/250 🎬 IMDb Title: Prisoners
+2025-05-03 13:02:27,288 - Querying OMDB for Movie: 'Prisoners'
+2025-05-03 13:02:27,689 - ✅ Found: Prisoners (2013)
+2025-05-03 13:02:27,990 - 209/250 🎬 IMDb Title: Hachi: A Dog's Tale
+2025-05-03 13:02:27,990 - Querying OMDB for Movie: 'Hachi: A Dog's Tale'
+2025-05-03 13:02:28,766 - ✅ Found: Hachi: A Dog's Tale (2009)
+2025-05-03 13:02:29,067 - 210/250 🎬 IMDb Title: Spotlight
+2025-05-03 13:02:29,067 - Querying OMDB for Movie: 'Spotlight'
+2025-05-03 13:02:29,785 - ✅ Found: Spotlight (2015)
+2025-05-03 13:02:30,086 - 211/250 🎬 IMDb Title: Logan
+2025-05-03 13:02:30,087 - Querying OMDB for Movie: 'Logan'
+2025-05-03 13:02:30,847 - ✅ Found: Logan (2017)
+2025-05-03 13:02:31,147 - 212/250 🎬 IMDb Title: Rang De Basanti
+2025-05-03 13:02:31,148 - Querying OMDB for Movie: 'Rang De Basanti'
+2025-05-03 13:02:31,982 - ✅ Found: Rang De Basanti (2006)
+2025-05-03 13:02:32,283 - 213/250 🎬 IMDb Title: Amores perros
+2025-05-03 13:02:32,283 - Querying OMDB for Movie: 'Amores perros'
+2025-05-03 13:02:33,074 - ✅ Found: Amores Perros (2000)
+2025-05-03 13:02:33,375 - 214/250 🎬 IMDb Title: The Princess Bride
+2025-05-03 13:02:33,375 - Querying OMDB for Movie: 'The Princess Bride'
+2025-05-03 13:02:34,135 - ✅ Found: The Princess Bride (1987)
+2025-05-03 13:02:34,436 - 215/250 🎬 IMDb Title: Catch Me If You Can
+2025-05-03 13:02:34,436 - Querying OMDB for Movie: 'Catch Me If You Can'
+2025-05-03 13:02:34,825 - ✅ Found: Catch Me If You Can (2002)
+2025-05-03 13:02:35,125 - 216/250 🎬 IMDb Title: Kaze no tani no Naushika
+2025-05-03 13:02:35,126 - Querying OMDB for Movie: 'Kaze no tani no Naushika'
+2025-05-03 13:02:35,493 - ❌ OMDB No Result for 'Kaze no tani no Naushika' — Error: Movie not found!
+2025-05-03 13:02:35,794 - 217/250 🎬 IMDb Title: Harry Potter and the Deathly Hallows: Part 2
+2025-05-03 13:02:35,794 - Querying OMDB for Movie: 'Harry Potter and the Deathly Hallows: Part 2'
+2025-05-03 13:02:36,533 - ✅ Found: Harry Potter and the Deathly Hallows: Part 2 (2011)
+2025-05-03 13:02:36,833 - 218/250 🎬 IMDb Title: Butch Cassidy and the Sundance Kid
+2025-05-03 13:02:36,834 - Querying OMDB for Movie: 'Butch Cassidy and the Sundance Kid'
+2025-05-03 13:02:37,208 - ✅ Found: Butch Cassidy and the Sundance Kid (1969)
+2025-05-03 13:02:37,508 - 219/250 🎬 IMDb Title: Rocky
+2025-05-03 13:02:37,509 - Querying OMDB for Movie: 'Rocky'
+2025-05-03 13:02:38,287 - ✅ Found: Rocky (1976)
+2025-05-03 13:02:38,588 - 220/250 🎬 IMDb Title: Barry Lyndon
+2025-05-03 13:02:38,588 - Querying OMDB for Movie: 'Barry Lyndon'
+2025-05-03 13:02:38,952 - ✅ Found: Barry Lyndon (1975)
+2025-05-03 13:02:39,253 - 221/250 🎬 IMDb Title: Monsters, Inc.
+2025-05-03 13:02:39,253 - Querying OMDB for Movie: 'Monsters, Inc.'
+2025-05-03 13:02:39,678 - ✅ Found: Monsters, Inc. (2001)
+2025-05-03 13:02:39,979 - 222/250 🎬 IMDb Title: The Grapes of Wrath
+2025-05-03 13:02:39,979 - Querying OMDB for Movie: 'The Grapes of Wrath'
+2025-05-03 13:02:40,760 - ✅ Found: The Grapes of Wrath (1940)
+2025-05-03 13:02:41,061 - 223/250 🎬 IMDb Title: The Maltese Falcon
+2025-05-03 13:02:41,061 - Querying OMDB for Movie: 'The Maltese Falcon'
+2025-05-03 13:02:41,846 - ✅ Found: The Maltese Falcon (1941)
+2025-05-03 13:02:42,147 - 224/250 🎬 IMDb Title: Dead Poets Society
+2025-05-03 13:02:42,147 - Querying OMDB for Movie: 'Dead Poets Society'
+2025-05-03 13:02:42,475 - ✅ Found: Dead Poets Society (1989)
+2025-05-03 13:02:42,776 - 225/250 🎬 IMDb Title: Donnie Darko
+2025-05-03 13:02:42,776 - Querying OMDB for Movie: 'Donnie Darko'
+2025-05-03 13:02:43,539 - ✅ Found: Donnie Darko (2001)
+2025-05-03 13:02:43,840 - 226/250 🎬 IMDb Title: The Terminator
+2025-05-03 13:02:43,840 - Querying OMDB for Movie: 'The Terminator'
+2025-05-03 13:02:44,593 - ✅ Found: The Terminator (1984)
+2025-05-03 13:02:44,894 - 227/250 🎬 IMDb Title: Gandhi
+2025-05-03 13:02:44,894 - Querying OMDB for Movie: 'Gandhi'
+2025-05-03 13:02:45,682 - ✅ Found: Gandhi (1982)
+2025-05-03 13:02:45,983 - 228/250 🎬 IMDb Title: Les diaboliques
+2025-05-03 13:02:45,983 - Querying OMDB for Movie: 'Les diaboliques'
+2025-05-03 13:02:46,739 - ✅ Found: Les Diaboliques-Remix (2018)
+2025-05-03 13:02:47,040 - 229/250 🎬 IMDb Title: La haine
+2025-05-03 13:02:47,040 - Querying OMDB for Movie: 'La haine'
+2025-05-03 13:02:47,418 - ✅ Found: La haine (1995)
+2025-05-03 13:02:47,719 - 230/250 🎬 IMDb Title: Groundhog Day
+2025-05-03 13:02:47,719 - Querying OMDB for Movie: 'Groundhog Day'
+2025-05-03 13:02:48,043 - ✅ Found: Groundhog Day (1993)
+2025-05-03 13:02:48,344 - 231/250 🎬 IMDb Title: The Wizard of Oz
+2025-05-03 13:02:48,344 - Querying OMDB for Movie: 'The Wizard of Oz'
+2025-05-03 13:02:48,690 - ✅ Found: The Wizard of Oz (1939)
+2025-05-03 13:02:48,991 - 232/250 🎬 IMDb Title: Jaws
+2025-05-03 13:02:48,991 - Querying OMDB for Movie: 'Jaws'
+2025-05-03 13:02:49,360 - ✅ Found: Jaws (1975)
+2025-05-03 13:02:49,661 - 233/250 🎬 IMDb Title: Le notti di Cabiria
+2025-05-03 13:02:49,661 - Querying OMDB for Movie: 'Le notti di Cabiria'
+2025-05-03 13:02:50,033 - ❌ OMDB No Result for 'Le notti di Cabiria' — Error: Movie not found!
+2025-05-03 13:02:50,333 - 234/250 🎬 IMDb Title: The Help
+2025-05-03 13:02:50,334 - Querying OMDB for Movie: 'The Help'
+2025-05-03 13:02:50,711 - ✅ Found: The Help (2011)
+2025-05-03 13:02:51,011 - 235/250 🎬 IMDb Title: Faa yeung nin wa
+2025-05-03 13:02:51,012 - Querying OMDB for Movie: 'Faa yeung nin wa'
+2025-05-03 13:02:51,346 - ❌ OMDB No Result for 'Faa yeung nin wa' — Error: Movie not found!
+2025-05-03 13:02:51,647 - 236/250 🎬 IMDb Title: Mandariinid
+2025-05-03 13:02:51,647 - Querying OMDB for Movie: 'Mandariinid'
+2025-05-03 13:02:52,045 - ❌ OMDB No Result for 'Mandariinid' — Error: Movie not found!
+2025-05-03 13:02:52,346 - 237/250 🎬 IMDb Title: Before Sunset
+2025-05-03 13:02:52,346 - Querying OMDB for Movie: 'Before Sunset'
+2025-05-03 13:02:53,107 - ✅ Found: Before Sunset (2004)
+2025-05-03 13:02:53,408 - 238/250 🎬 IMDb Title: Paper Moon
+2025-05-03 13:02:53,408 - Querying OMDB for Movie: 'Paper Moon'
+2025-05-03 13:02:54,184 - ✅ Found: Paper Moon (1973)
+2025-05-03 13:02:54,485 - 239/250 🎬 IMDb Title: Ah-ga-ssi
+2025-05-03 13:02:54,485 - Querying OMDB for Movie: 'Ah-ga-ssi'
+2025-05-03 13:02:54,859 - ❌ OMDB No Result for 'Ah-ga-ssi' — Error: Movie not found!
+2025-05-03 13:02:55,159 - 240/250 🎬 IMDb Title: Paris, Texas
+2025-05-03 13:02:55,160 - Querying OMDB for Movie: 'Paris, Texas'
+2025-05-03 13:02:55,909 - ✅ Found: Paris, Texas (1984)
+2025-05-03 13:02:56,210 - 241/250 🎬 IMDb Title: The Best Years of Our Lives
+2025-05-03 13:02:56,210 - Querying OMDB for Movie: 'The Best Years of Our Lives'
+2025-05-03 13:02:57,030 - ✅ Found: The Best Years of Our Lives (1946)
+2025-05-03 13:02:57,331 - 242/250 🎬 IMDb Title: Tenkû no shiro Rapyuta
+2025-05-03 13:02:57,331 - Querying OMDB for Movie: 'Tenkû no shiro Rapyuta'
+2025-05-03 13:02:58,078 - ✅ Found: Tenkû no shiro Rapyuta: Promotion (1986)
+2025-05-03 13:02:58,379 - 243/250 🎬 IMDb Title: Pirates of the Caribbean: The Curse of the Black Pearl
+2025-05-03 13:02:58,379 - Querying OMDB for Movie: 'Pirates of the Caribbean: The Curse of the Black Pearl'
+2025-05-03 13:02:59,144 - ✅ Found: Pirates of the Caribbean: The Curse of the Black Pearl (2003)
+2025-05-03 13:02:59,445 - 244/250 🎬 IMDb Title: Blade Runner 2049
+2025-05-03 13:02:59,445 - Querying OMDB for Movie: 'Blade Runner 2049'
+2025-05-03 13:02:59,820 - ✅ Found: Blade Runner 2049 (2017)
+2025-05-03 13:03:00,120 - 245/250 🎬 IMDb Title: La La Land
+2025-05-03 13:03:00,121 - Querying OMDB for Movie: 'La La Land'
+2025-05-03 13:03:00,955 - ✅ Found: La La Land (2016)
+2025-05-03 13:03:01,256 - 246/250 🎬 IMDb Title: Guardians of the Galaxy
+2025-05-03 13:03:01,256 - Querying OMDB for Movie: 'Guardians of the Galaxy'
+2025-05-03 13:03:01,637 - ✅ Found: Guardians of the Galaxy (2014)
+2025-05-03 13:03:01,938 - 247/250 🎬 IMDb Title: Fanny och Alexander
+2025-05-03 13:03:01,938 - Querying OMDB for Movie: 'Fanny och Alexander'
+2025-05-03 13:03:02,300 - ❌ OMDB No Result for 'Fanny och Alexander' — Error: Movie not found!
+2025-05-03 13:03:02,601 - 248/250 🎬 IMDb Title: Tsubaki Sanjûrô
+2025-05-03 13:03:02,601 - Querying OMDB for Movie: 'Tsubaki Sanjûrô'
+2025-05-03 13:03:03,405 - ✅ Found: Tsubaki Sanjûrô (2007)
+2025-05-03 13:03:03,706 - 249/250 🎬 IMDb Title: Gangs of Wasseypur
+2025-05-03 13:03:03,706 - Querying OMDB for Movie: 'Gangs of Wasseypur'
+2025-05-03 13:03:04,437 - ✅ Found: Gangs of Wasseypur (2012)
+2025-05-03 13:03:04,738 - 250/250 🎬 IMDb Title: Drishyam
+2025-05-03 13:03:04,738 - Querying OMDB for Movie: 'Drishyam'
+2025-05-03 13:03:05,105 - ✅ Found: Drishyam (2015)
+2025-05-03 13:03:05,406 - 📺 Fetching top 250 TV shows from top250list.csv...
+2025-05-03 13:03:05,406 - 001/250 📼 IMDb Title: Planet Earth II
+2025-05-03 13:03:05,406 - Querying OMDB for TV Show: 'Planet Earth II'
+2025-05-03 13:03:05,497 - ✅ Found: Planet Earth II (2016)
+2025-05-03 13:03:05,798 - 002/250 📼 IMDb Title: Band of Brothers
+2025-05-03 13:03:05,798 - Querying OMDB for TV Show: 'Band of Brothers'
+2025-05-03 13:03:05,883 - ✅ Found: Band of Brothers (2001)
+2025-05-03 13:03:06,184 - 003/250 📼 IMDb Title: Game of Thrones
+2025-05-03 13:03:06,184 - Querying OMDB for TV Show: 'Game of Thrones'
+2025-05-03 13:03:06,266 - ✅ Found: Game of Thrones (2011–2019)
+2025-05-03 13:03:06,567 - 004/250 📼 IMDb Title: Planet Earth
+2025-05-03 13:03:06,567 - Querying OMDB for TV Show: 'Planet Earth'
+2025-05-03 13:03:06,655 - ✅ Found: Planet Earth (2006)
+2025-05-03 13:03:06,956 - 005/250 📼 IMDb Title: Breaking Bad
+2025-05-03 13:03:06,956 - Querying OMDB for TV Show: 'Breaking Bad'
+2025-05-03 13:03:07,034 - ✅ Found: Breaking Bad (2008–2013)
+2025-05-03 13:03:07,334 - 006/250 📼 IMDb Title: Our Planet
+2025-05-03 13:03:07,335 - Querying OMDB for TV Show: 'Our Planet'
+2025-05-03 13:03:07,409 - ✅ Found: Our Planet (2019–2023)
+2025-05-03 13:03:07,710 - 007/250 📼 IMDb Title: The Wire
+2025-05-03 13:03:07,710 - Querying OMDB for TV Show: 'The Wire'
+2025-05-03 13:03:07,787 - ✅ Found: The Wire (2002–2008)
+2025-05-03 13:03:08,087 - 008/250 📼 IMDb Title: Blue Planet II
+2025-05-03 13:03:08,088 - Querying OMDB for TV Show: 'Blue Planet II'
+2025-05-03 13:03:08,171 - ✅ Found: Blue Planet II (2017)
+2025-05-03 13:03:08,472 - 009/250 📼 IMDb Title: Cosmos
+2025-05-03 13:03:08,472 - Querying OMDB for TV Show: 'Cosmos'
+2025-05-03 13:03:08,564 - ✅ Found: Cosmos (1980)
+2025-05-03 13:03:08,864 - 010/250 📼 IMDb Title: Cosmos
+2025-05-03 13:03:08,865 - Querying OMDB for TV Show: 'Cosmos'
+2025-05-03 13:03:08,945 - ✅ Found: Cosmos (1980)
+2025-05-03 13:03:09,246 - 011/250 📼 IMDb Title: Rick and Morty
+2025-05-03 13:03:09,246 - Querying OMDB for TV Show: 'Rick and Morty'
+2025-05-03 13:03:09,339 - ✅ Found: Rick and Morty (2013–)
+2025-05-03 13:03:09,639 - 012/250 📼 IMDb Title: Chernobyl
+2025-05-03 13:03:09,640 - Querying OMDB for TV Show: 'Chernobyl'
+2025-05-03 13:03:09,722 - ✅ Found: Chernobyl (2019)
+2025-05-03 13:03:10,023 - 013/250 📼 IMDb Title: The Sopranos
+2025-05-03 13:03:10,023 - Querying OMDB for TV Show: 'The Sopranos'
+2025-05-03 13:03:10,112 - ✅ Found: The Sopranos (1999–2007)
+2025-05-03 13:03:10,413 - 014/250 📼 IMDb Title: The World at War
+2025-05-03 13:03:10,413 - Querying OMDB for TV Show: 'The World at War'
+2025-05-03 13:03:10,500 - ✅ Found: The World at War (1973–1974)
+2025-05-03 13:03:10,801 - 015/250 📼 IMDb Title: Avatar: The Last Airbender
+2025-05-03 13:03:10,801 - Querying OMDB for TV Show: 'Avatar: The Last Airbender'
+2025-05-03 13:03:10,892 - ✅ Found: Avatar: The Last Airbender (2005–2008)
+2025-05-03 13:03:11,193 - 016/250 📼 IMDb Title: Life
+2025-05-03 13:03:11,193 - Querying OMDB for TV Show: 'Life'
+2025-05-03 13:03:11,292 - ✅ Found: Life (2009)
+2025-05-03 13:03:11,593 - 017/250 📼 IMDb Title: Sherlock
+2025-05-03 13:03:11,593 - Querying OMDB for TV Show: 'Sherlock'
+2025-05-03 13:03:11,687 - ✅ Found: Sherlock (2010–2017)
+2025-05-03 13:03:11,988 - 018/250 📼 IMDb Title: The Vietnam War
+2025-05-03 13:03:11,988 - Querying OMDB for TV Show: 'The Vietnam War'
+2025-05-03 13:03:12,071 - ✅ Found: The Vietnam War (2017)
+2025-05-03 13:03:12,372 - 019/250 📼 IMDb Title: The Twilight Zone
+2025-05-03 13:03:12,372 - Querying OMDB for TV Show: 'The Twilight Zone'
+2025-05-03 13:03:12,460 - ✅ Found: The Twilight Zone (1959–1964)
+2025-05-03 13:03:12,761 - 020/250 📼 IMDb Title: Human Planet
+2025-05-03 13:03:12,761 - Querying OMDB for TV Show: 'Human Planet'
+2025-05-03 13:03:12,839 - ✅ Found: Human Planet (2011)
+2025-05-03 13:03:13,140 - 021/250 📼 IMDb Title: Dekalog
+2025-05-03 13:03:13,140 - Querying OMDB for TV Show: 'Dekalog'
+2025-05-03 13:03:13,194 - ✅ Found: Dekalog (1989–1990)
+2025-05-03 13:03:13,495 - 022/250 📼 IMDb Title: The Civil War
+2025-05-03 13:03:13,495 - Querying OMDB for TV Show: 'The Civil War'
+2025-05-03 13:03:13,585 - ✅ Found: The Civil War (1990)
+2025-05-03 13:03:13,886 - 023/250 📼 IMDb Title: Firefly
+2025-05-03 13:03:13,886 - Querying OMDB for TV Show: 'Firefly'
+2025-05-03 13:03:13,934 - ✅ Found: Firefly (2002–2003)
+2025-05-03 13:03:14,235 - 024/250 📼 IMDb Title: Fullmetal Alchemist: Brotherhood
+2025-05-03 13:03:14,235 - Querying OMDB for TV Show: 'Fullmetal Alchemist: Brotherhood'
+2025-05-03 13:03:14,331 - ✅ Found: Fullmetal Alchemist: Brotherhood (2009–2010)
+2025-05-03 13:03:14,632 - 025/250 📼 IMDb Title: True Detective
+2025-05-03 13:03:14,632 - Querying OMDB for TV Show: 'True Detective'
+2025-05-03 13:03:14,731 - ✅ Found: True Detective (2014–)
+2025-05-03 13:03:15,032 - 026/250 📼 IMDb Title: Fargo
+2025-05-03 13:03:15,032 - Querying OMDB for TV Show: 'Fargo'
+2025-05-03 13:03:15,122 - ✅ Found: Fargo (2014–2024)
+2025-05-03 13:03:15,423 - 027/250 📼 IMDb Title: Batman: The Animated Series
+2025-05-03 13:03:15,423 - Querying OMDB for TV Show: 'Batman: The Animated Series'
+2025-05-03 13:03:15,517 - ✅ Found: Batman: The Animated Series (1992–1995)
+2025-05-03 13:03:15,818 - 028/250 📼 IMDb Title: Last Week Tonight with John Oliver
+2025-05-03 13:03:15,818 - Querying OMDB for TV Show: 'Last Week Tonight with John Oliver'
+2025-05-03 13:03:15,868 - ✅ Found: Last Week Tonight with John Oliver (2014–)
+2025-05-03 13:03:16,169 - 029/250 📼 IMDb Title: Death Note
+2025-05-03 13:03:16,169 - Querying OMDB for TV Show: 'Death Note'
+2025-05-03 13:03:16,248 - ✅ Found: Death Note (2006–2007)
+2025-05-03 13:03:16,548 - 030/250 📼 IMDb Title: The Blue Planet
+2025-05-03 13:03:16,549 - Querying OMDB for TV Show: 'The Blue Planet'
+2025-05-03 13:03:16,628 - ✅ Found: The Blue Planet (2001)
+2025-05-03 13:03:16,929 - 031/250 📼 IMDb Title: Cowboy Bebop
+2025-05-03 13:03:16,929 - Querying OMDB for TV Show: 'Cowboy Bebop'
+2025-05-03 13:03:17,702 - ✅ Found: Cowboy Bebop (1998–1999)
+2025-05-03 13:03:18,003 - 032/250 📼 IMDb Title: Black Mirror
+2025-05-03 13:03:18,003 - Querying OMDB for TV Show: 'Black Mirror'
+2025-05-03 13:03:18,372 - ✅ Found: Black Mirror (2011–)
+2025-05-03 13:03:18,673 - 033/250 📼 IMDb Title: Frozen Planet
+2025-05-03 13:03:18,673 - Querying OMDB for TV Show: 'Frozen Planet'
+2025-05-03 13:03:19,459 - ✅ Found: Frozen Planet (2011–2012)
+2025-05-03 13:03:19,760 - 034/250 📼 IMDb Title: One Punch Man
+2025-05-03 13:03:19,760 - Querying OMDB for TV Show: 'One Punch Man'
+2025-05-03 13:03:20,542 - ✅ Found: One Punch Man (2015–)
+2025-05-03 13:03:20,843 - 035/250 📼 IMDb Title: Africa
+2025-05-03 13:03:20,843 - Querying OMDB for TV Show: 'Africa'
+2025-05-03 13:03:21,684 - ✅ Found: Africa (2013)
+2025-05-03 13:03:21,985 - 036/250 📼 IMDb Title: Monty Python's Flying Circus
+2025-05-03 13:03:21,985 - Querying OMDB for TV Show: 'Monty Python's Flying Circus'
+2025-05-03 13:03:22,742 - ✅ Found: Monty Python's Flying Circus (1969–1974)
+2025-05-03 13:03:23,043 - 037/250 📼 IMDb Title: Pride and Prejudice
+2025-05-03 13:03:23,043 - Querying OMDB for TV Show: 'Pride and Prejudice'
+2025-05-03 13:03:23,411 - ✅ Found: Pride and Prejudice (1995)
+2025-05-03 13:03:23,712 - 038/250 📼 IMDb Title: Das Boot
+2025-05-03 13:03:23,712 - Querying OMDB for TV Show: 'Das Boot'
+2025-05-03 13:03:24,513 - ✅ Found: Das Boot (1985)
+2025-05-03 13:03:24,814 - 039/250 📼 IMDb Title: Friends
+2025-05-03 13:03:24,814 - Querying OMDB for TV Show: 'Friends'
+2025-05-03 13:03:25,243 - ✅ Found: Friends (1994–2004)
+2025-05-03 13:03:25,544 - 040/250 📼 IMDb Title: Only Fools and Horses....
+2025-05-03 13:03:25,544 - Querying OMDB for TV Show: 'Only Fools and Horses....'
+2025-05-03 13:03:26,342 - ✅ Found: The Story of... Only Fools and Horses.... (2017)
+2025-05-03 13:03:26,642 - 041/250 📼 IMDb Title: Apocalypse: La 2ème guerre mondiale
+2025-05-03 13:03:26,643 - Querying OMDB for TV Show: 'Apocalypse: La 2ème guerre mondiale'
+2025-05-03 13:03:27,012 - ❌ OMDB No Result for 'Apocalypse: La 2ème guerre mondiale' — Error: Series not found!
+2025-05-03 13:03:27,312 - 042/250 📼 IMDb Title: Seinfeld
+2025-05-03 13:03:27,313 - Querying OMDB for TV Show: 'Seinfeld'
+2025-05-03 13:03:28,113 - ✅ Found: Seinfeld (1989–1998)
+2025-05-03 13:03:28,414 - 043/250 📼 IMDb Title: Stranger Things
+2025-05-03 13:03:28,414 - Querying OMDB for TV Show: 'Stranger Things'
+2025-05-03 13:03:28,780 - ✅ Found: Stranger Things (2016–2025)
+2025-05-03 13:03:29,081 - 044/250 📼 IMDb Title: Mahabharat
+2025-05-03 13:03:29,081 - Querying OMDB for TV Show: 'Mahabharat'
+2025-05-03 13:03:29,836 - ✅ Found: Mahabharat (1988–1990)
+2025-05-03 13:03:30,137 - 045/250 📼 IMDb Title: Arrested Development
+2025-05-03 13:03:30,137 - Querying OMDB for TV Show: 'Arrested Development'
+2025-05-03 13:03:30,921 - ✅ Found: Arrested Development (2003–2019)
+2025-05-03 13:03:31,222 - 046/250 📼 IMDb Title: Gravity Falls
+2025-05-03 13:03:31,222 - Querying OMDB for TV Show: 'Gravity Falls'
+2025-05-03 13:03:32,015 - ✅ Found: Gravity Falls (2012–2016)
+2025-05-03 13:03:32,316 - 047/250 📼 IMDb Title: Twin Peaks
+2025-05-03 13:03:32,316 - Querying OMDB for TV Show: 'Twin Peaks'
+2025-05-03 13:03:33,127 - ✅ Found: Twin Peaks (1990–1991)
+2025-05-03 13:03:33,428 - 048/250 📼 IMDb Title: Over the Garden Wall
+2025-05-03 13:03:33,428 - Querying OMDB for TV Show: 'Over the Garden Wall'
+2025-05-03 13:03:34,240 - ✅ Found: Over the Garden Wall (2014)
+2025-05-03 13:03:34,541 - 049/250 📼 IMDb Title: Narcos
+2025-05-03 13:03:34,541 - Querying OMDB for TV Show: 'Narcos'
+2025-05-03 13:03:34,907 - ✅ Found: Narcos (2015–2017)
+2025-05-03 13:03:35,208 - 050/250 📼 IMDb Title: Freaks and Geeks
+2025-05-03 13:03:35,208 - Querying OMDB for TV Show: 'Freaks and Geeks'
+2025-05-03 13:03:36,006 - ✅ Found: Freaks and Geeks (1999–2000)
+2025-05-03 13:03:36,307 - 051/250 📼 IMDb Title: The Office
+2025-05-03 13:03:36,307 - Querying OMDB for TV Show: 'The Office'
+2025-05-03 13:03:36,691 - ✅ Found: The Office (2005–2013)
+2025-05-03 13:03:36,992 - 052/250 📼 IMDb Title: I, Claudius
+2025-05-03 13:03:36,992 - Querying OMDB for TV Show: 'I, Claudius'
+2025-05-03 13:03:37,783 - ✅ Found: I, Claudius (1976)
+2025-05-03 13:03:38,084 - 053/250 📼 IMDb Title: TVF Pitchers
+2025-05-03 13:03:38,084 - Querying OMDB for TV Show: 'TVF Pitchers'
+2025-05-03 13:03:39,142 - ✅ Found: TVF Pitchers (2015–2022)
+2025-05-03 13:03:39,443 - 054/250 📼 IMDb Title: House of Cards
+2025-05-03 13:03:39,443 - Querying OMDB for TV Show: 'House of Cards'
+2025-05-03 13:03:39,815 - ✅ Found: House of Cards (2013–2018)
+2025-05-03 13:03:40,116 - 055/250 📼 IMDb Title: Fawlty Towers
+2025-05-03 13:03:40,116 - Querying OMDB for TV Show: 'Fawlty Towers'
+2025-05-03 13:03:40,491 - ✅ Found: Fawlty Towers (1975–1979)
+2025-05-03 13:03:40,792 - 056/250 📼 IMDb Title: Westworld
+2025-05-03 13:03:40,792 - Querying OMDB for TV Show: 'Westworld'
+2025-05-03 13:03:41,164 - ✅ Found: Westworld (2016–2022)
+2025-05-03 13:03:41,465 - 057/250 📼 IMDb Title: Peaky Blinders
+2025-05-03 13:03:41,465 - Querying OMDB for TV Show: 'Peaky Blinders'
+2025-05-03 13:03:41,827 - ✅ Found: Peaky Blinders (2013–2022)
+2025-05-03 13:03:42,128 - 058/250 📼 IMDb Title: Cobra Kai
+2025-05-03 13:03:42,128 - Querying OMDB for TV Show: 'Cobra Kai'
+2025-05-03 13:03:42,499 - ✅ Found: Cobra Kai (2018–2025)
+2025-05-03 13:03:42,800 - 059/250 📼 IMDb Title: Sahsiyet
+2025-05-03 13:03:42,801 - Querying OMDB for TV Show: 'Sahsiyet'
+2025-05-03 13:03:43,166 - ❌ OMDB No Result for 'Sahsiyet' — Error: Series not found!
+2025-05-03 13:03:43,467 - 060/250 📼 IMDb Title: Justice League Unlimited
+2025-05-03 13:03:43,467 - Querying OMDB for TV Show: 'Justice League Unlimited'
+2025-05-03 13:03:44,229 - ✅ Found: Justice League Unlimited (2004–2006)
+2025-05-03 13:03:44,530 - 061/250 📼 IMDb Title: Blackadder Goes Forth
+2025-05-03 13:03:44,530 - Querying OMDB for TV Show: 'Blackadder Goes Forth'
+2025-05-03 13:03:45,302 - ✅ Found: Blackadder Goes Forth (1989)
+2025-05-03 13:03:45,603 - 062/250 📼 IMDb Title: Rome
+2025-05-03 13:03:45,603 - Querying OMDB for TV Show: 'Rome'
+2025-05-03 13:03:46,013 - ✅ Found: Rome (2005–2007)
+2025-05-03 13:03:46,314 - 063/250 📼 IMDb Title: It's Always Sunny in Philadelphia
+2025-05-03 13:03:46,314 - Querying OMDB for TV Show: 'It's Always Sunny in Philadelphia'
+2025-05-03 13:03:47,129 - ✅ Found: It's Always Sunny in Philadelphia (2005–)
+2025-05-03 13:03:47,430 - 064/250 📼 IMDb Title: Oz
+2025-05-03 13:03:47,430 - Querying OMDB for TV Show: 'Oz'
+2025-05-03 13:03:48,228 - ✅ Found: Oz (1997–2003)
+2025-05-03 13:03:48,529 - 065/250 📼 IMDb Title: The Simpsons
+2025-05-03 13:03:48,529 - Querying OMDB for TV Show: 'The Simpsons'
+2025-05-03 13:03:48,908 - ✅ Found: The Simpsons (1989–)
+2025-05-03 13:03:49,209 - 066/250 📼 IMDb Title: Attack on Titan
+2025-05-03 13:03:49,209 - Querying OMDB for TV Show: 'Attack on Titan'
+2025-05-03 13:03:49,303 - ✅ Found: Attack on Titan (2013–2023)
+2025-05-03 13:03:49,603 - 067/250 📼 IMDb Title: The West Wing
+2025-05-03 13:03:49,604 - Querying OMDB for TV Show: 'The West Wing'
+2025-05-03 13:03:50,504 - ✅ Found: The West Wing (1999–2006)
+2025-05-03 13:03:50,804 - 068/250 📼 IMDb Title: Nathan for You
+2025-05-03 13:03:50,805 - Querying OMDB for TV Show: 'Nathan for You'
+2025-05-03 13:03:51,190 - ✅ Found: Nathan for You (2013–2017)
+2025-05-03 13:03:51,491 - 069/250 📼 IMDb Title: Curb Your Enthusiasm
+2025-05-03 13:03:51,491 - Querying OMDB for TV Show: 'Curb Your Enthusiasm'
+2025-05-03 13:03:52,339 - ✅ Found: Curb Your Enthusiasm (2000–2024)
+2025-05-03 13:03:52,640 - 070/250 📼 IMDb Title: South Park
+2025-05-03 13:03:52,640 - Querying OMDB for TV Show: 'South Park'
+2025-05-03 13:03:53,006 - ✅ Found: South Park (1997–)
+2025-05-03 13:03:53,307 - 071/250 📼 IMDb Title: House M.D.
+2025-05-03 13:03:53,307 - Querying OMDB for TV Show: 'House M.D.'
+2025-05-03 13:03:53,728 - ❌ OMDB No Result for 'House M.D.' — Error: Series not found!
+2025-05-03 13:03:54,029 - 072/250 📼 IMDb Title: The Marvelous Mrs. Maisel
+2025-05-03 13:03:54,029 - Querying OMDB for TV Show: 'The Marvelous Mrs. Maisel'
+2025-05-03 13:03:54,820 - ✅ Found: The Marvelous Mrs. Maisel (2017–2023)
+2025-05-03 13:03:55,121 - 073/250 📼 IMDb Title: The Haunting of Hill House
+2025-05-03 13:03:55,121 - Querying OMDB for TV Show: 'The Haunting of Hill House'
+2025-05-03 13:03:55,889 - ✅ Found: The Haunting of Hill House (2018)
+2025-05-03 13:03:56,190 - 074/250 📼 IMDb Title: Chappelle's Show
+2025-05-03 13:03:56,190 - Querying OMDB for TV Show: 'Chappelle's Show'
+2025-05-03 13:03:56,564 - ✅ Found: Chappelle's Show (2003–2006)
+2025-05-03 13:03:56,865 - 075/250 📼 IMDb Title: Love, Death &amp; Robots
+2025-05-03 13:03:56,865 - Querying OMDB for TV Show: 'Love, Death &amp; Robots'
+2025-05-03 13:03:57,240 - ❌ OMDB No Result for 'Love, Death &amp; Robots' — Error: Series not found!
+2025-05-03 13:03:57,540 - 076/250 📼 IMDb Title: The Adventures of Sherlock Holmes
+2025-05-03 13:03:57,541 - Querying OMDB for TV Show: 'The Adventures of Sherlock Holmes'
+2025-05-03 13:03:58,305 - ✅ Found: The Adventures of Sherlock Holmes (1984–1985)
+2025-05-03 13:03:58,606 - 077/250 📼 IMDb Title: Dragon Ball Z
+2025-05-03 13:03:58,606 - Querying OMDB for TV Show: 'Dragon Ball Z'
+2025-05-03 13:03:59,501 - ✅ Found: Dragon Ball Z (1996–2003)
+2025-05-03 13:03:59,802 - 078/250 📼 IMDb Title: Lonesome Dove
+2025-05-03 13:03:59,802 - Querying OMDB for TV Show: 'Lonesome Dove'
+2025-05-03 13:04:00,576 - ✅ Found: Lonesome Dove (1989)
+2025-05-03 13:04:00,876 - 079/250 📼 IMDb Title: The Jinx: The Life and Deaths of Robert Durst
+2025-05-03 13:04:00,877 - Querying OMDB for TV Show: 'The Jinx: The Life and Deaths of Robert Durst'
+2025-05-03 13:04:01,277 - ✅ Found: The Jinx: The Life and Deaths of Robert Durst (2015–2024)
+2025-05-03 13:04:01,578 - 080/250 📼 IMDb Title: Dragon Ball Z: Doragon bôru zetto
+2025-05-03 13:04:01,578 - Querying OMDB for TV Show: 'Dragon Ball Z: Doragon bôru zetto'
+2025-05-03 13:04:01,943 - ❌ OMDB No Result for 'Dragon Ball Z: Doragon bôru zetto' — Error: Series not found!
+2025-05-03 13:04:02,243 - 081/250 📼 IMDb Title: Steins;Gate
+2025-05-03 13:04:02,243 - Querying OMDB for TV Show: 'Steins;Gate'
+2025-05-03 13:04:03,184 - ✅ Found: Steins;Gate (2011–2015)
+2025-05-03 13:04:03,485 - 082/250 📼 IMDb Title: Deadwood
+2025-05-03 13:04:03,486 - Querying OMDB for TV Show: 'Deadwood'
+2025-05-03 13:04:04,259 - ✅ Found: Deadwood (2004–2006)
+2025-05-03 13:04:04,560 - 083/250 📼 IMDb Title: Battlestar Galactica
+2025-05-03 13:04:04,560 - Querying OMDB for TV Show: 'Battlestar Galactica'
+2025-05-03 13:04:04,926 - ✅ Found: Battlestar Galactica (2004–2009)
+2025-05-03 13:04:05,227 - 084/250 📼 IMDb Title: Better Call Saul
+2025-05-03 13:04:05,227 - Querying OMDB for TV Show: 'Better Call Saul'
+2025-05-03 13:04:05,584 - ✅ Found: Better Call Saul (2015–2022)
+2025-05-03 13:04:05,885 - 085/250 📼 IMDb Title: The Thick of It
+2025-05-03 13:04:05,886 - Querying OMDB for TV Show: 'The Thick of It'
+2025-05-03 13:04:06,705 - ✅ Found: The Thick of It (2005–2012)
+2025-05-03 13:04:07,006 - 086/250 📼 IMDb Title: Six Feet Under
+2025-05-03 13:04:07,006 - Querying OMDB for TV Show: 'Six Feet Under'
+2025-05-03 13:04:07,740 - ✅ Found: Six Feet Under (2001–2005)
+2025-05-03 13:04:08,041 - 087/250 📼 IMDb Title: The Return of Sherlock Holmes
+2025-05-03 13:04:08,041 - Querying OMDB for TV Show: 'The Return of Sherlock Holmes'
+2025-05-03 13:04:08,815 - ✅ Found: The Return of Sherlock Holmes (1986–1988)
+2025-05-03 13:04:09,116 - 088/250 📼 IMDb Title: The Crown
+2025-05-03 13:04:09,116 - Querying OMDB for TV Show: 'The Crown'
+2025-05-03 13:04:09,961 - ✅ Found: The Crown (2016–2023)
+2025-05-03 13:04:10,262 - 089/250 📼 IMDb Title: The Memoirs of Sherlock Holmes
+2025-05-03 13:04:10,262 - Querying OMDB for TV Show: 'The Memoirs of Sherlock Holmes'
+2025-05-03 13:04:11,109 - ✅ Found: The Memoirs of Sherlock Holmes (1994)
+2025-05-03 13:04:11,410 - 090/250 📼 IMDb Title: The Shield
+2025-05-03 13:04:11,410 - Querying OMDB for TV Show: 'The Shield'
+2025-05-03 13:04:12,167 - ✅ Found: The Shield (2002–2008)
+2025-05-03 13:04:12,468 - 091/250 📼 IMDb Title: The X-Files
+2025-05-03 13:04:12,468 - Querying OMDB for TV Show: 'The X-Files'
+2025-05-03 13:04:13,264 - ✅ Found: The X-Files (1993–2018)
+2025-05-03 13:04:13,564 - 092/250 📼 IMDb Title: Top Gear
+2025-05-03 13:04:13,565 - Querying OMDB for TV Show: 'Top Gear'
+2025-05-03 13:04:14,382 - ✅ Found: Top Gear (2002–2022)
+2025-05-03 13:04:14,683 - 093/250 📼 IMDb Title: Downton Abbey
+2025-05-03 13:04:14,683 - Querying OMDB for TV Show: 'Downton Abbey'
+2025-05-03 13:04:15,496 - ✅ Found: Downton Abbey (2010–2015)
+2025-05-03 13:04:15,796 - 094/250 📼 IMDb Title: Monster
+2025-05-03 13:04:15,797 - Querying OMDB for TV Show: 'Monster'
+2025-05-03 13:04:16,648 - ✅ Found: Monster (2004–2005)
+2025-05-03 13:04:16,949 - 095/250 📼 IMDb Title: Dexter
+2025-05-03 13:04:16,949 - Querying OMDB for TV Show: 'Dexter'
+2025-05-03 13:04:17,309 - ✅ Found: Dexter (2006–2013)
+2025-05-03 13:04:17,610 - 096/250 📼 IMDb Title: Young Justice
+2025-05-03 13:04:17,610 - Querying OMDB for TV Show: 'Young Justice'
+2025-05-03 13:04:18,393 - ✅ Found: Young Justice (2010–2022)
+2025-05-03 13:04:18,694 - 097/250 📼 IMDb Title: Archer
+2025-05-03 13:04:18,694 - Querying OMDB for TV Show: 'Archer'
+2025-05-03 13:04:19,506 - ✅ Found: Archer (2009–2023)
+2025-05-03 13:04:19,807 - 098/250 📼 IMDb Title: Blackadder II
+2025-05-03 13:04:19,807 - Querying OMDB for TV Show: 'Blackadder II'
+2025-05-03 13:04:20,537 - ✅ Found: Blackadder II (1986)
+2025-05-03 13:04:20,838 - 099/250 📼 IMDb Title: From the Earth to the Moon
+2025-05-03 13:04:20,838 - Querying OMDB for TV Show: 'From the Earth to the Moon'
+2025-05-03 13:04:21,620 - ✅ Found: From the Earth to the Moon (1998)
+2025-05-03 13:04:21,921 - 100/250 📼 IMDb Title: This Is Us
+2025-05-03 13:04:21,921 - Querying OMDB for TV Show: 'This Is Us'
+2025-05-03 13:04:22,309 - ✅ Found: This Is Us (2016–2022)
+2025-05-03 13:04:22,610 - 101/250 📼 IMDb Title: Daredevil
+2025-05-03 13:04:22,610 - Querying OMDB for TV Show: 'Daredevil'
+2025-05-03 13:04:22,977 - ✅ Found: Daredevil (2015–2018)
+2025-05-03 13:04:23,278 - 102/250 📼 IMDb Title: Bron/Broen
+2025-05-03 13:04:23,278 - Querying OMDB for TV Show: 'Bron/Broen'
+2025-05-03 13:04:23,846 - ❌ OMDB No Result for 'Bron/Broen' — Error: Series not found!
+2025-05-03 13:04:24,147 - 103/250 📼 IMDb Title: Star Trek: The Next Generation
+2025-05-03 13:04:24,147 - Querying OMDB for TV Show: 'Star Trek: The Next Generation'
+2025-05-03 13:04:24,957 - ✅ Found: Star Trek: The Next Generation (1987–1994)
+2025-05-03 13:04:25,258 - 104/250 📼 IMDb Title: The Grand Tour
+2025-05-03 13:04:25,258 - Querying OMDB for TV Show: 'The Grand Tour'
+2025-05-03 13:04:25,650 - ✅ Found: The Grand Tour (2016–2024)
+2025-05-03 13:04:25,950 - 105/250 📼 IMDb Title: Making a Murderer
+2025-05-03 13:04:25,951 - Querying OMDB for TV Show: 'Making a Murderer'
+2025-05-03 13:04:26,699 - ✅ Found: Making a Murderer (2015–2018)
+2025-05-03 13:04:27,000 - 106/250 📼 IMDb Title: Parks and Recreation
+2025-05-03 13:04:27,000 - Querying OMDB for TV Show: 'Parks and Recreation'
+2025-05-03 13:04:27,717 - ✅ Found: Parks and Recreation (2009–2015)
+2025-05-03 13:04:28,018 - 107/250 📼 IMDb Title: North &amp; South
+2025-05-03 13:04:28,018 - Querying OMDB for TV Show: 'North &amp; South'
+2025-05-03 13:04:28,375 - ❌ OMDB No Result for 'North &amp; South' — Error: Series not found!
+2025-05-03 13:04:28,676 - 108/250 📼 IMDb Title: Sacred Games
+2025-05-03 13:04:28,676 - Querying OMDB for TV Show: 'Sacred Games'
+2025-05-03 13:04:29,424 - ✅ Found: Sacred Games (2018–2019)
+2025-05-03 13:04:29,725 - 109/250 📼 IMDb Title: Battlestar Galactica
+2025-05-03 13:04:29,725 - Querying OMDB for TV Show: 'Battlestar Galactica'
+2025-05-03 13:04:29,812 - ✅ Found: Battlestar Galactica (2004–2009)
+2025-05-03 13:04:30,112 - 110/250 📼 IMDb Title: Blackadder the Third
+2025-05-03 13:04:30,113 - Querying OMDB for TV Show: 'Blackadder the Third'
+2025-05-03 13:04:30,901 - ✅ Found: Blackadder the Third (1987)
+2025-05-03 13:04:31,201 - 111/250 📼 IMDb Title: Gomorra: La serie
+2025-05-03 13:04:31,202 - Querying OMDB for TV Show: 'Gomorra: La serie'
+2025-05-03 13:04:31,576 - ❌ OMDB No Result for 'Gomorra: La serie' — Error: Series not found!
+2025-05-03 13:04:31,877 - 112/250 📼 IMDb Title: Kôdo giasu: Hangyaku no rurûshu
+2025-05-03 13:04:31,877 - Querying OMDB for TV Show: 'Kôdo giasu: Hangyaku no rurûshu'
+2025-05-03 13:04:32,235 - ❌ OMDB No Result for 'Kôdo giasu: Hangyaku no rurûshu' — Error: Series not found!
+2025-05-03 13:04:32,536 - 113/250 📼 IMDb Title: Long Way Round
+2025-05-03 13:04:32,536 - Querying OMDB for TV Show: 'Long Way Round'
+2025-05-03 13:04:33,301 - ✅ Found: Long Way Round (2004–2010)
+2025-05-03 13:04:33,602 - 114/250 📼 IMDb Title: Atlanta
+2025-05-03 13:04:33,602 - Querying OMDB for TV Show: 'Atlanta'
+2025-05-03 13:04:34,359 - ✅ Found: Atlanta (2016–2022)
+2025-05-03 13:04:34,660 - 115/250 📼 IMDb Title: Through the Wormhole
+2025-05-03 13:04:34,660 - Querying OMDB for TV Show: 'Through the Wormhole'
+2025-05-03 13:04:35,456 - ✅ Found: Through the Wormhole (2010–2017)
+2025-05-03 13:04:35,757 - 116/250 📼 IMDb Title: Mad Men
+2025-05-03 13:04:35,757 - Querying OMDB for TV Show: 'Mad Men'
+2025-05-03 13:04:36,573 - ✅ Found: Mad Men (2007–2015)
+2025-05-03 13:04:36,874 - 117/250 📼 IMDb Title: Fullmetal Alchemist
+2025-05-03 13:04:36,874 - Querying OMDB for TV Show: 'Fullmetal Alchemist'
+2025-05-03 13:04:37,640 - ✅ Found: Fullmetal Alchemist (2003–2004)
+2025-05-03 13:04:37,941 - 118/250 📼 IMDb Title: Spaced
+2025-05-03 13:04:37,941 - Querying OMDB for TV Show: 'Spaced'
+2025-05-03 13:04:38,281 - ✅ Found: Spaced (1999–2001)
+2025-05-03 13:04:38,582 - 119/250 📼 IMDb Title: Shameless
+2025-05-03 13:04:38,582 - Querying OMDB for TV Show: 'Shameless'
+2025-05-03 13:04:39,410 - ✅ Found: Shameless (2011–2021)
+2025-05-03 13:04:39,711 - 120/250 📼 IMDb Title: Hunter x Hunter
+2025-05-03 13:04:39,711 - Querying OMDB for TV Show: 'Hunter x Hunter'
+2025-05-03 13:04:40,789 - ✅ Found: Hunter x Hunter (2011–2014)
+2025-05-03 13:04:41,090 - 121/250 📼 IMDb Title: The Bugs Bunny Show
+2025-05-03 13:04:41,090 - Querying OMDB for TV Show: 'The Bugs Bunny Show'
+2025-05-03 13:04:41,853 - ✅ Found: The Bugs Bunny Show (1960–1975)
+2025-05-03 13:04:42,154 - 122/250 📼 IMDb Title: Samurai X: Trust and Betrayal
+2025-05-03 13:04:42,154 - Querying OMDB for TV Show: 'Samurai X: Trust and Betrayal'
+2025-05-03 13:04:42,534 - ❌ OMDB No Result for 'Samurai X: Trust and Betrayal' — Error: Series not found!
+2025-05-03 13:04:42,834 - 123/250 📼 IMDb Title: Mind Your Language
+2025-05-03 13:04:42,835 - Querying OMDB for TV Show: 'Mind Your Language'
+2025-05-03 13:04:43,596 - ✅ Found: Mind Your Language (1977–1986)
+2025-05-03 13:04:43,897 - 124/250 📼 IMDb Title: QI
+2025-05-03 13:04:43,897 - Querying OMDB for TV Show: 'QI'
+2025-05-03 13:04:44,658 - ✅ Found: QI (2003–)
+2025-05-03 13:04:44,958 - 125/250 📼 IMDb Title: Doctor Who
+2025-05-03 13:04:44,959 - Querying OMDB for TV Show: 'Doctor Who'
+2025-05-03 13:04:45,292 - ✅ Found: Doctor Who (2005–2022)
+2025-05-03 13:04:45,593 - 126/250 📼 IMDb Title: Friday Night Lights
+2025-05-03 13:04:45,593 - Querying OMDB for TV Show: 'Friday Night Lights'
+2025-05-03 13:04:46,313 - ✅ Found: Friday Night Lights (2006–2011)
+2025-05-03 13:04:46,614 - 127/250 📼 IMDb Title: Skam
+2025-05-03 13:04:46,614 - Querying OMDB for TV Show: 'Skam'
+2025-05-03 13:04:47,392 - ✅ Found: Skam (2015–2017)
+2025-05-03 13:04:47,693 - 128/250 📼 IMDb Title: Mister Rogers' Neighborhood
+2025-05-03 13:04:47,693 - Querying OMDB for TV Show: 'Mister Rogers' Neighborhood'
+2025-05-03 13:04:48,065 - ✅ Found: Mister Rogers' Neighborhood (1968–2001)
+2025-05-03 13:04:48,365 - 129/250 📼 IMDb Title: Peep Show
+2025-05-03 13:04:48,366 - Querying OMDB for TV Show: 'Peep Show'
+2025-05-03 13:04:49,129 - ✅ Found: Peep Show (2003–2015)
+2025-05-03 13:04:49,430 - 130/250 📼 IMDb Title: Father Ted
+2025-05-03 13:04:49,430 - Querying OMDB for TV Show: 'Father Ted'
+2025-05-03 13:04:49,811 - ✅ Found: Father Ted (1995–1998)
+2025-05-03 13:04:50,112 - 131/250 📼 IMDb Title: Chef's Table
+2025-05-03 13:04:50,112 - Querying OMDB for TV Show: 'Chef's Table'
+2025-05-03 13:04:50,879 - ✅ Found: Chef's Table (2015–2024)
+2025-05-03 13:04:51,179 - 132/250 📼 IMDb Title: Leyla ile Mecnun
+2025-05-03 13:04:51,180 - Querying OMDB for TV Show: 'Leyla ile Mecnun'
+2025-05-03 13:04:51,556 - ❌ OMDB No Result for 'Leyla ile Mecnun' — Error: Series not found!
+2025-05-03 13:04:51,856 - 133/250 📼 IMDb Title: Seinto Seiya
+2025-05-03 13:04:51,857 - Querying OMDB for TV Show: 'Seinto Seiya'
+2025-05-03 13:04:52,627 - ✅ Found: Seinto Seiya: The Lost Canvas - Meio Shinwa (2009–2011)
+2025-05-03 13:04:52,928 - 134/250 📼 IMDb Title: Justice League
+2025-05-03 13:04:52,928 - Querying OMDB for TV Show: 'Justice League'
+2025-05-03 13:04:53,303 - ✅ Found: Justice League (2001–2004)
+2025-05-03 13:04:53,604 - 135/250 📼 IMDb Title: Yes Minister
+2025-05-03 13:04:53,604 - Querying OMDB for TV Show: 'Yes Minister'
+2025-05-03 13:04:54,371 - ✅ Found: Yes Minister (1980–1984)
+2025-05-03 13:04:54,672 - 136/250 📼 IMDb Title: Flight of the Conchords
+2025-05-03 13:04:54,672 - Querying OMDB for TV Show: 'Flight of the Conchords'
+2025-05-03 13:04:55,650 - ✅ Found: Flight of the Conchords (2007–2009)
+2025-05-03 13:04:55,951 - 137/250 📼 IMDb Title: Shin Seiki Evangerion
+2025-05-03 13:04:55,951 - Querying OMDB for TV Show: 'Shin Seiki Evangerion'
+2025-05-03 13:04:56,324 - ❌ OMDB No Result for 'Shin Seiki Evangerion' — Error: Series not found!
+2025-05-03 13:04:56,625 - 138/250 📼 IMDb Title: The Newsroom
+2025-05-03 13:04:56,625 - Querying OMDB for TV Show: 'The Newsroom'
+2025-05-03 13:04:57,003 - ✅ Found: The Newsroom (2012–2014)
+2025-05-03 13:04:57,303 - 139/250 📼 IMDb Title: Justified
+2025-05-03 13:04:57,304 - Querying OMDB for TV Show: 'Justified'
+2025-05-03 13:04:58,092 - ✅ Found: Justified (2010–2015)
+2025-05-03 13:04:58,393 - 140/250 📼 IMDb Title: The Defiant Ones
+2025-05-03 13:04:58,393 - Querying OMDB for TV Show: 'The Defiant Ones'
+2025-05-03 13:04:59,155 - ✅ Found: The Defiant Ones (2017)
+2025-05-03 13:04:59,455 - 141/250 📼 IMDb Title: Generation Kill
+2025-05-03 13:04:59,456 - Querying OMDB for TV Show: 'Generation Kill'
+2025-05-03 13:05:00,258 - ✅ Found: Generation Kill (2008)
+2025-05-03 13:05:00,559 - 142/250 📼 IMDb Title: Line of Duty
+2025-05-03 13:05:00,559 - Querying OMDB for TV Show: 'Line of Duty'
+2025-05-03 13:05:01,361 - ✅ Found: Line of Duty (2012–2021)
+2025-05-03 13:05:01,662 - 143/250 📼 IMDb Title: Poirot
+2025-05-03 13:05:01,662 - Querying OMDB for TV Show: 'Poirot'
+2025-05-03 13:05:02,491 - ✅ Found: Poirot (1989–2013)
+2025-05-03 13:05:02,792 - 144/250 📼 IMDb Title: Brass Eye
+2025-05-03 13:05:02,792 - Querying OMDB for TV Show: 'Brass Eye'
+2025-05-03 13:05:03,554 - ✅ Found: Brass Eye (1997–2001)
+2025-05-03 13:05:03,855 - 145/250 📼 IMDb Title: Boardwalk Empire
+2025-05-03 13:05:03,855 - Querying OMDB for TV Show: 'Boardwalk Empire'
+2025-05-03 13:05:04,606 - ✅ Found: Boardwalk Empire (2010–2014)
+2025-05-03 13:05:04,907 - 146/250 📼 IMDb Title: Adventure Time
+2025-05-03 13:05:04,907 - Querying OMDB for TV Show: 'Adventure Time'
+2025-05-03 13:05:05,290 - ✅ Found: Adventure Time (2010–2018)
+2025-05-03 13:05:05,590 - 147/250 📼 IMDb Title: Big Little Lies
+2025-05-03 13:05:05,591 - Querying OMDB for TV Show: 'Big Little Lies'
+2025-05-03 13:05:06,339 - ✅ Found: Big Little Lies (2017–2025)
+2025-05-03 13:05:06,640 - 148/250 📼 IMDb Title: Dark
+2025-05-03 13:05:06,640 - Querying OMDB for TV Show: 'Dark'
+2025-05-03 13:05:07,452 - ✅ Found: Dark (2017–2020)
+2025-05-03 13:05:07,753 - 149/250 📼 IMDb Title: John Adams
+2025-05-03 13:05:07,753 - Querying OMDB for TV Show: 'John Adams'
+2025-05-03 13:05:08,529 - ✅ Found: John Adams (2008)
+2025-05-03 13:05:08,830 - 150/250 📼 IMDb Title: Mystery Science Theater 3000
+2025-05-03 13:05:08,830 - Querying OMDB for TV Show: 'Mystery Science Theater 3000'
+2025-05-03 13:05:09,616 - ✅ Found: Mystery Science Theater 3000 (1988–1999)
+2025-05-03 13:05:09,917 - 151/250 📼 IMDb Title: Yes, Prime Minister
+2025-05-03 13:05:09,917 - Querying OMDB for TV Show: 'Yes, Prime Minister'
+2025-05-03 13:05:10,678 - ✅ Found: Yes, Prime Minister (1986–1987)
+2025-05-03 13:05:10,979 - 152/250 📼 IMDb Title: Berserk
+2025-05-03 13:05:10,979 - Querying OMDB for TV Show: 'Berserk'
+2025-05-03 13:05:11,734 - ✅ Found: Berserk (1997–1998)
+2025-05-03 13:05:12,035 - 153/250 📼 IMDb Title: The Punisher
+2025-05-03 13:05:12,035 - Querying OMDB for TV Show: 'The Punisher'
+2025-05-03 13:05:12,419 - ✅ Found: The Punisher (2017–2019)
+2025-05-03 13:05:12,720 - 154/250 📼 IMDb Title: The Eric Andre Show
+2025-05-03 13:05:12,720 - Querying OMDB for TV Show: 'The Eric Andre Show'
+2025-05-03 13:05:13,770 - ✅ Found: The Eric Andre Show (2012–)
+2025-05-03 13:05:14,071 - 155/250 📼 IMDb Title: The Night Of
+2025-05-03 13:05:14,071 - Querying OMDB for TV Show: 'The Night Of'
+2025-05-03 13:05:14,826 - ✅ Found: The Night Of (2016)
+2025-05-03 13:05:15,127 - 156/250 📼 IMDb Title: Homicide: Life on the Street
+2025-05-03 13:05:15,127 - Querying OMDB for TV Show: 'Homicide: Life on the Street'
+2025-05-03 13:05:15,875 - ✅ Found: Homicide: Life on the Street (1993–1999)
+2025-05-03 13:05:16,176 - 157/250 📼 IMDb Title: Louie
+2025-05-03 13:05:16,176 - Querying OMDB for TV Show: 'Louie'
+2025-05-03 13:05:17,002 - ✅ Found: Louie (2010–2015)
+2025-05-03 13:05:17,303 - 158/250 📼 IMDb Title: Samurai Champloo
+2025-05-03 13:05:17,303 - Querying OMDB for TV Show: 'Samurai Champloo'
+2025-05-03 13:05:18,075 - ✅ Found: Samurai Champloo (2004–2005)
+2025-05-03 13:05:18,376 - 159/250 📼 IMDb Title: Yeh Meri Family
+2025-05-03 13:05:18,376 - Querying OMDB for TV Show: 'Yeh Meri Family'
+2025-05-03 13:05:19,130 - ✅ Found: Yeh Meri Family (2018–)
+2025-05-03 13:05:19,431 - 160/250 📼 IMDb Title: Alfred Hitchcock Presents
+2025-05-03 13:05:19,431 - Querying OMDB for TV Show: 'Alfred Hitchcock Presents'
+2025-05-03 13:05:19,805 - ✅ Found: Alfred Hitchcock Presents (1955–1962)
+2025-05-03 13:05:20,106 - 161/250 📼 IMDb Title: Coupling
+2025-05-03 13:05:20,106 - Querying OMDB for TV Show: 'Coupling'
+2025-05-03 13:05:22,974 - ✅ Found: Coupling (2000–2004)
+2025-05-03 13:05:23,275 - 162/250 📼 IMDb Title: The Untold History of the United States
+2025-05-03 13:05:23,275 - Querying OMDB for TV Show: 'The Untold History of the United States'
+2025-05-03 13:05:24,142 - ✅ Found: The Untold History of the United States (2012–2013)
+2025-05-03 13:05:24,443 - 163/250 📼 IMDb Title: Dragon Ball
+2025-05-03 13:05:24,443 - Querying OMDB for TV Show: 'Dragon Ball'
+2025-05-03 13:05:25,201 - ✅ Found: Dragon Ball (1986–1989)
+2025-05-03 13:05:25,501 - 164/250 📼 IMDb Title: Dragon Ball
+2025-05-03 13:05:25,502 - Querying OMDB for TV Show: 'Dragon Ball'
+2025-05-03 13:05:25,587 - ✅ Found: Dragon Ball (1986–1989)
+2025-05-03 13:05:25,888 - 165/250 📼 IMDb Title: The IT Crowd
+2025-05-03 13:05:25,888 - Querying OMDB for TV Show: 'The IT Crowd'
+2025-05-03 13:05:26,724 - ✅ Found: The IT Crowd (2006–2013)
+2025-05-03 13:05:27,025 - 166/250 📼 IMDb Title: Mindhunter
+2025-05-03 13:05:27,025 - Querying OMDB for TV Show: 'Mindhunter'
+2025-05-03 13:05:27,396 - ✅ Found: Mindhunter (2017–2019)
+2025-05-03 13:05:27,697 - 167/250 📼 IMDb Title: Feud
+2025-05-03 13:05:27,697 - Querying OMDB for TV Show: 'Feud'
+2025-05-03 13:05:28,067 - ✅ Found: Feud (2017–2024)
+2025-05-03 13:05:28,368 - 168/250 📼 IMDb Title: Mr. Bean
+2025-05-03 13:05:28,368 - Querying OMDB for TV Show: 'Mr. Bean'
+2025-05-03 13:05:29,400 - ✅ Found: Mr. Bean (1990–1995)
+2025-05-03 13:05:29,701 - 169/250 📼 IMDb Title: Dr. Horrible's Sing-Along Blog
+2025-05-03 13:05:29,701 - Querying OMDB for TV Show: 'Dr. Horrible's Sing-Along Blog'
+2025-05-03 13:05:30,465 - ✅ Found: Dr. Horrible's Sing-Along Blog (2008)
+2025-05-03 13:05:30,766 - 170/250 📼 IMDb Title: Silicon Valley
+2025-05-03 13:05:30,766 - Querying OMDB for TV Show: 'Silicon Valley'
+2025-05-03 13:05:31,510 - ✅ Found: Silicon Valley (2014–2019)
+2025-05-03 13:05:31,811 - 171/250 📼 IMDb Title: The Office
+2025-05-03 13:05:31,811 - Querying OMDB for TV Show: 'The Office'
+2025-05-03 13:05:31,901 - ✅ Found: The Office (2005–2013)
+2025-05-03 13:05:32,202 - 172/250 📼 IMDb Title: Brideshead Revisited
+2025-05-03 13:05:32,202 - Querying OMDB for TV Show: 'Brideshead Revisited'
+2025-05-03 13:05:32,998 - ✅ Found: Brideshead Revisited (1981)
+2025-05-03 13:05:33,299 - 173/250 📼 IMDb Title: Sseulsseulhago Chalranhashin: Dokkaebi
+2025-05-03 13:05:33,299 - Querying OMDB for TV Show: 'Sseulsseulhago Chalranhashin: Dokkaebi'
+2025-05-03 13:05:34,905 - ❌ OMDB No Result for 'Sseulsseulhago Chalranhashin: Dokkaebi' — Error: Series not found!
+2025-05-03 13:05:35,205 - 174/250 📼 IMDb Title: Vikings
+2025-05-03 13:05:35,205 - Querying OMDB for TV Show: 'Vikings'
+2025-05-03 13:05:35,589 - ✅ Found: Vikings (2013–2020)
+2025-05-03 13:05:35,890 - 175/250 📼 IMDb Title: Impractical Jokers
+2025-05-03 13:05:35,890 - Querying OMDB for TV Show: 'Impractical Jokers'
+2025-05-03 13:05:36,651 - ✅ Found: Impractical Jokers (2011–)
+2025-05-03 13:05:36,952 - 176/250 📼 IMDb Title: BoJack Horseman
+2025-05-03 13:05:36,952 - Querying OMDB for TV Show: 'BoJack Horseman'
+2025-05-03 13:05:37,725 - ✅ Found: BoJack Horseman (2014–2020)
+2025-05-03 13:05:38,025 - 177/250 📼 IMDb Title: Masum
+2025-05-03 13:05:38,026 - Querying OMDB for TV Show: 'Masum'
+2025-05-03 13:05:38,788 - ✅ Found: Masum (2017)
+2025-05-03 13:05:39,089 - 178/250 📼 IMDb Title: Whose Line Is It Anyway?
+2025-05-03 13:05:39,089 - Querying OMDB for TV Show: 'Whose Line Is It Anyway?'
+2025-05-03 13:05:39,875 - ✅ Found: Whose Line Is It Anyway? (1998–2007)
+2025-05-03 13:05:40,176 - 179/250 📼 IMDb Title: Umbre
+2025-05-03 13:05:40,176 - Querying OMDB for TV Show: 'Umbre'
+2025-05-03 13:05:40,938 - ✅ Found: Umbre (2014–2019)
+2025-05-03 13:05:41,239 - 180/250 📼 IMDb Title: The New Batman Adventures
+2025-05-03 13:05:41,239 - Querying OMDB for TV Show: 'The New Batman Adventures'
+2025-05-03 13:05:42,005 - ✅ Found: The New Batman Adventures (1997–1999)
+2025-05-03 13:05:42,306 - 181/250 📼 IMDb Title: Money Heist
+2025-05-03 13:05:42,306 - Querying OMDB for TV Show: 'Money Heist'
+2025-05-03 13:05:42,683 - ✅ Found: Money Heist (2017–2021)
+2025-05-03 13:05:42,984 - 182/250 📼 IMDb Title: The Handmaid's Tale
+2025-05-03 13:05:42,984 - Querying OMDB for TV Show: 'The Handmaid's Tale'
+2025-05-03 13:05:43,393 - ✅ Found: The Handmaid's Tale (2017–2025)
+2025-05-03 13:05:43,694 - 183/250 📼 IMDb Title: Boku dake ga inai machi
+2025-05-03 13:05:43,694 - Querying OMDB for TV Show: 'Boku dake ga inai machi'
+2025-05-03 13:05:44,052 - ❌ OMDB No Result for 'Boku dake ga inai machi' — Error: Series not found!
+2025-05-03 13:05:44,353 - 184/250 📼 IMDb Title: Black Books
+2025-05-03 13:05:44,353 - Querying OMDB for TV Show: 'Black Books'
+2025-05-03 13:05:45,130 - ✅ Found: Black Books (2000–2004)
+2025-05-03 13:05:45,430 - 185/250 📼 IMDb Title: Mr. Robot
+2025-05-03 13:05:45,431 - Querying OMDB for TV Show: 'Mr. Robot'
+2025-05-03 13:05:46,211 - ✅ Found: Mr. Robot (2015–2019)
+2025-05-03 13:05:46,512 - 186/250 📼 IMDb Title: Hannibal
+2025-05-03 13:05:46,512 - Querying OMDB for TV Show: 'Hannibal'
+2025-05-03 13:05:46,894 - ✅ Found: Hannibal (2013–2015)
+2025-05-03 13:05:47,194 - 187/250 📼 IMDb Title: Horace and Pete
+2025-05-03 13:05:47,195 - Querying OMDB for TV Show: 'Horace and Pete'
+2025-05-03 13:05:47,986 - ✅ Found: Horace and Pete (2016)
+2025-05-03 13:05:48,287 - 188/250 📼 IMDb Title: Twin Peaks
+2025-05-03 13:05:48,287 - Querying OMDB for TV Show: 'Twin Peaks'
+2025-05-03 13:05:48,392 - ✅ Found: Twin Peaks (1990–1991)
+2025-05-03 13:05:48,693 - 189/250 📼 IMDb Title: Spartacus: Gods of the Arena
+2025-05-03 13:05:48,693 - Querying OMDB for TV Show: 'Spartacus: Gods of the Arena'
+2025-05-03 13:05:49,537 - ✅ Found: Spartacus: Gods of the Arena (2011)
+2025-05-03 13:05:49,838 - 190/250 📼 IMDb Title: The Prisoner
+2025-05-03 13:05:49,838 - Querying OMDB for TV Show: 'The Prisoner'
+2025-05-03 13:05:50,569 - ✅ Found: The Prisoner (1967–1968)
+2025-05-03 13:05:50,870 - 191/250 📼 IMDb Title: Endeavour
+2025-05-03 13:05:50,870 - Querying OMDB for TV Show: 'Endeavour'
+2025-05-03 13:05:51,704 - ✅ Found: Endeavour (2012–2023)
+2025-05-03 13:05:52,004 - 192/250 📼 IMDb Title: Luther
+2025-05-03 13:05:52,005 - Querying OMDB for TV Show: 'Luther'
+2025-05-03 13:05:52,783 - ✅ Found: Luther (2010–2019)
+2025-05-03 13:05:53,084 - 193/250 📼 IMDb Title: House of Cards
+2025-05-03 13:05:53,084 - Querying OMDB for TV Show: 'House of Cards'
+2025-05-03 13:05:53,174 - ✅ Found: House of Cards (2013–2018)
+2025-05-03 13:05:53,475 - 194/250 📼 IMDb Title: Sons of Anarchy
+2025-05-03 13:05:53,475 - Querying OMDB for TV Show: 'Sons of Anarchy'
+2025-05-03 13:05:53,857 - ✅ Found: Sons of Anarchy (2008–2014)
+2025-05-03 13:05:54,158 - 195/250 📼 IMDb Title: Tinker Tailor Soldier Spy
+2025-05-03 13:05:54,158 - Querying OMDB for TV Show: 'Tinker Tailor Soldier Spy'
+2025-05-03 13:05:54,944 - ✅ Found: Tinker Tailor Soldier Spy (1979)
+2025-05-03 13:05:55,245 - 196/250 📼 IMDb Title: I'm Alan Partridge
+2025-05-03 13:05:55,245 - Querying OMDB for TV Show: 'I'm Alan Partridge'
+2025-05-03 13:05:56,077 - ✅ Found: I'm Alan Partridge (1997–2002)
+2025-05-03 13:05:56,378 - 197/250 📼 IMDb Title: Futurama
+2025-05-03 13:05:56,378 - Querying OMDB for TV Show: 'Futurama'
+2025-05-03 13:05:56,741 - ✅ Found: Futurama (1999–)
+2025-05-03 13:05:57,042 - 198/250 📼 IMDb Title: Jesus of Nazareth
+2025-05-03 13:05:57,042 - Querying OMDB for TV Show: 'Jesus of Nazareth'
+2025-05-03 13:05:57,826 - ✅ Found: Jesus of Nazareth (1977)
+2025-05-03 13:05:58,126 - 199/250 📼 IMDb Title: Kôkaku kidôtai: Stand Alone Complex
+2025-05-03 13:05:58,127 - Querying OMDB for TV Show: 'Kôkaku kidôtai: Stand Alone Complex'
+2025-05-03 13:05:58,489 - ❌ OMDB No Result for 'Kôkaku kidôtai: Stand Alone Complex' — Error: Series not found!
+2025-05-03 13:05:58,789 - 200/250 📼 IMDb Title: The Knick
+2025-05-03 13:05:58,790 - Querying OMDB for TV Show: 'The Knick'
+2025-05-03 13:05:59,592 - ✅ Found: The Knick (2014–2015)
+2025-05-03 13:05:59,893 - 201/250 📼 IMDb Title: Detectorists
+2025-05-03 13:05:59,893 - Querying OMDB for TV Show: 'Detectorists'
+2025-05-03 13:06:00,691 - ✅ Found: Detectorists (2014–2022)
+2025-05-03 13:06:00,992 - 202/250 📼 IMDb Title: American Crime Story
+2025-05-03 13:06:00,992 - Querying OMDB for TV Show: 'American Crime Story'
+2025-05-03 13:06:01,370 - ✅ Found: American Crime Story (2016–)
+2025-05-03 13:06:01,671 - 203/250 📼 IMDb Title: This Is England '90
+2025-05-03 13:06:01,671 - Querying OMDB for TV Show: 'This Is England '90'
+2025-05-03 13:06:02,461 - ✅ Found: This Is England '90 (2015)
+2025-05-03 13:06:02,761 - 204/250 📼 IMDb Title: Ash vs Evil Dead
+2025-05-03 13:06:02,762 - Querying OMDB for TV Show: 'Ash vs Evil Dead'
+2025-05-03 13:06:03,570 - ✅ Found: Ash vs Evil Dead (2015–2018)
+2025-05-03 13:06:03,871 - 205/250 📼 IMDb Title: Wentworth
+2025-05-03 13:06:03,871 - Querying OMDB for TV Show: 'Wentworth'
+2025-05-03 13:06:04,791 - ✅ Found: Wentworth (2013–2021)
+2025-05-03 13:06:05,092 - 206/250 📼 IMDb Title: Community
+2025-05-03 13:06:05,092 - Querying OMDB for TV Show: 'Community'
+2025-05-03 13:06:05,983 - ✅ Found: Community (2009–2015)
+2025-05-03 13:06:06,284 - 207/250 📼 IMDb Title: Spartacus
+2025-05-03 13:06:06,284 - Querying OMDB for TV Show: 'Spartacus'
+2025-05-03 13:06:07,078 - ✅ Found: Spartacus (2010–2013)
+2025-05-03 13:06:07,379 - 208/250 📼 IMDb Title: Rurouni Kenshin: Wandering Samurai
+2025-05-03 13:06:07,379 - Querying OMDB for TV Show: 'Rurouni Kenshin: Wandering Samurai'
+2025-05-03 13:06:07,739 - ❌ OMDB No Result for 'Rurouni Kenshin: Wandering Samurai' — Error: Series not found!
+2025-05-03 13:06:08,040 - 209/250 📼 IMDb Title: The Venture Bros.
+2025-05-03 13:06:08,040 - Querying OMDB for TV Show: 'The Venture Bros.'
+2025-05-03 13:06:08,820 - ✅ Found: The Venture Bros. (2003–2018)
+2025-05-03 13:06:09,121 - 210/250 📼 IMDb Title: Scenes from a Marriage
+2025-05-03 13:06:09,121 - Querying OMDB for TV Show: 'Scenes from a Marriage'
+2025-05-03 13:06:09,929 - ✅ Found: Scenes from a Marriage (2021)
+2025-05-03 13:06:10,230 - 211/250 📼 IMDb Title: X-Men: The Animated Series
+2025-05-03 13:06:10,230 - Querying OMDB for TV Show: 'X-Men: The Animated Series'
+2025-05-03 13:06:10,613 - ❌ OMDB No Result for 'X-Men: The Animated Series' — Error: Series not found!
+2025-05-03 13:06:10,914 - 212/250 📼 IMDb Title: Generation War
+2025-05-03 13:06:10,914 - Querying OMDB for TV Show: 'Generation War'
+2025-05-03 13:06:11,848 - ✅ Found: Generation War (2013)
+2025-05-03 13:06:12,149 - 213/250 📼 IMDb Title: Behzat Ç.: Bir Ankara Polisiyesi
+2025-05-03 13:06:12,149 - Querying OMDB for TV Show: 'Behzat Ç.: Bir Ankara Polisiyesi'
+2025-05-03 13:06:12,516 - ❌ OMDB No Result for 'Behzat Ç.: Bir Ankara Polisiyesi' — Error: Series not found!
+2025-05-03 13:06:12,817 - 214/250 📼 IMDb Title: The Daily Show
+2025-05-03 13:06:12,817 - Querying OMDB for TV Show: 'The Daily Show'
+2025-05-03 13:06:13,641 - ✅ Found: The Daily Show (1996–)
+2025-05-03 13:06:13,942 - 215/250 📼 IMDb Title: The Colbert Report
+2025-05-03 13:06:13,942 - Querying OMDB for TV Show: 'The Colbert Report'
+2025-05-03 13:06:14,754 - ✅ Found: The Colbert Report (2005–2014)
+2025-05-03 13:06:15,055 - 216/250 📼 IMDb Title: The Legend of Korra
+2025-05-03 13:06:15,055 - Querying OMDB for TV Show: 'The Legend of Korra'
+2025-05-03 13:06:15,844 - ✅ Found: The Legend of Korra (2012–2014)
+2025-05-03 13:06:16,145 - 217/250 📼 IMDb Title: Narcos: Mexico
+2025-05-03 13:06:16,145 - Querying OMDB for TV Show: 'Narcos: Mexico'
+2025-05-03 13:06:16,920 - ✅ Found: Narcos: Mexico (2018–2021)
+2025-05-03 13:06:17,221 - 218/250 📼 IMDb Title: After Life
+2025-05-03 13:06:17,221 - Querying OMDB for TV Show: 'After Life'
+2025-05-03 13:06:17,685 - ✅ Found: After Life (2019–2022)
+2025-05-03 13:06:17,986 - 219/250 📼 IMDb Title: Happy Valley
+2025-05-03 13:06:17,986 - Querying OMDB for TV Show: 'Happy Valley'
+2025-05-03 13:06:18,373 - ✅ Found: Happy Valley (2014–2023)
+2025-05-03 13:06:18,674 - 220/250 📼 IMDb Title: Taboo
+2025-05-03 13:06:18,674 - Querying OMDB for TV Show: 'Taboo'
+2025-05-03 13:06:19,458 - ✅ Found: Taboo (2017)
+2025-05-03 13:06:19,759 - 221/250 📼 IMDb Title: Garth Marenghi's Darkplace
+2025-05-03 13:06:19,759 - Querying OMDB for TV Show: 'Garth Marenghi's Darkplace'
+2025-05-03 13:06:20,597 - ✅ Found: Garth Marenghi's Darkplace (2004)
+2025-05-03 13:06:20,898 - 222/250 📼 IMDb Title: Carnivàle
+2025-05-03 13:06:20,898 - Querying OMDB for TV Show: 'Carnivàle'
+2025-05-03 13:06:21,666 - ✅ Found: Carnivàle (2003–2005)
+2025-05-03 13:06:21,967 - 223/250 📼 IMDb Title: Samurai Jack
+2025-05-03 13:06:21,967 - Querying OMDB for TV Show: 'Samurai Jack'
+2025-05-03 13:06:22,711 - ✅ Found: Samurai Jack (2001–2017)
+2025-05-03 13:06:23,012 - 224/250 📼 IMDb Title: Police Squad!
+2025-05-03 13:06:23,012 - Querying OMDB for TV Show: 'Police Squad!'
+2025-05-03 13:06:23,777 - ✅ Found: Police Squad! (1982)
+2025-05-03 13:06:24,077 - 225/250 📼 IMDb Title: One Piece: Wan pîsu
+2025-05-03 13:06:24,078 - Querying OMDB for TV Show: 'One Piece: Wan pîsu'
+2025-05-03 13:06:24,444 - ❌ OMDB No Result for 'One Piece: Wan pîsu' — Error: Series not found!
+2025-05-03 13:06:24,744 - 226/250 📼 IMDb Title: Suits
+2025-05-03 13:06:24,744 - Querying OMDB for TV Show: 'Suits'
+2025-05-03 13:06:25,533 - ✅ Found: Suits (2011–2019)
+2025-05-03 13:06:25,834 - 227/250 📼 IMDb Title: Utopia
+2025-05-03 13:06:25,834 - Querying OMDB for TV Show: 'Utopia'
+2025-05-03 13:06:26,602 - ✅ Found: Utopia (2013–2014)
+2025-05-03 13:06:26,903 - 228/250 📼 IMDb Title: The Angry Video Game Nerd
+2025-05-03 13:06:26,903 - Querying OMDB for TV Show: 'The Angry Video Game Nerd'
+2025-05-03 13:06:27,647 - ✅ Found: The Angry Video Game Nerd (2004–)
+2025-05-03 13:06:27,948 - 229/250 📼 IMDb Title: The Bugs Bunny/Looney Tunes Comedy Hour
+2025-05-03 13:06:27,948 - Querying OMDB for TV Show: 'The Bugs Bunny/Looney Tunes Comedy Hour'
+2025-05-03 13:06:28,714 - ✅ Found: The Bugs Bunny/Looney Tunes Comedy Hour (1985–1986)
+2025-05-03 13:06:29,015 - 230/250 📼 IMDb Title: Borgen
+2025-05-03 13:06:29,015 - Querying OMDB for TV Show: 'Borgen'
+2025-05-03 13:06:29,785 - ✅ Found: Borgen (2010–2022)
+2025-05-03 13:06:30,086 - 231/250 📼 IMDb Title: Inside No. 9
+2025-05-03 13:06:30,086 - Querying OMDB for TV Show: 'Inside No. 9'
+2025-05-03 13:06:30,872 - ✅ Found: Inside No. 9 (2014–2024)
+2025-05-03 13:06:31,173 - 232/250 📼 IMDb Title: Doctor Who
+2025-05-03 13:06:31,173 - Querying OMDB for TV Show: 'Doctor Who'
+2025-05-03 13:06:31,317 - ✅ Found: Doctor Who (2005–2022)
+2025-05-03 13:06:31,617 - 233/250 📼 IMDb Title: Entourage
+2025-05-03 13:06:31,618 - Querying OMDB for TV Show: 'Entourage'
+2025-05-03 13:06:32,455 - ✅ Found: Entourage (2004–2011)
+2025-05-03 13:06:32,755 - 234/250 📼 IMDb Title: State of Play
+2025-05-03 13:06:32,756 - Querying OMDB for TV Show: 'State of Play'
+2025-05-03 13:06:33,570 - ✅ Found: State of Play (2003)
+2025-05-03 13:06:33,871 - 235/250 📼 IMDb Title: Inside Look: The People v. O.J. Simpson - American Crime Story
+2025-05-03 13:06:33,871 - Querying OMDB for TV Show: 'Inside Look: The People v. O.J. Simpson - American Crime Story'
+2025-05-03 13:06:34,730 - ✅ Found: Inside Look: The People v. O.J. Simpson - American Crime Story (2016)
+2025-05-03 13:06:35,031 - 236/250 📼 IMDb Title: Modern Family
+2025-05-03 13:06:35,031 - Querying OMDB for TV Show: 'Modern Family'
+2025-05-03 13:06:35,819 - ✅ Found: Modern Family (2009–2020)
+2025-05-03 13:06:36,120 - 237/250 📼 IMDb Title: The Muppet Show
+2025-05-03 13:06:36,120 - Querying OMDB for TV Show: 'The Muppet Show'
+2025-05-03 13:06:36,912 - ✅ Found: The Muppet Show (1976–1981)
+2025-05-03 13:06:37,213 - 238/250 📼 IMDb Title: Queer Eye
+2025-05-03 13:06:37,213 - Querying OMDB for TV Show: 'Queer Eye'
+2025-05-03 13:06:38,053 - ✅ Found: Queer Eye (2018–)
+2025-05-03 13:06:38,353 - 239/250 📼 IMDb Title: The Expanse
+2025-05-03 13:06:38,354 - Querying OMDB for TV Show: 'The Expanse'
+2025-05-03 13:06:38,724 - ✅ Found: The Expanse (2015–2022)
+2025-05-03 13:06:39,025 - 240/250 📼 IMDb Title: Brooklyn Nine-Nine
+2025-05-03 13:06:39,025 - Querying OMDB for TV Show: 'Brooklyn Nine-Nine'
+2025-05-03 13:06:39,428 - ✅ Found: Brooklyn Nine-Nine (2013–2021)
+2025-05-03 13:06:39,729 - 241/250 📼 IMDb Title: Pose
+2025-05-03 13:06:39,729 - Querying OMDB for TV Show: 'Pose'
+2025-05-03 13:06:40,500 - ✅ Found: Pose (2018–2021)
+2025-05-03 13:06:40,800 - 242/250 📼 IMDb Title: Jeeves and Wooster
+2025-05-03 13:06:40,801 - Querying OMDB for TV Show: 'Jeeves and Wooster'
+2025-05-03 13:06:41,574 - ✅ Found: Jeeves and Wooster (1990–1993)
+2025-05-03 13:06:41,875 - 243/250 📼 IMDb Title: Fleabag
+2025-05-03 13:06:41,875 - Querying OMDB for TV Show: 'Fleabag'
+2025-05-03 13:06:42,641 - ✅ Found: Fleabag (2016–2019)
+2025-05-03 13:06:42,942 - 244/250 📼 IMDb Title: Fringe
+2025-05-03 13:06:42,942 - Querying OMDB for TV Show: 'Fringe'
+2025-05-03 13:06:45,822 - ✅ Found: Fringe (2008–2013)
+2025-05-03 13:06:46,122 - 245/250 📼 IMDb Title: Billions
+2025-05-03 13:06:46,123 - Querying OMDB for TV Show: 'Billions'
+2025-05-03 13:06:46,938 - ✅ Found: Billions (2016–2023)
+2025-05-03 13:06:47,239 - 246/250 📼 IMDb Title: Sex Education
+2025-05-03 13:06:47,239 - Querying OMDB for TV Show: 'Sex Education'
+2025-05-03 13:06:48,051 - ✅ Found: Sex Education (2019–2023)
+2025-05-03 13:06:48,352 - 247/250 📼 IMDb Title: Kardes Payi
+2025-05-03 13:06:48,352 - Querying OMDB for TV Show: 'Kardes Payi'
+2025-05-03 13:06:49,126 - ✅ Found: Kardes Payi (2014–2015)
+2025-05-03 13:06:49,427 - 248/250 📼 IMDb Title: Violet Evergarden
+2025-05-03 13:06:49,427 - Querying OMDB for TV Show: 'Violet Evergarden'
+2025-05-03 13:06:50,158 - ✅ Found: Violet Evergarden (2018)
+2025-05-03 13:06:50,458 - 249/250 📼 IMDb Title: The Americans
+2025-05-03 13:06:50,459 - Querying OMDB for TV Show: 'The Americans'
+2025-05-03 13:06:51,232 - ✅ Found: The Americans (2013–2018)
+2025-05-03 13:06:51,533 - 250/250 📼 IMDb Title: Permanent Roommates
+2025-05-03 13:06:51,533 - Querying OMDB for TV Show: 'Permanent Roommates'
+2025-05-03 13:06:52,305 - ✅ Found: Permanent Roommates (2014–2023)
+2025-05-03 13:07:03,657 - 📄 SQL file written successfully.
+2025-05-03 13:07:03,657 - ✅ Generation complete.
