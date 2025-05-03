@@ -85,22 +85,39 @@ function MovieDetails() {
   // Add to watchlist
   const addToWatchlist = async () => {
     try {
-      // await fetch("http://localhost:4000/watchlist", {
-      //   method: "POST",
-      //   credentials: "include",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ bookId: id }),
-      // });
-      await fetch(`${API_BASE}/watchlist`, {
-        method: "POST",
+      // First check if the item is already in the watchlist
+      const checkResponse = await fetch(`${API_BASE}/getwatchlist`, {
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookId: id }),
       });
+      const watchlistItems = await checkResponse.json();
+      const existingItem = watchlistItems.find(item => item.item_id === id);
 
-      alert("Book added to watchlist!");
+      if (existingItem) {
+        // If item exists, update it
+        await fetch(`${API_BASE}/watchlist/${id}`, {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            status: "Planned"
+          }),
+        });
+        alert("Movie updated in watchlist!");
+      } else {
+        // If item doesn't exist, add it
+        await fetch(`${API_BASE}/watchlist`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            bookId: id,
+            status: "Planned"
+          }),
+        });
+        alert("Movie added to watchlist!");
+      }
     } catch (error) {
-      console.error("Error adding to watchlist:", error);
+      console.error("Error updating watchlist:", error);
     }
   };
 

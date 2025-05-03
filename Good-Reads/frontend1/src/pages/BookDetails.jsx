@@ -84,17 +84,14 @@ function BookDetails() {
   // Add to watchlist
   const addToWatchlist = async () => {
     try {
-      // await fetch("http://localhost:4000/watchlist", {
-      //   method: "POST",
-      //   credentials: "include",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ bookId: id }),
-      // });
       await fetch(`${API_BASE}/watchlist`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookId: id }),
+        body: JSON.stringify({ 
+          bookId: id,
+          status: "Planned"
+        }),
       });
 
       alert("Book added to watchlist!");
