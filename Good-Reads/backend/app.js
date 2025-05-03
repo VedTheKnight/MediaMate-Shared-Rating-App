@@ -417,23 +417,144 @@ app.get("/genres", async (req, res) => {
 });
 
 app.get("/getwatchlist2/:userId", isAuthenticated, async (req, res) => {
-  const { userId } = req.params; // Extract userId from the URL
-  const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status,b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
-    [userId]
-  );
-  res.json(result.rows);
+  const { userId } = req.params;
+
+  try {
+    const result = await pool.query(
+      `
+      SELECT 
+        w.item_id,
+        w.timestamp AS added_date,
+        ci.title,
+        ci.image_url,
+        ci.content_type,
+        w.status,
+        ur.rating_value AS self_rating,
+        COALESCE(avg_r.avg_rating, 0) AS avg_rating,
+        r.text AS review_text
+      FROM Watchlist w
+      JOIN ContentItem ci ON w.item_id = ci.item_id
+      LEFT JOIN Rating ur ON ur.user_id = w.user_id AND ur.item_id = w.item_id
+      LEFT JOIN Review r ON r.user_id = w.user_id AND r.item_id = w.item_id
+      LEFT JOIN (
+        SELECT item_id, AVG(rating_value) AS avg_rating
+        FROM Rating
+        GROUP BY item_id
+      ) avg_r ON avg_r.item_id = w.item_id
+      WHERE w.user_id = $1
+      `,
+      [userId]
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
+    res.status(500).json({ error: "Failed to fetch watchlist" });
+  }
 });
 
 
 app.get("/getwatchlist", async (req, res) => {
   const userId = req.session.userId;
-  const result = await pool.query(
-    "SELECT w.item_id, b.title, w.status, b.content_type FROM Watchlist w JOIN ContentItem b ON w.item_id = b.item_id WHERE w.user_id = $1",
-    [userId]
-  );
-  res.json(result.rows);
+
+  try {
+    const result = await pool.query(
+      `
+      SELECT 
+        w.item_id,
+        w.timestamp AS added_date, -- include the watchlist timestamp
+        ci.title,
+        ci.image_url,
+        ci.content_type,
+        w.status,
+        ur.rating_value AS self_rating,
+        COALESCE(avg_r.avg_rating, 0) AS avg_rating,
+        r.text AS review_text
+      FROM Watchlist w
+      JOIN ContentItem ci ON w.item_id = ci.item_id
+      LEFT JOIN Rating ur ON ur.user_id = w.user_id AND ur.item_id = w.item_id
+      LEFT JOIN Review r ON r.user_id = w.user_id AND r.item_id = w.item_id
+      LEFT JOIN (
+        SELECT item_id, AVG(rating_value) AS avg_rating
+        FROM Rating
+        GROUP BY item_id
+      ) avg_r ON avg_r.item_id = w.item_id
+      WHERE w.user_id = $1 
+      `,
+      [userId]
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
+    res.status(500).json({ error: "Failed to fetch watchlist" });
+  }
 });
+
+
+app.post("/postReview", async (req, res) => {
+  const userId = req.session.userId;
+  const { item_id, text } = req.body;
+  console.log("item_id", item_id,"text",text);
+  if (!userId || !item_id || !text) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  try {
+    // Check if a review by this user already exists
+    const existing = await pool.query(
+      "SELECT * FROM Review WHERE user_id = $1 AND item_id = $2",
+      [userId, item_id]
+    );
+
+    if (existing.rows.length > 0) {
+      // Update existing review
+      await pool.query(
+        "UPDATE Review SET text = $1, timestamp = now() WHERE user_id = $2 AND item_id = $3",
+        [text, userId, item_id]
+      );
+    } else {
+      // Insert new review
+      await pool.query(
+        "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, NULL)",
+        [userId, item_id, text]
+      );
+    }
+
+    res.json({ message: "Review submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    res.status(500).json({ error: "Failed to submit review" });
+  }
+});
+
+app.delete("/deletewatchlist/:itemId", async (req, res) => {
+  const userId = req.session.userId;
+  const itemId = parseInt(req.params.itemId, 10);
+
+  if (!userId || isNaN(itemId)) {
+    return res.status(400).json({ error: "Invalid item ID or user not logged in" });
+  }
+
+  try {
+    const result = await pool.query(
+      "DELETE FROM Watchlist WHERE user_id = $1 AND item_id = $2",
+      [userId, itemId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Watchlist item not found" });
+    }
+
+    res.json({ message: "Item removed from watchlist" });
+  } catch (error) {
+    console.error("Error deleting watchlist item:", error);
+    res.status(500).json({ error: "Failed to delete watchlist item" });
+  }
+});
+
+
+
 app.post("/watchlist", async (req, res) => {
   const { bookId, status } = req.body;
   const userId = req.session.userId;
@@ -1436,23 +1557,21 @@ app.post("/content/:type/:id/rating", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 app.post("/content/:type/:id/review", async (req, res) => {
   const { type, id } = req.params;
   const { text } = req.body;
-  const userId = req.session.userId; // Assumes session-based auth
+  const userId = req.session.userId;
 
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
   const allowed = ['Book', 'Movie', 'TV Show'];
   const canonicalType = typeMap[type?.toLowerCase()];
-  if (!canonicalType) return res.status(400).json({ error: "Invalid content type" });  
-  if (!allowed.includes(canonicalType)){ 
+  if (!canonicalType || !allowed.includes(canonicalType)) {
     return res.status(400).json({ error: "Invalid content type" });
   }
 
   try {
-    // Verify item exists and matches the type
+    // Check if content exists and matches the requested type
     const itemCheck = await pool.query(
       "SELECT content_type FROM ContentItem WHERE item_id = $1",
       [id]
@@ -1461,12 +1580,27 @@ app.post("/content/:type/:id/review", async (req, res) => {
       return res.status(404).json({ error: "Content item not found or type mismatch" });
     }
 
-    const sentimentScore = calculateSentimentScore(text); // assume this is defined elsewhere
+    const sentimentScore = calculateSentimentScore(text); // assume this is defined
 
-    await pool.query(
-      "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, $4)",
-      [userId, id, text, sentimentScore]
+    // Check if the user already submitted a review
+    const existing = await pool.query(
+      "SELECT review_id FROM Review WHERE user_id = $1 AND item_id = $2",
+      [userId, id]
     );
+
+    if (existing.rows.length > 0) {
+      // Update the existing review
+      await pool.query(
+        "UPDATE Review SET text = $1, sentiment_score = $2, timestamp = now() WHERE user_id = $3 AND item_id = $4",
+        [text, sentimentScore, userId, id]
+      );
+    } else {
+      // Insert new review
+      await pool.query(
+        "INSERT INTO Review (user_id, item_id, text, sentiment_score) VALUES ($1, $2, $3, $4)",
+        [userId, id, text, sentimentScore]
+      );
+    }
 
     res.json({ message: "Review submitted successfully" });
   } catch (error) {
@@ -1474,7 +1608,6 @@ app.post("/content/:type/:id/review", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 
 app.get("/content/:type/:id", async (req, res) => {

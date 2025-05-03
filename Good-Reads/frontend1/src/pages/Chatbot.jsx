@@ -125,7 +125,10 @@ const Chatbot = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h4" align="center">
+        hi
+        </Typography>
+      <Typography variant="h4" component="h1" align="center" gutterBottom>
         Recommendation Assistant
       </Typography>
       <Paper

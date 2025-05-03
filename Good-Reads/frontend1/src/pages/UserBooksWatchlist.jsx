@@ -3,33 +3,40 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   Container,
   Typography,
-  Grid,
-  Card,
-  CardContent,
-  Button,
-  ButtonGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Tabs,
+  Tab,
 } from "@mui/material";
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
 
-const API_BASE = "http://localhost:4000"; // 🔁 your backend IP/port
+const API_BASE = "http://localhost:4000";
 
 function UserBooksWatchlist() {
-  const { userId } = useParams(); // Get userId from URL
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
+  const [username, setUsername] = useState("");
   const [filteredStatus, setFilteredStatus] = useState("Planned");
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // const res = await fetch("http://localhost:4000/isLoggedIn", {
         const res = await fetch(`${API_BASE}/isLoggedIn`, {
-        credentials: "include",
+          credentials: "include",
         });
         const data = await res.json();
         if (data.message !== "Logged in") {
           navigate("/login");
         } else {
-          fetchWatchlist(); // Fetch books after auth passes
+          fetchWatchlist();
+          fetchUsername();
         }
       } catch (error) {
         console.error("Authentication check failed:", error);
@@ -39,72 +46,78 @@ function UserBooksWatchlist() {
 
     const fetchWatchlist = async () => {
       try {
-        // const res = await fetch(`http://localhost:4000/getwatchlist2/${userId}`, {
         const res = await fetch(`${API_BASE}/getwatchlist2/${userId}`, {
           credentials: "include",
         });
-        const data2 = await res.json();
-        const data = data2.filter(item => item.content_type === 'Book'); // Filter for books only
-        setBooks(data); // Assuming API returns an array like [{ item_id, title, status }]
+        const data = await res.json();
+        const booksOnly = data.filter((item) => item.content_type === "Book");
+        setBooks(booksOnly);
+        console.log(booksOnly,data);
       } catch (error) {
-        console.error("Failed to fetch watchlist:", error);
+        console.error("Failed to fetch user watchlist:", error);
       }
     };
 
+    const fetchUsername = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/user2/${userId}`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setUsername(data.username);
+      } catch (error) {
+        console.error("Failed to fetch username:", error);
+      }
+    }
+
     checkAuth();
-  }, [navigate, userId]); // Added userId to dependency array
+  }, [navigate, userId]);
 
   const filteredBooks = books.filter((book) => book.status === filteredStatus);
 
   return (
     <Container style={styles.container}>
       <Typography variant="h4" gutterBottom style={styles.title}>
-        Books Watchlist
+        {username}'s Book Watchlist
       </Typography>
 
-      {/* Filter Buttons */}
-      <ButtonGroup variant="contained" color="primary" style={styles.buttonGroup}>
-        <Button
-          onClick={() => setFilteredStatus("Planned")}
-          variant={filteredStatus === "Planned" ? "contained" : "outlined"}
-        >
-          Planned
-        </Button>
-        <Button
-          onClick={() => setFilteredStatus("Watching")}
-          variant={filteredStatus === "Watching" ? "contained" : "outlined"}
-        >
-          Watching
-        </Button>
-        <Button
-          onClick={() => setFilteredStatus("Completed")}
-          variant={filteredStatus === "Completed" ? "contained" : "outlined"}
-        >
-          Completed
-        </Button>
-      </ButtonGroup>
+      <Tabs
+        value={filteredStatus}
+        onChange={(e, newValue) => setFilteredStatus(newValue)}
+        centered
+        textColor="primary"
+        indicatorColor="primary"
+        style={styles.tabs}
+      >
+        <Tab value="Planned" label="📌 Planned" />
+        <Tab value="Watching" label="🎥 Watching" />
+        <Tab value="Completed" label="✅ Completed" />
+      </Tabs>
 
-      {/* Book Cards */}
-      <Grid container spacing={4}>
-        {filteredBooks.map((book) => (
-          <Grid item xs={12} sm={6} md={4} key={book.item_id}>
-            <Card style={styles.card}>
-              <CardContent>
-                <Typography variant="h5" style={styles.cardTitle}>
-                  {book.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  style={styles.cardDescription}
-                >
-                  Status: {book.status}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      <TableContainer component={Paper} style={styles.tableContainer}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Cover</strong></TableCell>
+              <TableCell><strong>Title</strong></TableCell>
+              <TableCell><strong>Avg Rating</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredBooks.map((book) => (
+              <TableRow key={book.item_id}>
+                <TableCell>
+                  <img src={book.image_url} alt={book.title} style={styles.cover} />
+                </TableCell>
+                <TableCell>{book.title}</TableCell>
+                <TableCell>
+                  <Rating value={book.avg_rating || 0} readOnly style={{ maxWidth: "100px" }} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 }
@@ -113,31 +126,24 @@ const styles = {
   container: {
     marginTop: "80px",
     padding: "20px",
-    maxWidth: "1200px",
-    margin: "0 auto",
   },
   title: {
-    color: "#333",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  tabs: {
     marginBottom: "30px",
+    borderRadius: "8px",
+    backgroundColor: "#f5f5f5",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
   },
-  buttonGroup: {
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "30px",
+  tableContainer: {
+    marginTop: "20px",
   },
-  card: {
-    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-    transition: "transform 0.3s, box-shadow 0.3s",
-  },
-  cardTitle: {
-    color: "#222",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  cardDescription: {
-    color: "#555",
+  cover: {
+    width: "50px",
+    height: "75px",
+    objectFit: "cover",
   },
 };
 
