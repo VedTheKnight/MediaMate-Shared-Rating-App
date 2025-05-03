@@ -21,7 +21,10 @@ function Navbar() {
     "/groups",
     "/friends",
     "/settings",
-    "/chatbot"
+    "/chatbot",
+    "/content/book",
+    "/content/movie",
+    "/content/tv"
   ];
 
   // Only show navbar on specified routes

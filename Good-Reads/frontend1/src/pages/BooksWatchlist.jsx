@@ -39,12 +39,13 @@ function BooksWatchlist() {
 
     const fetchWatchlist = async () => {
       try {
-        // const res = await fetch("http://localhost:4000/getwatchlist", {
         const res = await fetch(`${API_BASE}/getwatchlist`, {
           credentials: "include",
         });
         const data = await res.json();
-        setBooks(data); // assuming API returns an array like [{ item_id, title, status }]
+        // Filter for books only
+        const booksData = data.filter(item => item.content_type === 'Book');
+        setBooks(booksData);
       } catch (error) {
         console.error("Failed to fetch watchlist:", error);
       }

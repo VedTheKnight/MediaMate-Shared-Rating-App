@@ -163,123 +163,123 @@ function BookDetails() {
 
   return (
     <>
-    <Navbar />
-    <Container style={styles.container}>
-      {/* Book Details */}
-      <Card style={styles.card}>
-        <CardContent>
-          <Typography variant="h4" style={styles.title}>
-            {book.title}
-          </Typography>
-          <img src={book.image_url} alt={book.title} style={styles.image} />
-          <Typography variant="body1" style={styles.description}>
-            {book.description}
-          </Typography>
-          <Typography variant="subtitle1" style={styles.genre}>
-            Genre: {book.genre}
-          </Typography>
-          <Typography variant="subtitle1" style={styles.releaseDate}>
-            Release Date: {new Date(book.release_date).toDateString()}
-          </Typography>
+      <Navbar />
+      <Container style={styles.container}>
+        {/* Book Details */}
+        <Card style={styles.card}>
+          <CardContent>
+            <Typography variant="h4" style={styles.title}>
+              {book.title}
+            </Typography>
+            <img src={book.image_url} alt={book.title} style={styles.image} />
+            <Typography variant="body1" style={styles.description}>
+              {book.description}
+            </Typography>
+            <Typography variant="subtitle1" style={styles.genre}>
+              Genre: {book.genre}
+            </Typography>
+            <Typography variant="subtitle1" style={styles.releaseDate}>
+              Release Date: {new Date(book.release_date).toDateString()}
+            </Typography>
 
-          {/* Rating and Sentiment */}
-          <div style={styles.ratingContainer}>
-            <Typography variant="h6">Average Rating:</Typography>
-            <Rating style={{ maxWidth: "150px" }} value={book.rating} readOnly />
-          </div>
-          {book.average_sentiment > 0 && (
-            <div style={styles.sentimentContainer}>
-              <Typography variant="h6">Overall Sentiment:</Typography>
-              <div style={styles.sentimentBar}>
-                <div 
-                  style={{
-                    ...styles.sentimentFill,
-                    width: `${book.average_sentiment * 100}%`,
-                    backgroundColor: getSentimentColor(book.average_sentiment)
-                  }}
-                />
-              </div>
-              <Typography style={styles.sentimentText}>
-                {getSentimentText(book.average_sentiment)} ({Math.round(book.average_sentiment * 100)}%)
-              </Typography>
+            {/* Rating and Sentiment */}
+            <div style={styles.ratingContainer}>
+              <Typography variant="h6">Average Rating:</Typography>
+              <Rating style={{ maxWidth: "150px" }} value={book.rating} readOnly />
             </div>
-          )}
-
-          {/* Add to Watchlist */}
-          <Button variant="contained" color="primary" onClick={addToWatchlist} style={{ marginTop: "20px" }}>
-            Add to Watchlist
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/* Reviews Section */}
-      <div style={styles.reviewsSection}>
-        <Typography variant="h5" gutterBottom>
-          Reviews:
-        </Typography>
-        
-        {/* Sentiment Filter */}
-        <div style={{ marginBottom: '20px' }}>
-          <FormControl variant="outlined" style={{ minWidth: 120 }}>
-            <InputLabel>Filter by Sentiment</InputLabel>
-            <Select
-              value={sentimentFilter}
-              onChange={(e) => setSentimentFilter(e.target.value)}
-              label="Filter by Sentiment"
-            >
-              <MenuItem value="all">All Reviews</MenuItem>
-              <MenuItem value="positive">Positive</MenuItem>
-              <MenuItem value="neutral">Neutral</MenuItem>
-              <MenuItem value="negative">Negative</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-
-        {book.reviews.length === 0 ? (
-          <Typography>No reviews yet. Be the first to review!</Typography>
-        ) : (
-          book.reviews.map((review) => (
-            <Card key={review.review_id} style={styles.reviewCard}>
-              <CardContent>
-                <Typography variant="subtitle1" style={styles.reviewUser}>
-                  {review.username} {getSentimentEmoji(review.sentiment_score)}
-                </Typography>
-                <Typography>{review.text}</Typography>
+            {book.average_sentiment > 0 && (
+              <div style={styles.sentimentContainer}>
+                <Typography variant="h6">Overall Sentiment:</Typography>
                 <div style={styles.sentimentBar}>
                   <div 
                     style={{
                       ...styles.sentimentFill,
-                      width: `${review.sentiment_score * 100}%`,
-                      backgroundColor: getSentimentColor(review.sentiment_score)
+                      width: `${book.average_sentiment * 100}%`,
+                      backgroundColor: getSentimentColor(book.average_sentiment)
                     }}
                   />
                 </div>
                 <Typography style={styles.sentimentText}>
-                  {getSentimentText(review.sentiment_score)} ({Math.round(review.sentiment_score * 100)}%)
+                  {getSentimentText(book.average_sentiment)} ({Math.round(book.average_sentiment * 100)}%)
                 </Typography>
-              </CardContent>
-            </Card>
-          ))
-        )}
+              </div>
+            )}
 
-        {/* Add Review */}
-        <div style={styles.addReviewSection}>
-          <TextField
-            label="Write your review"
-            multiline
-            rows={4}
-            fullWidth
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            variant="outlined"
-            style={{ marginBottom: "20px" }}
-          />
-          <Button variant="contained" color="secondary" onClick={submitReview}>
-            Submit Review
-          </Button>
+            {/* Add to Watchlist */}
+            <Button variant="contained" color="primary" onClick={addToWatchlist} style={{ marginTop: "20px" }}>
+              Add to Watchlist
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Reviews Section */}
+        <div style={styles.reviewsSection}>
+          <Typography variant="h5" gutterBottom>
+            Reviews:
+          </Typography>
+          
+          {/* Sentiment Filter */}
+          <div style={{ marginBottom: '20px' }}>
+            <FormControl variant="outlined" style={{ minWidth: 120 }}>
+              <InputLabel>Filter by Sentiment</InputLabel>
+              <Select
+                value={sentimentFilter}
+                onChange={(e) => setSentimentFilter(e.target.value)}
+                label="Filter by Sentiment"
+              >
+                <MenuItem value="all">All Reviews</MenuItem>
+                <MenuItem value="positive">Positive</MenuItem>
+                <MenuItem value="neutral">Neutral</MenuItem>
+                <MenuItem value="negative">Negative</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+
+          {book.reviews.length === 0 ? (
+            <Typography>No reviews yet. Be the first to review!</Typography>
+          ) : (
+            book.reviews.map((review) => (
+              <Card key={review.review_id} style={styles.reviewCard}>
+                <CardContent>
+                  <Typography variant="subtitle1" style={styles.reviewUser}>
+                    {review.username} {getSentimentEmoji(review.sentiment_score)}
+                  </Typography>
+                  <Typography>{review.text}</Typography>
+                  <div style={styles.sentimentBar}>
+                    <div 
+                      style={{
+                        ...styles.sentimentFill,
+                        width: `${review.sentiment_score * 100}%`,
+                        backgroundColor: getSentimentColor(review.sentiment_score)
+                      }}
+                    />
+                  </div>
+                  <Typography style={styles.sentimentText}>
+                    {getSentimentText(review.sentiment_score)} ({Math.round(review.sentiment_score * 100)}%)
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))
+          )}
+
+          {/* Add Review */}
+          <div style={styles.addReviewSection}>
+            <TextField
+              label="Write your review"
+              multiline
+              rows={4}
+              fullWidth
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              variant="outlined"
+              style={{ marginBottom: "20px" }}
+            />
+            <Button variant="contained" color="secondary" onClick={submitReview}>
+              Submit Review
+            </Button>
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
     </>
   );
 }
