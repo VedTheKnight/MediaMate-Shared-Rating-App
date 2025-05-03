@@ -7,7 +7,7 @@ import {
   Grid,
 } from "@mui/material";
 
-const API_BASE = "http://10.129.6.179:4000";
+const API_BASE = "http://localhost:4000";
 
 const getColorFromSentiment = (score) => {
   if (score >= 0.8) return "#4CAF50";

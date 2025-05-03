@@ -24,7 +24,8 @@ function Navbar() {
     "/chatbot",
     "/content/book",
     "/content/movie",
-    "/content/tv"
+    "/content/tv",
+    "/activity"
   ];
 
   // Only show navbar on specified routes
