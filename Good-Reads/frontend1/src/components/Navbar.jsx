@@ -28,15 +28,11 @@ function Navbar() {
     "/activity"
   ];
 
-  // Only show navbar on specified routes
   const shouldShowNavbar = showNavbarRoutes.some((route) =>
     location.pathname.startsWith(route)
   ) && !hideNavbarRoutes.includes(location.pathname);
-  
-  if (!shouldShowNavbar) {
-    return null;
-  }
-  
+
+  if (!shouldShowNavbar) return null;
 
   const handleLogout = async () => {  
     try {
@@ -44,7 +40,6 @@ function Navbar() {
         method: "POST",
         credentials: "include",
       });
-      
       if (response.ok) {
         navigate("/login");
       } else {
@@ -58,6 +53,7 @@ function Navbar() {
   return (
     <nav style={styles.navbar}>
       <div style={styles.container}>
+        <img src="/logo2.png" alt="Logo" style={styles.logo} />
         <div style={styles.navLinks}>
           <Link to="/dashboard" style={styles.link}>
             <span style={styles.icon}>🏠</span>
@@ -123,12 +119,17 @@ const styles = {
   },
   container: {
     display: "flex",
-    justifyContent: "center",       // center all items horizontally
+    justifyContent: "center",
     alignItems: "center",
-    maxWidth: "100%",               // full width
+    maxWidth: "100%",
     margin: "0 auto",
     padding: "0 20px",
-    flexWrap: "wrap",               // allow wrapping on small screens
+    flexWrap: "wrap",
+  },
+  logo: {
+    height: "80px",
+    marginRight: "20px",
+    cursor: "pointer",
   },
   navLinks: {
     display: "flex",
@@ -175,6 +176,5 @@ const styles = {
     letterSpacing: "0.3px"
   }
 };
-
 
 export default Navbar;

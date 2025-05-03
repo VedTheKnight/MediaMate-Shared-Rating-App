@@ -10,9 +10,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // fetch("http://localhost:4000/isLoggedIn", { credentials: "include" })
     fetch(`${API_BASE}/isLoggedIn`, { credentials: "include" })
-    .then((res) => res.json())
+      .then((res) => res.json())
       .then((data) => {
         if (data.message === "Logged in") {
           navigate("/dashboard");
@@ -30,7 +29,6 @@ function Login() {
     setError("");
     setLoading(true);
 
-    // const response = await fetch("http://localhost:4000/login", {
     const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -51,6 +49,7 @@ function Login() {
   return (
     <div style={styles.container}>
       <div style={styles.formCard}>
+        <img src="/logo.png" alt="Logo" style={styles.logo} />
         <h2 style={styles.title}>Login</h2>
         {error && <p style={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -75,7 +74,10 @@ function Login() {
           </button>
         </form>
         <p style={styles.linkText}>
-          Don't have an account? <Link to="/signup" style={styles.link}>Sign up here</Link>
+          Don't have an account?{" "}
+          <Link to="/signup" style={styles.link}>
+            Sign up here
+          </Link>
         </p>
       </div>
     </div>
@@ -98,6 +100,12 @@ const styles = {
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     width: "100%",
     maxWidth: "400px",
+  },
+  logo: {
+    display: "block",
+    margin: "0 auto 20px",
+    maxWidth: "120px",
+    height: "auto",
   },
   title: {
     textAlign: "center",
