@@ -30,10 +30,10 @@ const _ = require('lodash');
 // PostgreSQL connection
 // NOTE: use YOUR postgres username and password here
 const pool = new Pool({
-  user: 'postgres',
+  user: 'test',
   host: 'localhost',
-  database: 'rating_app',
-  password: '12345678',
+  database: 'ecommerce',
+  password: 'test',
   port: 5432,
 });
 
@@ -1950,9 +1950,9 @@ app.get("/recommendation/:type", async (req, res) => {
         WHERE r.user_id = $1
           AND ci.content_type = $2
       `, [userId, canonicalType]);
-      // console.log(`Fetched ${userRatings.length} ratings for user ${userId} and type ${canonicalType}`);
+      console.log(`Fetched ${userRatings.length} ratings for user ${userId} and type ${canonicalType}`);
 
-      // 2) Pull all items of this type
+      // 2) Pull all items of this type, including aggregates
       const { rows: items } = await client.query(`
         SELECT
           ci.item_id,
@@ -1963,7 +1963,8 @@ app.get("/recommendation/:type", async (req, res) => {
           ci.image_url,
           g.name                AS genre_name,
           COALESCE(AVG(r.rating_value), 0)      AS rating,
-          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment,
+          ci.genre_id
         FROM ContentItem ci
         JOIN Genre g ON g.genre_id = ci.genre_id
         LEFT JOIN Rating r   ON r.item_id    = ci.item_id
@@ -1972,9 +1973,9 @@ app.get("/recommendation/:type", async (req, res) => {
         GROUP BY
           ci.item_id, ci.title, ci.description,
           ci.content_type, ci.release_date,
-          ci.image_url, g.name
+          ci.image_url, g.name, ci.genre_id
       `, [canonicalType]);
-      // console.log(`Fetched ${items.length} items of type ${canonicalType}`);
+      console.log(`Fetched ${items.length} items of type ${canonicalType}`);
 
       // 3) Build TF‑IDF model over descriptions
       const tfidf = new natural.TfIdf();
@@ -1995,110 +1996,135 @@ app.get("/recommendation/:type", async (req, res) => {
       const genreIds   = _.uniq(items.map(it => it.genre_id));
       const genreIndex = Object.fromEntries(genreIds.map((g, i) => [g, i]));
 
+      // helper to normalize a vector
       const normalize = vec => {
         const magnitude = Math.sqrt(vec.reduce((sum, val) => sum + val * val, 0));
-        return magnitude ? vec.map(val => val / magnitude) : vec;
+        return magnitude ? vec.map(val => val / magnitude) : vec.map(() => 0);
       };
 
-      // 6) Vectorize each item: [TF‑IDF … , one‑hot genre …]
+      // 6) Vectorize each item: compute descVec, genreVec, then log and attach debug
       const itemVectors = items.map((it, idx) => {
-        // TF‑IDF vector
-        const descVec = normalize(vocab.map(term => tfidf.tfidf(term, idx)));
+        // 6a) Build a term→weight map for debugging
+        const termWeights = {};
+        vocab.forEach(term => {
+          const w = tfidf.tfidf(term, idx);
+          termWeights[term] = Number.isFinite(w) ? w : 0;
+        });
 
-        // Genre one‑hot
-        genreVec = Array(genreIds.length).fill(0);
+        // TF‑IDF vector (normalized)
+        const descVec = normalize(vocab.map(term => termWeights[term]));
+
+        // Genre one‑hot (scaled)
+        const genreVec = Array(genreIds.length).fill(0);
         genreVec[genreIndex[it.genre_id]] = 1;
+        const genreWeight = 2.0; // you can adjust this
+        const scaledGenre = genreVec.map(v => v * genreWeight);
 
-        // Scale the genre vector by the weight
-        const genreWeight = 2.0; // Adjust this weight as needed
-        genreVec = genreVec.map(value => value * genreWeight);
+        // Log it for inspection
+        // console.log(JSON.stringify({
+        //   item_id: it.item_id,
+        //   title:   it.title,
+        //   termWeights,
+        //   genreVector: scaledGenre
+        // }, null, 2));
+
+        // Combined vector for similarity
+        const vector = [...descVec, ...scaledGenre];
 
         return {
-          item_id:    it.item_id,
-          title:      it.title,
-          description:it.description,
-          genre:      it.genre_name,
-          image_url:  it.image_url,
-          vector:     [...descVec, ...genreVec],
+          item_id:          it.item_id,
+          title:            it.title,
+          description:      it.description,
+          content_type:     it.content_type,
+          release_date:     it.release_date,
+          image_url:        it.image_url,
+          genre_name:       it.genre_name,
+          rating:           it.rating,
+          average_sentiment:it.average_sentiment,
+          vector,
+
+          // debug field returned in JSON
+          debug: {
+            termWeights,
+            genreVector: scaledGenre
+          }
         };
       });
-      // console.log(`Vectorized ${itemVectors.length} items`);
+      //console.log(`Vectorized ${itemVectors.length} items`);
 
       // 7) If no ratings, fall back to original full listing
       if (!userRatings.length) {
         console.log("No ratings found for user, falling back to all items.");
         const fallback = await client.query(`
           SELECT
-          ci.item_id,
-          ci.title,
-          ci.description,
-          ci.content_type,
-          ci.release_date,
-          ci.image_url,
-          g.name                AS genre_name,
-          COALESCE(AVG(r.rating_value), 0)      AS rating,
-          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
-        FROM ContentItem ci
-        JOIN Genre g ON g.genre_id = ci.genre_id
-        LEFT JOIN Rating r   ON r.item_id    = ci.item_id
-        LEFT JOIN Review rev ON rev.item_id  = ci.item_id
-        WHERE ci.content_type = $1
-        GROUP BY
-          ci.item_id, ci.title, ci.description,
-          ci.content_type, ci.release_date,
-          ci.image_url, g.name
+            ci.item_id,
+            ci.title,
+            ci.description,
+            ci.content_type,
+            ci.release_date,
+            ci.image_url,
+            g.name                AS genre_name,
+            COALESCE(AVG(r.rating_value), 0)      AS rating,
+            COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+          FROM ContentItem ci
+          JOIN Genre g ON g.genre_id = ci.genre_id
+          LEFT JOIN Rating r   ON r.item_id    = ci.item_id
+          LEFT JOIN Review rev ON rev.item_id  = ci.item_id
+          WHERE ci.content_type = $1
+          GROUP BY
+            ci.item_id, ci.title, ci.description,
+            ci.content_type, ci.release_date,
+            ci.image_url, g.name
         `, [canonicalType]);
-        // console.log(fallback.rows);
         return res.json(fallback.rows);
       }
 
-      // 1) Choose which ratings to use (either high ratings ≥3, or fallback to all)
-      const liked  = userRatings.filter(r => r.rating_value >= 3);
-      const toUse  = liked.length > 0 ? liked : userRatings;
+      // 8) Choose which ratings to use (rating ≥ 3 or fallback)
+      const liked = userRatings.filter(r => r.rating_value >= 3);
+      const toUse = liked.length > 0 ? liked : userRatings;
 
-      // 2) Build weighted vectors
+      // 9) Build weighted vectors
       const weighted = toUse.map(r => {
         const iv = itemVectors.find(iv => iv.item_id === r.item_id);
-        return iv.vector.map(value => value * r.rating_value);
+        return iv.vector.map(v => v * r.rating_value);
       });
 
-      // 3) Compute userProfile by averaging each dimension
-      //    Notice we rename the callback args so `_` remains Lodash
-      const userProfile = weighted[0].map((__element, idx) =>
-        // here `_` is Lodash, not the element
-        _.meanBy(weighted, vec => vec[idx])
+      // 10) Compute userProfile by dimension‑wise mean
+      const userProfile = weighted[0].map((_, idx) =>
+        weighted.reduce((sum, vec) => sum + vec[idx], 0) / weighted.length
       );
-      // console.log("User profile vector:", userProfile);
+      console.log("User profile vector:", userProfile);
 
-      // 9) Score unseen items by cosine similarity & return top 10
+      // 11) Score unseen items & return top 20 with debug field
       const seen = new Set(userRatings.map(r => r.item_id));
       const recommendations = itemVectors
         .filter(iv => !seen.has(iv.item_id))
         .map(iv => {
-          const dot  = iv.vector.reduce((sum, v, i) => sum + v * userProfile[i], 0);
+          const dot  = iv.vector.reduce((s, v, i) => s + v * userProfile[i], 0);
           const magA = Math.sqrt(iv.vector.reduce((s, v) => s + v*v, 0));
           const magB = Math.sqrt(userProfile.reduce((s, v) => s + v*v, 0));
-          const score = magA && magB ? dot/(magA*magB) : 0;
-          const item = items.find(item => item.item_id === iv.item_id);
-          // console.log(item.item_id, item.title, iv.vector, score);
+          const score = (magA && magB) ? dot/(magA*magB) : 0;
+
           return {
-            item_id: item.item_id,
-            title: item.title,
-            description: item.description,
-            content_type: item.content_type,
-            release_date: item.release_date,
-            image_url: item.image_url,
-            genre_name: item.genre_name,
-            rating: item.rating, // Average rating
-            average_sentiment: item.average_sentiment, // Average sentiment
-            score, // Recommendation score
+            item_id:          iv.item_id,
+            title:            iv.title,
+            description:      iv.description,
+            content_type:     iv.content_type,
+            release_date:     iv.release_date,
+            image_url:        iv.image_url,
+            genre_name:       iv.genre_name,
+            rating:           iv.rating,
+            average_sentiment:iv.average_sentiment,
+            score,
+            debug:            iv.debug   // includes termWeights & genreVector
           };
         })
         .sort((a, b) => b.score - a.score)
         .slice(0, 20);
-      // console.log("Recommendations:", recommendations);
-        console.log("Recommendations:", recommendations.map(r => r.title));
+
+      console.log("Recommendations:", recommendations);
       return res.json(recommendations);
+
     } catch (err) {
       console.error("Rec error:", err);
       return res.status(500).json({ error: "Failed to generate recommendations" });
@@ -2111,24 +2137,24 @@ app.get("/recommendation/:type", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT
-          ci.item_id,
-          ci.title,
-          ci.description,
-          ci.content_type,
-          ci.release_date,
-          ci.image_url,
-          g.name                AS genre_name,
-          COALESCE(AVG(r.rating_value), 0)      AS rating,
-          COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
-        FROM ContentItem ci
-        JOIN Genre g ON g.genre_id = ci.genre_id
-        LEFT JOIN Rating r   ON r.item_id    = ci.item_id
-        LEFT JOIN Review rev ON rev.item_id  = ci.item_id
-        WHERE ci.content_type = $1
-        GROUP BY
-          ci.item_id, ci.title, ci.description,
-          ci.content_type, ci.release_date,
-          ci.image_url, g.name
+        ci.item_id,
+        ci.title,
+        ci.description,
+        ci.content_type,
+        ci.release_date,
+        ci.image_url,
+        g.name                AS genre_name,
+        COALESCE(AVG(r.rating_value), 0)      AS rating,
+        COALESCE(AVG(rev.sentiment_score), 0) AS average_sentiment
+      FROM ContentItem ci
+      JOIN Genre g ON g.genre_id = ci.genre_id
+      LEFT JOIN Rating r   ON r.item_id    = ci.item_id
+      LEFT JOIN Review rev ON rev.item_id  = ci.item_id
+      WHERE ci.content_type = $1
+      GROUP BY
+        ci.item_id, ci.title, ci.description,
+        ci.content_type, ci.release_date,
+        ci.image_url, g.name
     `, [canonicalType]);
     return res.json(result.rows);
   } catch (error) {
